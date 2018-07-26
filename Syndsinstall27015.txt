@@ -1,0 +1,646 @@
+@echo off
+rem This script was written by Balimbanana.
+title SynergyDS 15
+set pmpck1=0
+set pmpck2=0
+set pmpck3=0
+set pmpck4=0
+set pmpck5=0
+set cldir=%programfiles(x86)%\Steam\steamapps
+if EXIST "E:\SteamLibrary\steamapps\common\Synergy\synergy" set cldir=E:\SteamLibrary\steamapps
+if EXIST "D:\SteamLibrary\steamapps\common\Synergy\synergy" set cldir=D:\SteamLibrary\steamapps
+if EXIST "F:\SteamLibrary\steamapps\common\Synergy\synergy" set cldir=F:\SteamLibrary\steamapps
+:start
+set anonset=0
+if NOT EXIST steamcmd.exe goto notindir
+echo Information: enter the letter inside the () and press enter to continue at the prompts.
+echo First (I)nstall, (U)pdate or (R)un with auto-restart
+echo (RB) To run Synergy 18.7 beta or (IS) to install SourceMod.
+echo (RT) To run Synergy Twich branch.
+if EXIST "steamapps\common\Synergy\synergy\addons\sourcemod\plugins" (
+	echo ^(ISM^) to install additional SourceMod plugins.
+	echo ^(IMP^) to list/install Player Model Packs.
+)
+if EXIST "steamapps\common\Synergy\synergy" echo (IMSP) to list/install additional Mod Support's ^(for version 56.16^)
+set /p uprun=
+for /f "delims=" %%V in ('powershell -command "$env:uprun.ToLower()"') do set "uprun=%%V"
+if '%uprun%'=='u' goto firstinstall
+if '%uprun%'=='i' goto firstinstall
+if '%uprun%'=='rb' goto srcds
+if '%uprun%'=='rt' goto srcds
+if '%uprun%'=='r' goto srcds
+if '%uprun%'=='is' goto instsourcem
+if '%uprun%'=='ism' goto instsourcepluginstop
+if '%uprun%'=='imp' goto instpmpck
+if '%uprun%'=='imsp' goto instmodsup
+if '%uprun%'=='linksm' goto linksm
+echo Choose an option.
+goto start
+
+:firstinstall
+if '%anonset%'=='0' (echo Regular, ^(B^)eta, or ^(T^)witch? ^(anything except b or t will do regular^)
+	set /p betaset=
+)
+for /f "delims=" %%V in ('powershell -command "$env:betaset.ToLower()"') do set "betaset=%%V"
+echo Enter your username here:
+set /p username=
+set anonblck=""
+for /f "delims=" %%V in ('powershell -command "$env:username.ToLower()"') do set "anonblck=%%V"
+if '%anonblck%'=='anonymous' goto noanon
+if '%betaset%'=='b' goto betainst
+if '%betaset%'=='t' goto twitchinst
+echo Updating/installing Synergy DS
+steamcmd.exe +login %username% +app_update 17520 validate +quit
+echo Update/installation Complete
+echo If there were errors above, close the script and log into SteamCMD.exe separately, then restart the script.
+timeout -T 10
+if '%uprun%'=='i' goto setup
+cls
+:srcds
+set synpath=steamapps\common\Synergy
+if '%uprun%'=='rb' set synpath=steamapps\common\synbeta
+if '%uprun%'=='rt' set synpath=steamapps\common\syntwitch
+if '%betaset%'=='b' set synpath=steamapps\common\synbeta
+if '%betaset%'=='t' set synpath=steamapps\common\syntwitch
+if NOT EXIST %synpath% goto notinstalled
+for /f "delims=" %%V in ('powershell -command "$ab = get-date; $ab.Minute"') do set "starttime=%%V"
+:reds
+echo (%date%)(%time%) SynDS started.
+start /wait %synpath%\srcds.exe -console -game synergy +maxplayers 10 +sv_lan 0 +map d1_trainstation_06 +exec server2.cfg -ip 0.0.0.0 -port 27015 -nocrashdialog -insecure -nohltv
+echo (%date%)(%time%) WARNING: SynDS closed or crashed, restarting.
+for /f "delims=" %%V in ('powershell -command "$ab = get-date; $ab.Minute"') do set "ctime=%%V"
+set /a cttime=ctime-starttime
+if %cttime%==0 (
+	echo ^The last crash was less than a minute ago, waiting to restart.
+	timeout -T 10
+)
+for /f "delims=" %%V in ('powershell -command "$ab = get-date; $ab.Minute"') do set "starttime=%%V"
+goto reds
+
+:betainst
+echo Updating/installing Synergy Beta DS
+steamcmd.exe +login %username% +force_install_dir steamapps\Common\synbeta +app_update 17520 -beta development -validate +quit
+echo Update/installation Complete
+echo If there were errors above, close the script and log into SteamCMD.exe separately, then restart the script.
+timeout -T 10
+if '%uprun%'=='i' goto setup
+cls
+goto srcds
+
+:twitchinst
+echo Updating/installing Synergy Twitch Branch DS
+steamcmd.exe +login %username% +force_install_dir steamapps\Common\syntwitch +app_update 17520 -beta twitch -betapassword jonnyhawtsauce -validate +quit
+echo Update/installation Complete
+echo If there were errors above, close the script and log into SteamCMD.exe separately, then restart the script.
+timeout -T 10
+if '%uprun%'=='i' goto setup
+cls
+goto srcds
+
+:setup
+net session >nul 2>&1
+if %ERRORLEVEL% NEQ 0 ( goto notadmin )
+set s=1
+set hl=1
+echo Setting up links and first settings in server2.cfg
+if NOT EXIST "%cldir%\sourcemods" set s=0
+if NOT EXIST "%cldir%\common\Half-Life 2" set hl=0
+if '%hl%'=='0' (if EXIST "steamapps\common\Half-Life 2" set hl=2)
+if '%hl%'=='0' goto insthl2
+if '%hl%'=='1' mklink /d "steamapps\common\Half-Life 2" "%cldir%\common\Half-Life 2"
+if '%s%'=='0' echo sourcemods not found, not linking.
+if '%s%'=='1' mklink /j "steamapps\sourcemods" "%cldir%\sourcemods"
+set synpath=steamapps\common\Synergy
+set syntype=56.16
+if '%betaset%'=='b' (
+	set synpath=steamapps\common\synbeta
+	set syntype=18.7
+)
+if '%betaset%'=='t' (
+	set synpath=steamapps\common\syntwitch
+	set syntype=Twitch
+)
+if NOT EXIST "%synpath%\synergy\cfg\server2.cfg" (
+	echo hostname First Syn %syntype% Server>"%synpath%\synergy\cfg\server2.cfg"
+	echo sv_lan 0 >>"%synpath%\synergy\cfg\server2.cfg"
+	echo mp_friendlyfire 0 >>"%synpath%\synergy\cfg\server2.cfg"
+	echo mp_reset 1 >>"%synpath%\synergy\cfg\server2.cfg"
+	echo mp_transition_time 45>>"%synpath%\synergy\cfg\server2.cfg"
+	echo mp_transition_percent 68>>"%synpath%\synergy\cfg\server2.cfg"
+	echo sv_vote_enable 1 >>"%synpath%\synergy\cfg\server2.cfg"
+	echo sv_vote_failure_timer 300>>"%synpath%\synergy\cfg\server2.cfg"
+	echo sv_vote_interval 10>>"%synpath%\synergy\cfg\server2.cfg"
+	echo sv_vote_percent_difficulty 67>>"%synpath%\synergy\cfg\server2.cfg"
+	echo sv_vote_percent_kick 67>>"%synpath%\synergy\cfg\server2.cfg"
+	echo sv_vote_percent_map 67>>"%synpath%\synergy\cfg\server2.cfg"
+	echo sv_vote_percent_restore 67>>"%synpath%\synergy\cfg\server2.cfg"
+	echo //Change this to a different savenumber for forked servers>>"%synpath%\synergy\cfg\server2.cfg"
+	echo sv_savedir save2/>>"%synpath%\synergy\cfg\server2.cfg")
+if NOT EXIST "%synpath%\synergy\cfg\workshop_srv.cfg" (
+	echo 1082553471>"%synpath%\synergy\cfg\workshop_srv.cfg"
+	echo 492916281>>"%synpath%\synergy\cfg\workshop_srv.cfg"
+	echo 647127451>>"%synpath%\synergy\cfg\workshop_srv.cfg"
+	echo 647128829>>"%synpath%\synergy\cfg\workshop_srv.cfg"
+	echo 678214923>>"%synpath%\synergy\cfg\workshop_srv.cfg"
+	echo 664873590>>"%synpath%\synergy\cfg\workshop_srv.cfg"
+	echo 683512034>>"%synpath%\synergy\cfg\workshop_srv.cfg"
+	echo 682177824>>"%synpath%\synergy\cfg\workshop_srv.cfg"
+	echo 692269416>>"%synpath%\synergy\cfg\workshop_srv.cfg"
+	echo 694312354>>"%synpath%\synergy\cfg\workshop_srv.cfg"
+	echo 691111508>>"%synpath%\synergy\cfg\workshop_srv.cfg"
+	echo 698969705>>"%synpath%\synergy\cfg\workshop_srv.cfg"
+	echo 689508204>>"%synpath%\synergy\cfg\workshop_srv.cfg"
+	echo 671789112>>"%synpath%\synergy\cfg\workshop_srv.cfg"
+	echo 647128322>>"%synpath%\synergy\cfg\workshop_srv.cfg"
+	echo 733880910>>"%synpath%\synergy\cfg\workshop_srv.cfg"
+	echo 751771158>>"%synpath%\synergy\cfg\workshop_srv.cfg"
+	echo 762217131>>"%synpath%\synergy\cfg\workshop_srv.cfg"
+	echo 783933738>>"%synpath%\synergy\cfg\workshop_srv.cfg"
+	echo 860392418>>"%synpath%\synergy\cfg\workshop_srv.cfg"
+	echo 886714754>>"%synpath%\synergy\cfg\workshop_srv.cfg"
+	echo 909637644>>"%synpath%\synergy\cfg\workshop_srv.cfg"
+	echo 918216553>>"%synpath%\synergy\cfg\workshop_srv.cfg"
+	echo 931794062>>"%synpath%\synergy\cfg\workshop_srv.cfg")
+echo Should be all configured for server running, starting server after timeout.
+timeout -T 5
+cls
+goto srcds
+
+
+:insthl2
+echo Half-Life 2 was not found during setup, press any key to install it first or close the script and install it manually.
+pause
+steamcmd.exe +login %username% +app_update 220 validate +quit
+if EXIST "steamapps\common\Half-Life 2" goto setup
+goto notconfigured
+:notconfigured
+echo Half-Life 2 directory was not found in default install location, install halted.
+pause
+exit
+:notinstalled
+set syntype=56.16
+if '%uprun%'=='rb' set syntype=Beta
+if '%betaset%'=='b' set syntype=Beta
+echo Synergy %syntype% not installed.
+pause
+goto start
+:notindir
+set foundcmd=0
+echo This script is not being run from the SteamCMD directory, either move the script to the correct directory and try again.
+echo (Note: this may be caused by running as admin, you only have to run as admin for the first install)
+echo Or enter the directory here (including drive letter):
+if NOT EXIST "drivers\etc\hosts" (
+	echo ^If you do not have SteamCMD, you can enter ^(S^) to download now.
+	set /p dlstart=
+)
+for /f "delims=" %%V in ('powershell -command "$env:dlstart.ToLower()"') do set "dlstart=%%V"
+if '%dlstart%'=='s' goto dlsteamcmd
+set /p changedir=
+%changedir:~0,2%
+cd %changedir%
+goto start
+:notadmin
+echo You must be running this script as administrator for first install.
+pause
+exit
+
+:dlsteamcmd
+if EXIST "%cd%\steamcmd.zip" set foundcmd=1
+if EXIST "%cd%\steamcmd.zip" goto extractcmd
+if EXIST "%userprofile%\downloads\steamcmd.zip" set foundcmd=2
+if EXIST "%userprofile%\downloads\steamcmd.zip" goto extractcmd
+start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://steamcdn-a.akamaihd.net/client/installer/steamcmd.zip\",\"$PWD\steamcmd.zip\" }"
+if EXIST "%cd%\steamcmd.zip" set foundcmd=1
+if EXIST "%cd%\steamcmd.zip" goto extractcmd
+if EXIST "%userprofile%\downloads\steamcmd.zip" set foundcmd=2
+if EXIST "%userprofile%\downloads\steamcmd.zip" goto extractcmd
+goto extractcmd
+
+:extractcmd
+ping localhost -n 1 >NUL
+if EXIST steamcmd.exe goto start
+if '%foundcmd%'=='1' start /wait /min powershell -command "& {Add-Type -AssemblyName System.IO.Compression.FileSystem; [System.IO.Compression.ZipFile]::ExtractToDirectory(\"$PWD\steamcmd.zip\", \"$PWD\") }"
+if '%foundcmd%'=='2' start /wait /min powershell -command "& {Add-Type -AssemblyName System.IO.Compression.FileSystem; [System.IO.Compression.ZipFile]::ExtractToDirectory(\"$HOME\downloads\steamcmd.zip\", \"$PWD\") }"
+if EXIST steamcmd.exe echo Successfully installed SteamCMD to %cd%
+goto start
+
+:instsourcem
+echo This function is designed for the current version of Synergy, the development branch may be unstable.
+echo Regular, (B)eta, or (T)witch? (anything except b or t will do regular)
+set /p betaset=
+for /f "delims=" %%V in ('powershell -command "$env:betaset.ToLower()"') do set "betaset=%%V"
+set synpath=steamapps\common\Synergy\synergy
+set syntype=56.16
+if '%betaset%'=='b' (
+	set synpath=steamapps\common\synbeta\synergy
+	set syntype=nonstand
+)
+if '%betaset%'=='t' (
+	set synpath=steamapps\common\syntwitch\synergy
+	set syntype=nonstand
+)
+if NOT EXIST %synpath% goto notinstalled
+echo This will direct download the required SourceMod files and then extract them.
+pause
+if EXIST "%synpath%\addons\sourcemod" (
+	echo "SourceMod is already installed, if you want to re-install, rename the current SourceMod install (addons) to addonsold  and run this script again..."
+	pause
+	goto start )
+start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://sm.alliedmods.net/smdrop/1.9/sourcemod-1.9.0-git6229-windows.zip\",\"$PWD\sourcemod-1.9.0-git6229-windows.zip\") }"
+start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://mms.alliedmods.net/mmsdrop/1.11/mmsource-1.11.0-git1105-windows.zip\",\"$PWD\mmsource-1.11.0-git1105-windows.zip\") }"
+start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://users.alliedmods.net/~kyles/builds/SteamWorks/SteamWorks-git121-windows.zip\",\"$PWD\SteamWorks-git121-windows.zip\") }"
+set dlloc=0
+if EXIST "%userprofile%\downloads\sourcemod-1.9.0-git6229-windows.zip" set dlloc=1
+if EXIST "sourcemod-1.9.0-git6229-windows.zip" set dlloc=2
+if '%dlloc%'=='0' goto dltowrong
+echo This may take a minute or two, just wait for the next message after PowerShell finishes extracting SourceMod...
+if '%dlloc%'=='1' start /wait /min powershell -command "& {Add-Type -AssemblyName System.IO.Compression.FileSystem; [System.IO.Compression.ZipFile]::ExtractToDirectory(\"$HOME\downloads\sourcemod-1.9.0-git6229-windows.zip\", \"$PWD\$env:synpath\"); [System.IO.Compression.ZipFile]::ExtractToDirectory(\"$HOME\downloads\mmsource-1.11.0-git1105-windows.zip\", \"$PWD\$env:synpath\"); [System.IO.Compression.ZipFile]::ExtractToDirectory(\"$HOME\downloads\SteamWorks-git121-windows.zip\", \"$PWD\$env:synpath\") }"
+if '%dlloc%'=='2' start /wait /min powershell -command "& {Add-Type -AssemblyName System.IO.Compression.FileSystem; [System.IO.Compression.ZipFile]::ExtractToDirectory(\"$PWD\sourcemod-1.9.0-git6229-windows.zip\", \"$PWD\$env:synpath\"); [System.IO.Compression.ZipFile]::ExtractToDirectory(\"$PWD\mmsource-1.11.0-git1105-windows.zip\", \"$PWD\$env:synpath\"); [System.IO.Compression.ZipFile]::ExtractToDirectory(\"$PWD\SteamWorks-git121-windows.zip\", \"$PWD\$env:synpath\") }"
+if NOT EXIST "%synpath%\addons\sourcemod\gamedata\sdkhooks.games\custom" mkdir "%synpath%\addons\sourcemod\gamedata\sdkhooks.games\custom"
+if NOT EXIST "%synpath%\addons\sourcemod\gamedata\sdktools.games\custom" mkdir "%synpath%\addons\sourcemod\gamedata\sdktools.games\custom"
+if '%syntype%'=='nonstand' (
+	start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SM-Synergy/raw/master/devtwitchgamedata/sdkhooks.games/custom/game.synergy.txt\", \"$PWD\$env:synpath\addons\sourcemod\gamedata\sdkhooks.games\custom\game.synergy.txt\") }"
+	start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SM-Synergy/raw/master/devtwitchgamedata/sdktools.games/custom/game.synergy.txt\", \"$PWD\$env:synpath\addons\sourcemod\gamedata\sdktools.games\custom\game.synergy.txt\") }"
+)
+if NOT EXIST "%synpath%\addons\sourcemod" (
+	echo Failed to auto-install SourceMod, you may have an outdated PowerShell, or something else went wrong somewhere.
+	echo You should still be able to manually install it from the downloads earlier.
+	pause
+	exit )
+echo Now you should be able to install any plugins you want.
+explorer "%cd%\%synpath%\addons\sourcemod\plugins"
+pause
+cls
+goto start
+
+:instsourcepluginstop
+echo Install plugins for Regular, (B)eta, or (T)witch? (anything except b or t will do regular)
+set /p betaset=
+for /f "delims=" %%V in ('powershell -command "$env:betaset.ToLower()"') do set "betaset=%%V"
+set synpath=steamapps\common\Synergy\synergy
+if '%betaset%'=='b' set synpath=steamapps\common\synbeta\synergy
+if '%betaset%'=='t' set synpath=steamapps\common\syntwitch\synergy
+if NOT EXIST %synpath% goto notinstalled
+goto instsourceplugins
+:instsourceplugins
+echo (O) to open plugins directory. Add SP to any of the following to get the sp file of each.
+echo (M) to download fixed MapChooser (N) to download fixed Nominations
+echo (ML) to download ModelLoader     (G) to download GCFScape to open .vpk files
+echo (GT) to download Goto            (V) to download VoteCar
+echo (HD) to download HealthDisplay   (HYP) to download HyperSpawn
+echo (ST) to download Save/Teleport
+echo Some plugins will also require their translation files, you can get the full pack with (FP)
+echo If you have downloaded the full pack, use (FPI) to auto-install the plugins with translations included.
+echo (B) to go back to start.
+set /p pluginsubstr=
+for /f "delims=" %%V in ('powershell -command "$env:pluginsubstr.ToLower()"') do set "pluginsubstr=%%V"
+if '%pluginsubstr%'=='o' explorer "%cd%\%synpath%\addons\sourcemod\plugins"
+if '%pluginsubstr%'=='m' (
+	start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SM-Synergy/raw/master/plugins/mapchooser.smx\",\"$PWD\$env:synpath\addons\sourcemod\plugins\mapchooser.smx\") }"
+	if NOT EXIST "%cd%\%synpath%\cfg\mapcyclecfg.txt" (
+		findstr d1 %synpath%\mapcycle.txt > %synpath%\cfg\mapcyclecfg.txt
+		findstr d2 %synpath%\mapcycle.txt >> %synpath%\cfg\mapcyclecfg.txt
+		findstr d3 %synpath%\mapcycle.txt >> %synpath%\cfg\mapcyclecfg.txt
+		findstr ep1_ %synpath%\mapcycle.txt >> %synpath%\cfg\mapcyclecfg.txt
+		findstr ep2_ %synpath%\mapcycle.txt >> %synpath%\cfg\mapcyclecfg.txt
+	)
+	echo ^Installed!
+	echo.
+)
+if '%pluginsubstr%'=='n' start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SM-Synergy/raw/master/plugins/nominations.smx\",\"$PWD\$env:synpath\addons\sourcemod\plugins\nominations.smx\") }"
+if '%pluginsubstr%'=='msp' start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SM-Synergy/raw/master/scripting/mapchooser.sp\",\"$PWD\$env:synpath\addons\sourcemod\scripting\mapchooser.sp\") }"
+if '%pluginsubstr%'=='nsp' start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SM-Synergy/raw/master/scripting/nominations.sp\",\"$PWD\$env:synpath\addons\sourcemod\scripting\nominations.sp\") }"
+if '%pluginsubstr%'=='ml' start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://www.dropbox.com/s/d4jkxfyvncpdm3f/addons.zip?dl=1\",\"$PWD\$env:synpath\addons\sourcemod\modelloader.zip\") }"
+if '%pluginsubstr%'=='ml' start /wait /min powershell -command "& {Add-Type -AssemblyName System.IO.Compression.FileSystem; [System.IO.Compression.ZipFile]::ExtractToDirectory(\"$PWD\steamapps\Common\Synergy\synergy\addons\sourcemod\modelloader.zip\",\"$PWD\$env:synpath\") }"
+if '%pluginsubstr%'=='mlsp' echo SP file not available for this plugin, sorry.
+if '%pluginsubstr%'=='gt' start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"http://www.sourcemod.net/vbcompiler.php?file_id=58625\",\"$PWD\$env:synpath\addons\sourcemod\plugins\sm_goto.smx\") }"
+if '%pluginsubstr%'=='gtsp' start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://forums.alliedmods.net/attachment.php?attachmentid=58625\",\"$PWD\$env:synpath\addons\sourcemod\scripting\sm_goto.sp\") }"
+if '%pluginsubstr%'=='hd' start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SM-Synergy/raw/master/plugins/healthdisplay.smx\",\"$PWD\$env:synpath\addons\sourcemod\plugins\healthdisplay.smx\") }"
+if '%pluginsubstr%'=='hdsp' start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SM-Synergy/raw/master/scripting/healthdisplay.sp\",\"$PWD\$env:synpath\addons\sourcemod\scripting\healthdisplay.sp\") }"
+if '%pluginsubstr%'=='st' start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SM-Synergy/raw/master/plugins/syn_tp.smx\",\"$PWD\$env:synpath\addons\sourcemod\plugins\syn_tp.smx\") }"
+if '%pluginsubstr%'=='stsp' start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SM-Synergy/raw/master/scripting/syn_tp.sp\",\"$PWD\$env:synpath\addons\sourcemod\scripting\syn_tp.sp\") }"
+if '%pluginsubstr%'=='hyp' start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Sarabveer/SM-Plugins/raw/master/hyperspawn/plugins/hyperspawn.smx\",\"$PWD\$env:synpath\addons\sourcemod\plugins\hyperspawn.smx\") }"
+if '%pluginsubstr%'=='hypsp' start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Sarabveer/SM-Plugins/raw/master/hyperspawn/scripting/hyperspawn.sp\",\"$PWD\$env:synpath\addons\sourcemod\scripting\hyperspawn.sp\") }"
+if '%pluginsubstr%'=='g' start http://nemesis.thewavelength.net/files/files/gcfscape186.zip
+
+if '%pluginsubstr%'=='v' (
+	start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SM-Synergy/raw/master/plugins/votecar.smx\",\"$PWD\$env:synpath\addons\sourcemod\plugins\votecar.smx\") }"
+	start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SM-Synergy/raw/master/translations/votecar.phrases.txt\",\"$PWD\$env:synpath\addons\sourcemod\translations\votecar.phrases.txt\") }"
+	if EXIST "%cd%\%synpath%\addons\sourcemod\translations\votecar.phrases.txt" echo ^Installed!
+)
+if '%pluginsubstr%'=='vsp' start https://github.com/Balimbanana/SM-Synergy
+if '%pluginsubstr%'=='fp' start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SM-Synergy/archive/master.zip\",\"$PWD\SM-Synergy-master.zip\") }"
+if '%pluginsubstr%'=='fpi' goto instfp
+if '%pluginsubstr%'=='b' goto start
+goto instsourceplugins
+
+:instfp
+if NOT EXIST "%cd%\%synpath%\cfg\mapcyclecfg.txt" (
+	findstr d1 %synpath%\mapcycle.txt > %synpath%\cfg\mapcyclecfg.txt
+	findstr d2 %synpath%\mapcycle.txt >> %synpath%\cfg\mapcyclecfg.txt
+	findstr d3 %synpath%\mapcycle.txt >> %synpath%\cfg\mapcyclecfg.txt
+	findstr ep1_ %synpath%\mapcycle.txt >> %synpath%\cfg\mapcyclecfg.txt
+	findstr ep2_ %synpath%\mapcycle.txt >> %synpath%\cfg\mapcyclecfg.txt
+)
+if NOT EXIST "%cd%\SM-Synergy-master.zip" start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SM-Synergy/archive/master.zip\",\"$PWD\SM-Synergy-master.zip\") }"
+if EXIST "%cd%\SM-Synergy-master.zip" start /wait /min powershell -command "& {Add-Type -AssemblyName System.IO.Compression.FileSystem; [System.IO.Compression.ZipFile]::ExtractToDirectory(\"$PWD\SM-Synergy-master.zip\", \"$PWD\$env:synpath\addons\") }"
+if EXIST "%userprofile%\downloads\SM-Synergy-master.zip" start /wait /min powershell -command "& {Add-Type -AssemblyName System.IO.Compression.FileSystem; [System.IO.Compression.ZipFile]::ExtractToDirectory(\"$HOME\downloads\SM-Synergy-master.zip\", \"$PWD\$env:synpath\addons\") }"
+if EXIST "%cd%\%synpath%\addons\SM-Synergy-master" start /wait /min robocopy /S /NP /NJS /NJH /NS "%cd%\%synpath%\addons\SM-Synergy-master" "%cd%\%synpath%\addons\sourcemod"
+if EXIST "%cd%\%synpath%\addons\SM-Synergy-master" rd /Q /S "%cd%\%synpath%\addons\SM-Synergy-master"
+if NOT EXIST "%cd%\%synpath%\addons\sourcemod\translations\fpd.phrases.txt" (
+	echo ^Failed to install.
+	if NOT EXIST \"%userprofile%\downloads\SM-Synergy-master.zip\" echo ^Could not find in downloads.
+	if NOT EXIST \"%cd%\SM-Synergy-master.zip\" echo ^Could not find in %cd%.
+	pause
+)
+goto instsourceplugins
+
+:instpmpck
+if EXIST steamapps\workshop\content\17520\646159916\646159916_pak.vpk set pmpck1=2
+if EXIST steamapps\workshop\content\17520\703682251\703682251_pak.vpk set pmpck2=2
+if EXIST steamapps\workshop\content\17520\729355384\upload.vpk set pmpck3=2
+if EXIST steamapps\workshop\content\17520\1099811040\m_pack4upd.vpk set pmpck4=2
+if EXIST steamapps\workshop\content\17520\1133952585\1133952585_pak.vpk set pmpck5=2
+if EXIST "%cldir%\workshop\content\17520\646159916\646159916_pak.vpk" set pmpck1=1
+if EXIST "%cldir%\workshop\content\17520\703682251\703682251_pak.vpk" set pmpck2=1
+if EXIST "%cldir%\workshop\content\17520\729355384\upload.vpk" set pmpck3=1
+if EXIST "%cldir%\workshop\content\17520\1099811040\m_pack4upd.vpk" set pmpck4=1
+if EXIST "%cldir%\workshop\content\17520\1133952585\1133952585_pak.vpk" set pmpck5=1
+if '%pmpck1%'=='1' echo Player Model Pack 1 detected in CL workshop dir.
+if '%pmpck2%'=='1' echo Player Model Pack 2 detected in CL workshop dir.
+if '%pmpck3%'=='1' echo Player Model Pack 3 detected in CL workshop dir.
+if '%pmpck4%'=='1' echo Player Model Pack 4 detected in CL workshop dir.
+if '%pmpck5%'=='1' echo Player Model Pack 5 detected in CL workshop dir.
+if '%pmpck1%'=='2' echo Player Model Pack 1 detected in workshop dir.
+if '%pmpck2%'=='2' echo Player Model Pack 2 detected in workshop dir.
+if '%pmpck3%'=='2' echo Player Model Pack 3 detected in workshop dir.
+if '%pmpck4%'=='2' echo Player Model Pack 4 detected in workshop dir.
+if '%pmpck5%'=='2' echo Player Model Pack 5 detected in workshop dir.
+if %pmpck1% GEQ 1 echo (1) To install Pack 1 to your server.
+if %pmpck2% GEQ 1 echo (2) To install Pack 2 to your server.
+if %pmpck3% GEQ 1 echo (3) To install Pack 3 to your server.
+if %pmpck4% GEQ 1 echo (4) To install Pack 4 to your server.
+if %pmpck5% GEQ 1 echo (5) To install Pack 5 to your server.
+if '%pmpck1%'=='0' echo (DL1) to download Pack 1.
+if '%pmpck2%'=='0' echo (DL2) to download Pack 2.
+if '%pmpck3%'=='0' echo (DL3) to download Pack 3.
+if '%pmpck4%'=='0' echo (DL4) to download Pack 4.
+if '%pmpck5%'=='0' echo (DL5) to download Pack 5.
+echo (B) to go back to start.
+set /p pmpckopt=
+for /f "delims=" %%V in ('powershell -command "$env:pmpckopt.ToLower()"') do set "pmpckopt=%%V"
+if '%pmpckopt%'=='b' (
+	cls
+	goto ^start
+)
+if '%pmpckopt%'=='1' (
+	if '%pmpck1%'=='1' set pmpckdir=^%programfiles^(x86^)%\Steam\steamapps\workshop\content\17520\646159916\646159916_pak
+	if '%pmpck1%'=='2' set pmpckdir=^steamapps\workshop\content\17520\646159916\646159916_pak
+	set part=^1
+	set installing=^1
+)
+if '%pmpckopt%'=='2' (
+	if '%pmpck2%'=='1' set pmpckdir=^%programfiles^(x86^)%\Steam\steamapps\workshop\content\17520\703682251\703682251_pak
+	if '%pmpck2%'=='2' set pmpckdir=^steamapps\workshop\content\17520\703682251\703682251_pak
+	set part=^2
+	set installing=^1
+)
+if '%pmpckopt%'=='3' (
+	if '%pmpck3%'=='1' set pmpckdir=^%programfiles^(x86^)%\Steam\steamapps\workshop\content\17520\729355384\upload
+	if '%pmpck3%'=='2' set pmpckdir=^steamapps\workshop\content\17520\729355384\upload
+	set part=^3
+	set installing=^1
+)
+if '%pmpckopt%'=='4' (
+	if '%pmpck4%'=='1' set pmpckdir=^%programfiles^(x86^)%\Steam\steamapps\workshop\content\17520\1099811040\m_pack4upd
+	if '%pmpck4%'=='2' set pmpckdir=^steamapps\workshop\content\17520\1099811040\m_pack4upd
+	set part=^4
+	set installing=^1
+)
+if '%pmpckopt%'=='5' (
+	if '%pmpck5%'=='1' set pmpckdir=^%programfiles^(x86^)%\Steam\steamapps\workshop\content\17520\1133952585\1133952585_pak
+	if '%pmpck5%'=='2' set pmpckdir=^steamapps\workshop\content\17520\1133952585\1133952585_pak
+	set part=^5
+	set installing=^1
+)
+if '%installing%'=='1' (
+	if NOT EXIST "%pmpckdir%.vpk" echo.
+	if NOT EXIST "%pmpckdir%.vpk" echo ^You do not have this part downloaded...
+	if NOT EXIST "%pmpckdir%.vpk" echo.
+	if NOT EXIST "%pmpckdir%.vpk" set installing=^0
+	if NOT EXIST "%pmpckdir%.vpk" goto ^instpmpck
+)
+if '%installing%'=='1' (
+	start /wait /min steamapps\common\Synergy\bin\vpk.exe %pmpckdir%.vpk
+	start /wait /min robocopy /S /NP /NJS /NJH /NS "%cd%\%pmpckdir%" "steamapps\common\Synergy\synergy"
+	rd /Q /S "%cd%\%pmpckdir%"
+	echo.
+	echo ^Completed extracting Part %part%...
+	echo.
+	set installing=^0
+	set pmpckopt=^0
+)
+if '%pmpckopt%'=='dl1' steamcmd.exe +login anonymous +workshop_download_item 17520 646159916 +quit
+if '%pmpckopt%'=='dl2' steamcmd.exe +login anonymous +workshop_download_item 17520 703682251 +quit
+if '%pmpckopt%'=='dl3' steamcmd.exe +login anonymous +workshop_download_item 17520 729355384 +quit
+if '%pmpckopt%'=='dl4' steamcmd.exe +login anonymous +workshop_download_item 17520 1099811040 +quit
+if '%pmpckopt%'=='dl5' steamcmd.exe +login anonymous +workshop_download_item 17520 1133952585 +quit
+ping localhost -n 3 >NUL
+goto instpmpck
+
+:linksm
+net session >nul 2>&1
+if %ERRORLEVEL% NEQ 0 ( goto notadmin )
+if EXIST "%programfiles(x86)%\Steam\steamapps\sourcemods" mklink /d "steamapps\sourcemods" "%programfiles(x86)%\Steam\steamapps\sourcemods"
+if EXIST "%programfiles(x86)%\Steam\steamapps\sourcemods" goto start
+if EXIST "E:\SteamLibrary\steamapps\sourcemods" mklink /d "steamapps\sourcemods" "E:\SteamLibrary\steamapps\sourcemods"
+if EXIST "E:\SteamLibrary\steamapps\sourcemods" goto start
+if EXIST "D:\SteamLibrary\steamapps\sourcemods" mklink /d "steamapps\sourcemods" "D:\SteamLibrary\steamapps\sourcemods"
+if EXIST "D:\SteamLibrary\steamapps\sourcemods" goto start
+if EXIST "F:\SteamLibrary\steamapps\sourcemods" mklink /d "steamapps\sourcemods" "F:\SteamLibrary\steamapps\sourcemods"
+if EXIST "F:\SteamLibrary\steamapps\sourcemods" goto start
+if NOT EXIST "steamapps\sourcemods" echo Could not find Sourcemods in CL directory.
+goto start
+
+:instmodsup
+if NOT EXIST "steamapps\sourcemods" (
+	cls
+	echo ^Sourcemods not found in SteamCMD directory.
+	if EXIST "%cldir%\sourcemods" echo ^Sourcemods were found in client directory.
+	if EXIST "%cldir%\sourcemods" echo ^In order to link the client Sourcemods directory to SteamCMD's Sourcemods, restart this script as an administrator and put in the first prompt after in the correct directory: linksm
+	if NOT EXIST "%cldir%\sourcemods" mkdir steamapps\sourcemods
+	pause
+	exit
+)
+set contentpath=steamapps\common\Synergy\synergy\content
+if EXIST "%contentpath%\bti.dat" (
+	set supportsinst=^%supportsinst%, Below The Ice
+	if NOT EXIST "steamapps\sourcemods\belowice" echo ^Below The Ice SourceMod not installed!
+	if NOT EXIST "steamapps\sourcemods\belowice" echo ^Download with ^(BTI^)
+)
+if EXIST "%contentpath%\ce.dat" (
+	set supportsinst=^%supportsinst%, Causality Effect
+	if NOT EXIST "steamapps\sourcemods\CausalityEffect" echo ^Causality Effect SourceMod not installed!
+	if NOT EXIST "steamapps\sourcemods\CausalityEffect" echo ^Download with ^(CE^)
+)
+if EXIST "%contentpath%\ctoa.dat" (
+	set supportsinst=^%supportsinst%, Coastline To Atmosphere
+	if NOT EXIST "steamapps\sourcemods\Coastline_to_Atmosphere" echo ^Coastline To Atmosphere SourceMod not installed!
+	if NOT EXIST "steamapps\sourcemods\Coastline_to_Atmosphere" echo ^Download with ^(CTOA^)
+)
+if EXIST "%contentpath%\cd.dat" (
+	set supportsinst=^%supportsinst%, Combine Destiny
+	if NOT EXIST "steamapps\sourcemods\CombineDestiny" echo ^Combine Destiny SourceMod not installed!
+	if NOT EXIST "steamapps\sourcemods\CombineDestiny" echo ^Download with ^(CD^)
+)
+if EXIST "%contentpath%\dh.dat" (
+	set supportsinst=^%supportsinst%, DayHard
+	if NOT EXIST "steamapps\sourcemods\DayHard" echo ^DayHard SourceMod not installed!
+	if NOT EXIST "steamapps\sourcemods\DayHard" echo ^Download with ^(DH^)
+)
+if EXIST "%contentpath%\aftermath.dat" (
+	set supportsinst=^%supportsinst%, Aftermath
+	if NOT EXIST "steamapps\sourcemods\Aftermath" echo ^Aftermath SourceMod not installed!
+	if NOT EXIST "steamapps\sourcemods\Aftermath" echo ^Download with ^(AM^)
+)
+if EXIST "%contentpath%\deepdown.dat" (
+	set supportsinst=^%supportsinst%, DeepDown
+	if NOT EXIST "steamapps\sourcemods\DeepDown" echo ^DeepDown SourceMod not installed!
+	if NOT EXIST "steamapps\sourcemods\DeepDown" echo ^Download with ^(DD^)
+)
+if EXIST "%contentpath%\DownFall.dat" (
+	set supportsinst=^%supportsinst%, DownFall
+	if NOT EXIST "steamapps\common\Half-Life 2 DownFall" echo ^DownFall Steam game not installed!
+	if NOT EXIST "steamapps\common\Half-Life 2 DownFall" echo ^Download with ^(DF^)
+)
+if EXIST "%contentpath%\eots.dat" (
+	set supportsinst=^%supportsinst%, Eye of The Storm
+	if NOT EXIST "steamapps\sourcemods\eots" echo ^Eye of The Storm SourceMod not installed!
+	if NOT EXIST "steamapps\sourcemods\eots" echo ^Download with ^(EOTS^)
+)
+if EXIST "%contentpath%\leonep3.dat" (
+	set supportsinst=^%supportsinst%, Half-Life 2 Episode 3 The Closure
+	if NOT EXIST "steamapps\sourcemods\Halflife2-Episode3" echo ^Half-Life 2 Episode 3 The Closure SourceMod not installed!
+	if NOT EXIST "steamapps\sourcemods\Halflife2-Episode3" echo ^Download with ^(EP3^)
+)
+if EXIST "%contentpath%\Liberation.dat" (
+	set supportsinst=^%supportsinst%, Liberation
+	if NOT EXIST "steamapps\sourcemods\Liberation" echo ^Liberation SourceMod not installed!
+	if NOT EXIST "steamapps\sourcemods\Liberation" echo ^Download with ^(LIB^)
+)
+if EXIST "%contentpath%\luts.dat" (
+	set supportsinst=^%supportsinst%, Lost Under The Snow
+	if NOT EXIST "steamapps\sourcemods\LostUnderTheSnow" echo ^Lost Under The Snow SourceMod not installed!
+	if NOT EXIST "steamapps\sourcemods\LostUnderTheSnow" echo ^Download with ^(LUTS^)
+)
+if EXIST "%contentpath%\mpr.dat" (
+	set supportsinst=^%supportsinst%, The Masked Prisoner
+	if NOT EXIST "steamapps\sourcemods\themaskedprisoner" echo ^The Masked Prisoner SourceMod not installed!
+	if NOT EXIST "steamapps\sourcemods\themaskedprisoner" echo ^Download with ^(MPR^)
+)
+if EXIST "%contentpath%\missionimprobable.dat" (
+	set supportsinst=^%supportsinst%, Mission Improbable
+	if NOT EXIST "steamapps\sourcemods\missionimprobable" echo ^Mission Improbable SourceMod not installed!
+	if NOT EXIST "steamapps\sourcemods\missionimprobable" echo ^Download with ^(MI^)
+)
+if EXIST "%contentpath%\mop.dat" (
+	set supportsinst=^%supportsinst%, Mistake of Pythagoras
+	if NOT EXIST "steamapps\sourcemods\MOP" echo ^Mistake of Pythagoras SourceMod not installed!
+	if NOT EXIST "steamapps\sourcemods\MOP" echo ^Download with ^(MOP^)
+)
+if EXIST "%contentpath%\omegaprison.dat" (
+	set supportsinst=^%supportsinst%, Omega Prison
+	if NOT EXIST "steamapps\sourcemods\omegaprison" echo ^Omega Prison SourceMod not installed!
+	if NOT EXIST "steamapps\sourcemods\omegaprison" echo ^Download with ^(OP^)
+)
+if EXIST "%contentpath%\ravenholm.dat" (
+	set supportsinst=^%supportsinst%, Ravenholm
+	if NOT EXIST "steamapps\sourcemods\RavenholmNCZ" echo ^Ravenholm SourceMod not installed!
+	if NOT EXIST "steamapps\sourcemods\RavenholmNCZ" echo ^Download with ^(RH^)
+)
+if EXIST "%contentpath%\slums2ext.dat" (
+	set supportsinst=^%supportsinst%, Slums 2: Extended
+	if NOT EXIST "steamapps\sourcemods\Slums 2 Extended" echo ^Slums 2: Extended SourceMod not installed!
+	if NOT EXIST "steamapps\sourcemods\Slums 2 Extended" echo ^Download with ^(S2E^)
+)
+if EXIST "%contentpath%\sn.dat" (
+	set supportsinst=^%supportsinst%, Spherical Nightmares
+	if NOT EXIST "steamapps\sourcemods\Spherical Nightmares" echo ^Spherical Nightmares SourceMod not installed!
+	if NOT EXIST "steamapps\sourcemods\Spherical Nightmares" echo ^Download with ^(SN^)
+)
+if EXIST "%contentpath%\stridermount.dat" (
+	set supportsinst=^%supportsinst%, Strider Mountain
+	if NOT EXIST "steamapps\sourcemods\Strider_Mountain_Rev3" echo ^Strider Mountain SourceMod not installed!
+	if NOT EXIST "steamapps\sourcemods\Strider_Mountain_Rev3" echo ^Download with ^(SM^)
+)
+if EXIST "%contentpath%\cit2.dat" (
+	set supportsinst=^%supportsinst%, The Citizen Returns
+	if NOT EXIST "steamapps\sourcemods\The Citizen Returns" echo ^The Citizen Returns SourceMod not installed!
+	if NOT EXIST "steamapps\sourcemods\The Citizen Returns" echo ^Download with ^(CIT2^)
+)
+if EXIST "%contentpath%\hunger.dat" (
+	set supportsinst=^%supportsinst%, They Hunger Again
+	if NOT EXIST "steamapps\sourcemods\hunger" echo ^They Hunger Again SourceMod not installed!
+	if NOT EXIST "steamapps\sourcemods\hunger" echo ^Download with ^(TH^)
+)
+if EXIST "%contentpath%\up.dat" (
+	set supportsinst=^%supportsinst%, Uncertainty Principle
+	if NOT EXIST "steamapps\sourcemods\uncertaintyprinciple" echo ^Uncertainty Principle SourceMod not installed!
+	if NOT EXIST "steamapps\sourcemods\uncertaintyprinciple" echo ^Download with ^(UP^)
+)
+if EXIST "%contentpath%\precursor.dat" (
+	set supportsinst=^%supportsinst%, Precursor
+	if NOT EXIST "steamapps\sourcemods\Precursor" echo ^Precursor SourceMod not installed!
+	if NOT EXIST "steamapps\sourcemods\Precursor" echo ^Download with ^(PRE^)
+)
+if EXIST "%contentpath%\researchanddevelopment.dat" (
+	set supportsinst=^%supportsinst%, Research and Development
+	if NOT EXIST "steamapps\sourcemods\Research and Development" echo ^Research and Development SourceMod not installed!
+	if NOT EXIST "steamapps\sourcemods\Research and Development" echo ^Download with ^(RAND^)
+)
+ping localhost -n 1 >NUL
+set supportsinst=%supportsinst:~2%
+echo You currently have support files for: %supportsinst% on your server.
+echo.
+echo (B) to go back to start.
+set /p dlsm=
+for /f "delims=" %%V in ('powershell -command "$env:dlsm.ToLower()"') do set "dlsm=%%V"
+if '%dlsm%'=='b' cls
+if '%dlsm%'=='b' goto start
+if '%dlsm%'=='bti' start http://www.runthinkshootlive.com/posts/below-the-ice/
+if '%dlsm%'=='ce' start http://www.moddb.com/mods/causality-effect/downloads/the-installer
+if '%dlsm%'=='ctoa' start http://www.runthinkshootlive.com/posts/leons-coastline-to-atmosphere/
+if '%dlsm%'=='cd' start http://www.moddb.com/mods/combine-destiny
+if '%dlsm%'=='dh' start http://www.moddb.com/mods/dayhard
+if '%dlsm%'=='am' start http://www.runthinkshootlive.com/posts/aftermath/
+if '%dlsm%'=='dd' start http://www.runthinkshootlive.com/posts/deep-down/
+if '%dlsm%'=='df' start http://store.steampowered.com/app/587650
+if '%dlsm%'=='eots' start http://www.runthinkshootlive.com/posts/eye-of-the-storm-episode-1/
+if '%dlsm%'=='ep3' start http://www.moddb.com/mods/the-closure/downloads/half-life-2-episode-3-the-closure-v-20
+if '%dlsm%'=='lib' start http://www.runthinkshootlive.com/posts/liberation/
+if '%dlsm%'=='luts' start http://www.runthinkshootlive.com/posts/lost-under-the-snow/
+if '%dlsm%'=='mpr' start http://www.runthinkshootlive.com/posts/the-masked-prisoner/
+if '%dlsm%'=='mi' start http://www.runthinkshootlive.com/posts/mission-improbable/
+if '%dlsm%'=='mop' start http://www.moddb.com/mods/mistake-of-pythagoras/downloads/mistake-of-pythagoras-v10c
+if '%dlsm%'=='op' start http://www.runthinkshootlive.com/posts/omega-prison/
+if '%dlsm%'=='rh' start http://www.moddb.com/mods/ravenholm/downloads/
+if '%dlsm%'=='s2e' start http://www.runthinkshootlive.com/posts/slums-2-extended/
+if '%dlsm%'=='sn' start http://www.runthinkshootlive.com/posts/spherical-nightmares/
+if '%dlsm%'=='sm' start http://www.runthinkshootlive.com/posts/strider-mountain/
+if '%dlsm%'=='cit2' start http://www.runthinkshootlive.com/posts/the-citizen-returns/
+if '%dlsm%'=='th' start http://www.moddb.com/mods/they-hunger-again/downloads/they-hunger-again-v13
+if '%dlsm%'=='up' start http://www.runthinkshootlive.com/posts/uncertainty-principle/
+if '%dlsm%'=='pre' start http://www.runthinkshootlive.com/posts/precursor-half-life-2-ep2/
+if '%dlsm%'=='rand' start http://www.moddb.com/mods/research-and-development/downloads
+goto instmodsup
+
+:dltowrong
+echo SourceMod zip not in your users Download folder, or the SteamCMD folder, auto-install halted.
+echo Press any key to re-run the SourceMod install function...
+pause
+goto instsourcem
+
+:noanon
+echo You cannot use anonymous to install Synergy...
+set anonset=1
+goto firstinstall
