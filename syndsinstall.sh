@@ -10,6 +10,9 @@ if [ ! -d $cldir ]; then
 	if [ -d $HOME/steam/steamapps ]; then
 		cldir=$HOME/steam/steamapps
 	fi
+	if [ -d $HOME/Library/Application\ Support/Steam/SteamApps ]; then
+		cldir=$HOME/Library/Application\ Support/Steam/SteamApps
+	fi
 	if [ ! -d $cldir ]; then
 		cldir=none
 	fi
@@ -48,7 +51,7 @@ anonset=0
 if [ ! -f ./steamcmd.sh ];then notindir; fi
 echo "Information: enter the letter inside the () and press enter to continue at the prompts."
 echo "First (I)nstall, (U)pdate, (R)un with auto-restart"
-echo "(RB) to run Synergy 4.3 beta, (RT) to run Synergy Twitch branch."
+echo "(RB) to run Synergy 18.7 beta, (RT) to run Synergy Twitch branch."
 echo "(IS) to install SourceMod."
 if [ -d ./steamapps/common/Synergy/synergy/addons/sourcemod/plugins ]; then echo "(ISM) to install additional SourceMod plugins."; fi
 read uprun
@@ -59,7 +62,7 @@ if [ $uprun = "rb" ]; then srcds;fi
 if [ $uprun = "rt" ]; then srcds;fi
 if [ $uprun = "r" ]; then srcds;fi
 if [ $uprun = "is" ]; then instsourcem;fi
-if [ $uprun = "ism" ]; then instsourceplugins;fi
+if [ $uprun = "ism" ]; then instsourcepluginstop;fi
 if [ $uprun = "linksm" ]; then linksm;fi
 echo "Choose an option."
 start
@@ -76,25 +79,48 @@ start
 
 instsourcem() {
 if [ ! -d ./steamapps/common/Synergy/synergy ];then notinstalled;fi
-echo "This function is designed for the current version of Synergy, the development branch is still unstable, you can still manually install if you want to."
+echo "This function is designed for the current version of Synergy, the development branch may be unstable."
+echo "Install SourceMod for Regular, (B)eta, or (T)witch? (anything except b or t will do regular)"
+read betaset
+betaset=${betaset,,}
+synpath="steamapps/common/Synergy/synergy"
+if [ $betaset = "b" ];then
+	synpath="steamapps/common/synbeta/synergy";
+	syntype="nonstand"
+fi
+if [ $betaset = "t" ];then
+	synpath="steamapps/common/syntwitch/synergy";
+	syntype="nonstand"
+fi
+if [ ! -d $synpath ];then notinstalled;fi
 echo "This will direct download the required SourceMod files and then extract them."
 read nullptr
-if [ -d ./steamapps/common/Synergy/synergy/addons/sourcemod ];then
+if [ -d ./$synpath/addons/sourcemod ];then
 	echo "SourceMod is already installed, if you want to re-install, rename the current SourceMod install and re-run this script."
 	read nullptr
 	start
 fi
-curl -sqL "https://sm.alliedmods.net/smdrop/1.8/sourcemod-1.8.0-git6041-linux.tar.gz" | tar zxvf - -C ./steamapps/common/Synergy/synergy
-curl -sqL "https://mms.alliedmods.net/mmsdrop/1.10/mmsource-1.10.7-git959-linux.tar.gz" | tar zxvf - -C ./steamapps/common/Synergy/synergy
-curl -sqL "https://users.alliedmods.net/~kyles/builds/SteamWorks/SteamWorks-git126-linux.tar.gz" | tar zxvf - -C ./steamapps/common/Synergy/synergy
-if [ ! -d ./steamapps/common/Synergy/synergy/addons/sourcemod ];then
+curl -sqL "https://sm.alliedmods.net/smdrop/1.8/sourcemod-1.8.0-git6041-linux.tar.gz" | tar zxvf - -C ./$synpath
+curl -sqL "https://mms.alliedmods.net/mmsdrop/1.10/mmsource-1.10.7-git959-linux.tar.gz" | tar zxvf - -C ./$synpath
+curl -sqL "https://users.alliedmods.net/~kyles/builds/SteamWorks/SteamWorks-git126-linux.tar.gz" | tar zxvf - -C ./$synpath
+if [ ! -d ./$synpath/addons/sourcemod ];then
 	echo "Failed to auto-install SourceMod, you may have to manually install it."
 	read nullptr
-	exit
+	start
+fi
+if [ $syntype = "nonstand" ];then
+	if [ ! -d ./$synpath/addons/sourcemod/gamedata/sdkhooks.games/custom ];then
+		mkdir ./$synpath/addons/sourcemod/gamedata/sdkhooks.games/custom
+	fi
+	if [ ! -d ./$synpath/addons/sourcemod/gamedata/sdktools.games/custom ];then
+		mkdir ./$synpath/addons/sourcemod/gamedata/sdktools.games/custom
+	fi
+	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/devtwitchgamedata/sdkhooks.games/custom/game.synergy.txt" -P ./$synpath/addons/sourcemod/gamedata/sdkhooks.games/custom
+	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/devtwitchgamedata/sdktools.games/custom/game.synergy.txt" -P ./$synpath/addons/sourcemod/gamedata/sdktools.games/custom
 fi
 # remove nextmap as it does not work in Synergy
-rm -f ./steamapps/common/Synergy/synergy/addons/sourcemod/plugins/nextmap.smx
-echo "SourceMod installed, you can put plugins in ./steamapps/common/Synergy/synergy/addons/sourcemod/plugins"
+rm -f ./$synpath/addons/sourcemod/plugins/nextmap.smx
+echo "SourceMod installed, you can put plugins in ./$synpath/addons/sourcemod/plugins"
 start
 }
 
@@ -207,7 +233,7 @@ synpath=./steamapps/common/Synergy
 syntype=56.16
 if [ $betaset = "b" ];then
 	synpath=./steamapps/common/synbeta
-	syntype=4.3
+	syntype=18.7
 fi
 if [ $betaset = "t" ];then
 	synpath=./steamapps/common/syntwitch
@@ -275,66 +301,96 @@ echo "Something went wrong with installing HL2, restarting script."
 start
 }
 
+instsourcepluginstop() {
+echo "Install plugins for Regular, (B)eta, or (T)witch? (anything except b or t will do regular)"
+read betaset
+betaset=${betaset,,}
+synpath="steamapps/common/Synergy/synergy"
+if [ $betaset = "b" ];then synpath="steamapps/common/synbeta/synergy";fi
+if [ $betaset = "t" ];then synpath="steamapps/common/syntwitch/synergy";fi
+if [ ! -d $synpath ];then notinstalled;fi
+instsourceplugins
+}
+
 instsourceplugins() {
 echo "Add SP to any of the following to get the sp file of each."
 echo "(M) to download fixed MapChooser  (N) to download fixed Nominations"
 echo "(ML) to download ModelLoader      (GT) to download Goto"
-echo "(V) to download VoteCar"
+echo "(V) to download VoteCar           (HD) to download HealthDisplay"
+echo "(HYP) to download HyperSpawn      (ST) to download Save/Teleport"
 echo "Some plugins will also require their translation files, you can get a full pack of these plugins with (FP)"
 echo "(B) to go back to start"
 read pluginsubstr
 pluginsubstr=${pluginsubstr,,}
 if [ $pluginsubstr = "m" ];then
-	rm -f ./steamapps/common/Synergy/synergy/addons/sourcemod/plugins/mapchooser.smx
-	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/plugins/mapchooser.smx" -P ./steamapps/common/Synergy/synergy/addons/sourcemod/plugins
-	if [ ! -f ./steamapps/common/Synergy/synergy/cfg/mapcyclecfg.txt ];then
-		cat ./steamapps/common/Synergy/synergy/mapcycle.txt | grep d1>./steamapps/common/Synergy/synergy/cfg/mapcyclecfg.txt
-		cat ./steamapps/common/Synergy/synergy/mapcycle.txt | grep d2>>./steamapps/common/Synergy/synergy/cfg/mapcyclecfg/txt
-		cat ./steamapps/common/Synergy/synergy/mapcycle.txt | grep d3>>./steamapps/common/Synergy/synergy/cfg/mapcyclecfg.txt
-		cat ./steamapps/common/Synergy/synergy/mapcycle.txt | grep ep1_>>./steamapps/common/Synergy/synergy/cfg/mapcyclecfg.txt
-		cat ./steamapps/common/Synergy/synergy/mapcycle.txt | grep ep2_>>./steamapps/common/Synergy/synergy/cfg/mapcyclecfg.txt
+	rm -f ./$synpath/addons/sourcemod/plugins/mapchooser.smx
+	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/plugins/mapchooser.smx" -P ./$synpath/addons/sourcemod/plugins
+	if [ ! -f ./$synpath/cfg/mapcyclecfg.txt ];then
+		cat ./$synpath/mapcycle.txt | grep d1>./$synpath/cfg/mapcyclecfg.txt
+		cat ./$synpath/mapcycle.txt | grep d2>>./$synpath/cfg/mapcyclecfg/txt
+		cat ./$synpath/mapcycle.txt | grep d3>>./$synpath/cfg/mapcyclecfg.txt
+		cat ./$synpath/mapcycle.txt | grep ep1_>>./$synpath/cfg/mapcyclecfg.txt
+		cat ./$synpath/mapcycle.txt | grep ep2_>>./$synpath/cfg/mapcyclecfg.txt
 	fi
 	echo "Installed!"
 fi
 if [ $pluginsubstr = "n" ];then
-	rm -f ./steamapps/common/Synergy/synergy/addons/sourcemod/plugins/nominations.smx
-	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/plugins/nominations.smx" -P ./steamapps/common/Synergy/synergy/addons/sourcemod/plugins
+	rm -f ./$synpath/addons/sourcemod/plugins/nominations.smx
+	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/plugins/nominations.smx" -P ./$synpath/addons/sourcemod/plugins
 fi
 if [ $pluginsubstr = "msp" ];then
-	rm -f ./steamapps/common/Synergy/synergy/addons/sourcemod/scripting/mapchooser.sp
-	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/scripting/mapchooser.sp" -P ./steamapps/common/Synergy/synergy/addons/sourcemod/scripting
+	rm -f ./$synpath/addons/sourcemod/scripting/mapchooser.sp
+	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/scripting/mapchooser.sp" -P ./$synpath/addons/sourcemod/scripting
 fi
 if [ $pluginsubstr = "nsp" ];then
-	rm -f ./steamapps/common/Synergy/synergy/addons/sourcemod/scripting/nominations.sp
-	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/scripting/nominations.sp" -P ./steamapps/common/Synergy/synergy/addons/sourcemod/scripting
+	rm -f ./$synpath/addons/sourcemod/scripting/nominations.sp
+	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/scripting/nominations.sp" -P ./$synpath/addons/sourcemod/scripting
 fi
 if [ $pluginsubstr = "ml" ];then
-	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/plugins/modelloader.smx" -P ./steamapps/common/Synergy/synergy/addons/sourcemod/plugins
-	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/translations/modelloader.phrases.txt" -P ./steamapps/common/Synergy/synergy/addons/sourcemod/translations
-	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/translations/chi/modelloader.phrases.txt" -P ./steamapps/common/Synergy/synergy/addons/sourcemod/translations/chi
-	if [ -f ./steamapps/common/Synergy/synergy/addons/sourcemod/translations/modelloader.phrases ];then echo "Installed!";fi
+	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/plugins/modelloader.smx" -P ./$synpath/addons/sourcemod/plugins
+	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/translations/modelloader.phrases.txt" -P ./$synpath/addons/sourcemod/translations
+	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/translations/chi/modelloader.phrases.txt" -P ./$synpath/addons/sourcemod/translations/chi
+	if [ -f ./$synpath/addons/sourcemod/translations/modelloader.phrases ];then echo "Installed!";fi
 fi
 if [ $pluginsubstr = "mlsp" ];then echo "SP file not available for this plugin, sorry.";fi
 if [ $pluginsubstr = "gt" ];then
-	wget -nv "http://www.sourcemod.net/vbcompiler.php?file_id=58625" -P ./steamapps/common/Synergy/synergy/addons/sourcemod/plugins
+	wget -nv "http://www.sourcemod.net/vbcompiler.php?file_id=58625" -P ./$synpath/addons/sourcemod/plugins
 fi
 if [ $pluginsubstr = "gtsp" ];then
-	wget -nv "http://www.forums.alliedmods.net/attachment.php?attachmentid=58625" -P ./steamapps/common/Synergy/synergy/addons/sourcemod/scripting
+	wget -nv "http://www.forums.alliedmods.net/attachment.php?attachmentid=58625" -P ./$synpath/addons/sourcemod/scripting
 fi
 if [ $pluginsubstr = "v" ];then
-	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/plugins/votecar.smx" -P ./steamapps/common/Synergy/synergy/addons/sourcemod/plugins
-	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/translations/votecar.phrases.txt" -P ./steamapps/common/Synergy/synergy/addons/sourcemod/translations
+	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/plugins/votecar.smx" -P ./$synpath/addons/sourcemod/plugins
+	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/translations/votecar.phrases.txt" -P ./$synpath/addons/sourcemod/translations
 fi
 if [ $pluginsubstr = "vsp" ];then
-	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/scripting/votecar.sp" -P ./steamapps/common/Synergy/synergy/addons/sourcemod/scripting
+	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/scripting/votecar.sp" -P ./$synpath/addons/sourcemod/scripting
 fi
 if [ $pluginsubstr = "fp" ];then
 	wget -nv "https://github.com/Balimbanana/SM-Synergy/archive/master.zip" -P .
-	unzip -qq ./master.zip -d ./steamapps/common/Synergy/synergy/addons/sourcemod
-	rsync --remove-source-files -a ./steamapps/common/Synergy/synergy/addons/sourcemod/SM-Synergy-master/* ./steamapps/common/Synergy/synergy/addons/sourcemod
+	unzip -qq ./master.zip -d ./$synpath/addons/sourcemod
+	rsync --remove-source-files -a ./$synpath/addons/sourcemod/SM-Synergy-master/* ./$synpath/addons/sourcemod
 	rm -f ./master.zip
-	rm -rf ./steamapps/common/Synergy/synergy/addons/sourcemod/SM-Synergy-master
+	rm -rf ./$synpath/addons/sourcemod/SM-Synergy-master
 	echo "Installed!"
+fi
+if [ $pluginsubstr = "hd" ];then
+	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/plugins/healthdisplay.smx" -P ./$synpath/addons/sourcemod/plugins
+fi
+if [ $pluginsubstr = "hdsp" ];then
+	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/scripting/healthdisplay.sp" -P ./$synpath/addons/sourcemod/scripting
+fi
+if [ $pluginsubstr = "hyp" ];then
+	wget -nv "https://github.com/Sarabveer/SM-Plugins/raw/master/hyperspawn/plugins/hyperspawn.smx" -P ./$synpath/addons/sourcemod/plugins
+fi
+if [ $pluginsubstr = "hypsp" ];then
+	wget -nv "https://github.com/Sarabveer/SM-Plugins/raw/master/hyperspawn/scripting/hyperspawn.sp" -P ./$synpath/addons/sourcemod/scripting
+fi
+if [ $pluginsubstr = "st" ];then
+	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/plugins/syn_tp.smx" -P ./$synpath/addons/sourcemod/plugins
+fi
+if [ $pluginsubstr = "stsp" ];then
+	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/scripting/syn_tp.sp" -P ./$synpath/addons/sourcemod/scripting
 fi
 if [ $pluginsubstr = "b" ];then start;fi
 instsourceplugins
