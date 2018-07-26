@@ -1,0 +1,20 @@
+@echo off
+rem This script was written by Balimbanana.
+title Synergy Jalopy Radar Fix
+set cldir=%programfiles(x86)%\Steam\steamapps
+if EXIST "D:\SteamLibrary\steamapps\common\Synergy\synergy" set cldir=D:\SteamLibrary\steamapps
+if EXIST "E:\SteamLibrary\steamapps\common\Synergy\synergy" set cldir=E:\SteamLibrary\steamapps
+if EXIST "F:\SteamLibrary\steamapps\common\Synergy\synergy" set cldir=F:\SteamLibrary\steamapps
+if EXIST "G:\SteamLibrary\steamapps\common\Synergy\synergy" set cldir=G:\SteamLibrary\steamapps
+if EXIST "H:\SteamLibrary\steamapps\common\Synergy\synergy" set cldir=H:\SteamLibrary\steamapps
+:start
+if NOT EXIST "%cldir%\common\Synergy\synergy" goto notfound
+if NOT EXIST "%cldir%\common\Synergy\synergy\scripts" mkdir ^"%cldir%\common\Synergy\synergy\scripts"
+start /wait /min powershell -command "& {$WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://gist.githubusercontent.com/Balimbanana/5edefbc6d9a0a7fe7c28e444547ddf65/raw/4dc290629081715ad585e31747cfbd7d8f7a83c7/vgui_screens.txt\",\"$env:cldir\common\Synergy\synergy\scripts\vgui_screens.txt\") }"
+if EXIST "%cldir%\common\Synergy\synergy\scripts\vgui_screens.txt" echo ^Fixed!
+pause
+exit
+
+:notfound
+echo Could not find game directory...
+pause
