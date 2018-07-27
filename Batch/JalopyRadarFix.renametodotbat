@@ -1,6 +1,6 @@
 @echo off
 rem This script was written by Balimbanana.
-title Synergy Jalopy Radar Fix
+title Synergy 56.16 Jalopy Radar Fix
 set cldir=%programfiles(x86)%\Steam\steamapps
 if EXIST "D:\SteamLibrary\steamapps\common\Synergy\synergy" set cldir=D:\SteamLibrary\steamapps
 if EXIST "E:\SteamLibrary\steamapps\common\Synergy\synergy" set cldir=E:\SteamLibrary\steamapps
