@@ -206,6 +206,7 @@ echo "Updating/installing Synergy Twitch Branch DS"
 echo "Update/installation Complete"
 echo "If there were errors above, close the script and log in to steamcmd.sh separately, then restart this script."
 if [ $uprun = "i" ];then setup;fi
+uprun="t"
 srcds
 }
 
@@ -215,6 +216,7 @@ echo "Updating/installing Synergy Beta DS"
 echo "Update/installation Complete"
 echo "If there were errors above, close the script and log in to steamcmd.sh separately, then restart this script."
 if [ $uprun = "i" ];then setup;fi
+uprun="b"
 srcds
 }
 
