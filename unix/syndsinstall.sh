@@ -394,6 +394,12 @@ fi
 if [ $pluginsubstr = "stsp" ];then
 	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/scripting/syn_tp.sp" -P ./$synpath/addons/sourcemod/scripting
 fi
+if [ $pluginsubstr = "syn" ];then
+	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/plugins/synfixes.smx" -P ./$synpath/addons/sourcemod/plugins
+fi
+if [ $pluginsubstr = "synsp" ];then
+	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/scripting/synfixes.sp" -P ./$synpath/addons/sourcemod/scripting
+fi
 if [ $pluginsubstr = "b" ];then start;fi
 instsourceplugins
 }
