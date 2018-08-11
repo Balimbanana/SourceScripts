@@ -320,6 +320,7 @@ echo "(M) to download fixed MapChooser  (N) to download fixed Nominations"
 echo "(ML) to download ModelLoader      (GT) to download Goto"
 echo "(V) to download VoteCar           (HD) to download HealthDisplay"
 echo "(HYP) to download HyperSpawn      (ST) to download Save/Teleport"
+echo "(SYN) to download SynFixes
 echo "Some plugins will also require their translation files, you can get a full pack of these plugins with (FP)"
 echo "(B) to go back to start"
 read pluginsubstr
