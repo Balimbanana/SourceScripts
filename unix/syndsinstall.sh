@@ -56,6 +56,7 @@ echo "(IS) to install SourceMod."
 if [ -d ./steamapps/common/Synergy/synergy/addons/sourcemod/plugins ]; then echo "(ISM) to install additional SourceMod plugins."; fi
 read uprun
 uprun=${uprun,,}
+if [ -z $uprun ];then uprun="noneselected" ;fi
 if [ $uprun = "u" ]; then firstinstall;fi
 if [ $uprun = "i" ]; then firstinstall;fi
 if [ $uprun = "rb" ]; then srcds;fi
@@ -83,7 +84,7 @@ echo "This function is designed for the current version of Synergy, the developm
 echo "Install SourceMod for Regular, (B)eta, or (T)witch? (anything except b or t will do regular)"
 read betaset
 betaset=${betaset,,}
-if [ $betaset = "" ];then betaset="r" ;fi
+if [ -z $betaset ];then betaset="r" ;fi
 syntype="reg"
 synpath="steamapps/common/Synergy/synergy"
 if [ $betaset = "b" ];then
