@@ -83,6 +83,8 @@ echo "This function is designed for the current version of Synergy, the developm
 echo "Install SourceMod for Regular, (B)eta, or (T)witch? (anything except b or t will do regular)"
 read betaset
 betaset=${betaset,,}
+if [ $betaset = "" ];then betaset="r" ;fi
+syntype="reg"
 synpath="steamapps/common/Synergy/synergy"
 if [ $betaset = "b" ];then
 	synpath="steamapps/common/synbeta/synergy";
