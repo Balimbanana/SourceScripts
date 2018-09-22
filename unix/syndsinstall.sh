@@ -271,6 +271,14 @@ if [ $uprun = "rt" ];then synpath="steamapps/common/syntwitch";fi
 if [ $uprun = "t" ];then synpath="steamapps/common/syntwitch";fi
 if [ ! -f ./$synpath/srcds_run ];then notinstalled;fi
 if [ ! -d ./steamapps/common/Half-Life\ 2 ];then insthl2;fi
+if [ ! -L ./$synpath/bin/libtier0.so ];then
+	mv ./$synpath/bin/libtier0.so ./$synpath/bin/libtier0.so.bak
+	ln -s ./$synpath/bin/libtier0_srv.so ./$synpath/bin/libtier0.so
+fi
+if [ ! -L ./$synpath/bin/libvstdlib.so ];then
+	mv ./$synpath/bin/libvstdlib.so ./$synpath/bin/libvstdlib.so.bak
+	ln -s ./$synpath/bin/libvstdlib_srv.so ./$synpath/bin/libvstdlib.so
+fi
 reds
 }
 
