@@ -239,10 +239,12 @@ syntype=56.16
 if [ $betaset = "b" ];then
 	synpath=./steamapps/common/synbeta
 	syntype=18.7
+	uprun="b"
 fi
 if [ $betaset = "t" ];then
 	synpath=./steamapps/common/syntwitch
 	syntype=Twitch
+	uprun="t"
 fi
 if [ ! -f $synpath/synergy/cfg/server2.cfg ];then
 	echo hostname First Syn $syntype Server>$synpath/synergy/cfg/server2.cfg
@@ -307,8 +309,22 @@ start
 
 insthl2() {
 echo "Half-Life 2 was not found during setup, press any key to install it, or close the script and install it manually."
-read nullptr
+echo "You can also install Ep1 with 1, Ep2 with 2 (will also install Ep1 and HL2), or 3 for HL2, Ep1, Ep2, and Half-Life Source."
+read hllist
+hllist=${hllist,,}
+re='^[0-9]+$'
+if [ -z $hllist ];then hllist=0 ;fi
+if ! [[ $hllist =~ $re ]];then hllist=0 ;fi
 ./steamcmd.sh +login $stusername +force_install_dir ./steamapps/common/Half-Life\ 2 +app_update 220 validate +quit
+if [ $hllist > 0 ];then
+	./steamcmd.sh +login $stusername +force_install_dir ./steamapps/common/Half-Life\ 2/episodic +app_update 380 validate +quit
+fi
+if [ $hllist > 1 ];then
+	./steamcmd.sh +login $stusername +force_install_dir ./steamapps/common/Half-Life\ 2/ep2 +app_update 420 validate +quit
+fi
+if [ $hllist > 2 ];then
+	./steamcmd.sh +login $stusername +force_install_dir ./steamapps/common/Half-Life\ 2/hl1 +app_update 280 validate +quit
+fi
 if [ -d ./steamapps/common/Half-Life\ 2 ];then setup;fi
 echo "Something went wrong with installing HL2, restarting script."
 start
