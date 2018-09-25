@@ -316,14 +316,14 @@ re='^[0-9]+$'
 if [ -z $hllist ];then hllist=0 ;fi
 if ! [[ $hllist =~ $re ]];then hllist=0 ;fi
 ./steamcmd.sh +login $stusername +force_install_dir ./steamapps/common/Half-Life\ 2 +app_update 220 validate +quit
+if [ $hllist > 2 ];then
+	./steamcmd.sh +login $stusername +force_install_dir ./steamapps/common/Half-Life\ 2 +app_update 280 validate +quit
+fi
 if [ $hllist > 0 ];then
-	./steamcmd.sh +login $stusername +force_install_dir ./steamapps/common/Half-Life\ 2/episodic +app_update 380 validate +quit
+	./steamcmd.sh +login $stusername +force_install_dir ./steamapps/common/Half-Life\ 2 +app_update 380 validate +quit
 fi
 if [ $hllist > 1 ];then
-	./steamcmd.sh +login $stusername +force_install_dir ./steamapps/common/Half-Life\ 2/ep2 +app_update 420 validate +quit
-fi
-if [ $hllist > 2 ];then
-	./steamcmd.sh +login $stusername +force_install_dir ./steamapps/common/Half-Life\ 2/hl1 +app_update 280 validate +quit
+	./steamcmd.sh +login $stusername +force_install_dir ./steamapps/common/Half-Life\ 2 +app_update 420 validate +quit
 fi
 if [ -d ./steamapps/common/Half-Life\ 2 ];then setup;fi
 echo "Something went wrong with installing HL2, restarting script."
