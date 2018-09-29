@@ -4,6 +4,9 @@ if [ ! -d $cldir ]; then
 	if [ -d /Steam/steamapps ]; then
 		cldir=/Steam/steamapps
 	fi
+	if [ -d $HOME/.local/share/Steam/steamapps ]; then
+		cldir=$HOME/.local/share/Steam/steamapps
+	fi
 	if [ -d $HOME/Steam/steamapps ]; then
 		cldir=$HOME/Steam/steamapps
 	fi
