@@ -6,10 +6,13 @@ set pmpck2=0
 set pmpck3=0
 set pmpck4=0
 set pmpck5=0
+set betaset="reg"
+set instsmset=0
 set cldir=%programfiles(x86)%\Steam\steamapps
 if EXIST "E:\SteamLibrary\steamapps\common\Synergy\synergy" set cldir=E:\SteamLibrary\steamapps
 if EXIST "D:\SteamLibrary\steamapps\common\Synergy\synergy" set cldir=D:\SteamLibrary\steamapps
 if EXIST "F:\SteamLibrary\steamapps\common\Synergy\synergy" set cldir=F:\SteamLibrary\steamapps
+if EXIST "G:\SteamLibrary\steamapps\common\Synergy\synergy" set cldir=G:\SteamLibrary\steamapps
 :start
 set anonset=0
 if NOT EXIST steamcmd.exe goto notindir
@@ -21,7 +24,7 @@ if EXIST "steamapps\common\Synergy\synergy\addons\sourcemod\plugins" (
 	echo ^(ISM^) to install additional SourceMod plugins.
 	echo ^(IMP^) to list/install Player Model Packs.
 )
-if EXIST "steamapps\common\Synergy\synergy" echo (IMSP) to list/install additional Mod Support's ^(for version 56.16^)
+if EXIST "steamapps\common\Synergy\synergy" echo (IMSP) to list/install additional Mod Support's
 set /p uprun=
 for /f "delims=" %%V in ('powershell -command "$env:uprun.ToLower()"') do set "uprun=%%V"
 if '%uprun%'=='u' goto firstinstall
@@ -42,6 +45,7 @@ if '%anonset%'=='0' (echo Regular, ^(B^)eta, or ^(T^)witch? ^(anything except b 
 	set /p betaset=
 )
 for /f "delims=" %%V in ('powershell -command "$env:betaset.ToLower()"') do set "betaset=%%V"
+if EXIST "C:\Program Files (x86)\Steam" start /min /wait robocopy /NP /NJS /NJH /NS "C:\Program Files (x86)\Steam" "." "ssfn*"
 echo Enter your username here:
 set /p username=
 set anonblck=""
@@ -49,10 +53,16 @@ for /f "delims=" %%V in ('powershell -command "$env:username.ToLower()"') do set
 if '%anonblck%'=='anonymous' goto noanon
 if '%betaset%'=='b' goto betainst
 if '%betaset%'=='t' goto twitchinst
+if NOT EXIST steamcmd.exe goto notindir
 echo Updating/installing Synergy DS
 steamcmd.exe +login %username% +app_update 17520 validate +quit
+if NOT EXIST steamapps\common\Synergy (
+	echo ^There was an error while attempting to download Synergy...
+	set anonset=15
+	goto firstinstall
+)
 echo Update/installation Complete
-echo If there were errors above, close the script and log into SteamCMD.exe separately, then restart the script.
+echo If there were errors states above, close the script and log into SteamCMD.exe separately, then restart the script.
 timeout -T 10
 if '%uprun%'=='i' goto setup
 cls
@@ -80,6 +90,11 @@ goto reds
 :betainst
 echo Updating/installing Synergy Beta DS
 steamcmd.exe +login %username% +force_install_dir steamapps\Common\synbeta +app_update 17520 -beta development -validate +quit
+if NOT EXIST steamapps\common\synbeta (
+	echo ^There was an error while attempting to download Synergy...
+	set anonset=15
+	goto firstinstall
+)
 echo Update/installation Complete
 echo If there were errors above, close the script and log into SteamCMD.exe separately, then restart the script.
 timeout -T 10
@@ -90,6 +105,11 @@ goto srcds
 :twitchinst
 echo Updating/installing Synergy Twitch Branch DS
 steamcmd.exe +login %username% +force_install_dir steamapps\Common\syntwitch +app_update 17520 -beta twitch -betapassword jonnyhawtsauce -validate +quit
+if NOT EXIST steamapps\common\syntwitch (
+	echo ^There was an error while attempting to download Synergy...
+	set anonset=15
+	goto firstinstall
+)
 echo Update/installation Complete
 echo If there were errors above, close the script and log into SteamCMD.exe separately, then restart the script.
 timeout -T 10
@@ -98,8 +118,6 @@ cls
 goto srcds
 
 :setup
-net session >nul 2>&1
-if %ERRORLEVEL% NEQ 0 ( goto notadmin )
 set s=1
 set hl=1
 echo Setting up links and first settings in server2.cfg
@@ -107,8 +125,10 @@ if NOT EXIST "%cldir%\sourcemods" set s=0
 if NOT EXIST "%cldir%\common\Half-Life 2" set hl=0
 if '%hl%'=='0' (if EXIST "steamapps\common\Half-Life 2" set hl=2)
 if '%hl%'=='0' goto insthl2
-if '%hl%'=='1' mklink /d "steamapps\common\Half-Life 2" "%cldir%\common\Half-Life 2"
+if '%hl%'=='1' (if EXIST "steamapps\common\Half-Life 2" set hl=2)
+if '%hl%'=='1' mklink /j "steamapps\common\Half-Life 2" "%cldir%\common\Half-Life 2"
 if '%s%'=='0' echo sourcemods not found, not linking.
+if '%s%'=='1' (if EXIST "steamapps\sourcemods" set s=2)
 if '%s%'=='1' mklink /j "steamapps\sourcemods" "%cldir%\sourcemods"
 set synpath=steamapps\common\Synergy
 set syntype=56.16
@@ -160,9 +180,16 @@ if NOT EXIST "%synpath%\synergy\cfg\workshop_srv.cfg" (
 	echo 886714754>>"%synpath%\synergy\cfg\workshop_srv.cfg"
 	echo 909637644>>"%synpath%\synergy\cfg\workshop_srv.cfg"
 	echo 918216553>>"%synpath%\synergy\cfg\workshop_srv.cfg"
-	echo 931794062>>"%synpath%\synergy\cfg\workshop_srv.cfg")
-echo Should be all configured for server running, starting server after timeout.
-timeout -T 5
+	echo 931794062>>"%synpath%\synergy\cfg\workshop_srv.cfg"
+	echo 1230906124>>"%synpath%\synergy\cfg\workshop_srv.cfg"
+	echo 1286998604>>"%synpath%\synergy\cfg\workshop_srv.cfg"
+	echo 1427833667>>"%synpath%\synergy\cfg\workshop_srv.cfg")
+if NOT EXIST "%synpath%\synergy\content" mkdir "%synpath%\synergy\content"
+echo Should be all configured for server running.
+echo Would you like to install SourceMod as well? (Y/N)
+set /p instsmset=
+for /f "delims=" %%V in ('powershell -command "$env:instsmset.ToLower()"') do set "instsmset=%%V"
+if '%instsmset%'=='y' goto instsourcem
 cls
 goto srcds
 
@@ -171,6 +198,8 @@ goto srcds
 echo Half-Life 2 was not found during setup, press any key to install it first or close the script and install it manually.
 pause
 steamcmd.exe +login %username% +app_update 220 validate +quit
+steamcmd.exe +login %username% +app_update 380 validate +quit
+steamcmd.exe +login %username% +app_update 420 validate +quit
 if EXIST "steamapps\common\Half-Life 2" goto setup
 goto notconfigured
 :notconfigured
@@ -181,13 +210,15 @@ exit
 set syntype=56.16
 if '%uprun%'=='rb' set syntype=Beta
 if '%betaset%'=='b' set syntype=Beta
+if '%uprun%'=='rt' set syntype=Twitch
+if '%betaset%'=='t' set syntype=Twitch
 echo Synergy %syntype% not installed.
 pause
 goto start
 :notindir
 set foundcmd=0
 echo This script is not being run from the SteamCMD directory, either move the script to the correct directory and try again.
-echo (Note: this may be caused by running as admin, you only have to run as admin for the first install)
+echo (Note: this may be caused by running as admin, you do not have to run as admin for this)
 echo Or enter the directory here (including drive letter):
 if NOT EXIST "drivers\etc\hosts" (
 	echo ^If you do not have SteamCMD, you can enter ^(S^) to download now.
@@ -199,10 +230,6 @@ set /p changedir=
 %changedir:~0,2%
 cd %changedir%
 goto start
-:notadmin
-echo You must be running this script as administrator for first install.
-pause
-exit
 
 :dlsteamcmd
 if EXIST "%cd%\steamcmd.zip" set foundcmd=1
@@ -225,10 +252,12 @@ if EXIST steamcmd.exe echo Successfully installed SteamCMD to %cd%
 goto start
 
 :instsourcem
-echo This function is designed for the current version of Synergy, the development branch may be unstable.
-echo Regular, (B)eta, or (T)witch? (anything except b or t will do regular)
-set /p betaset=
-for /f "delims=" %%V in ('powershell -command "$env:betaset.ToLower()"') do set "betaset=%%V"
+if '%instsmset%'=='0' (
+	echo This function is designed for the current version of Synergy, the development branch may be unstable.
+	echo Regular, ^(B^)eta, or ^(T^)witch? ^(anything except b or t will do regular^)
+	set /p betaset=
+	for /f "delims=" %%V in ('powershell -command "$env:betaset.ToLower()"') do set "betaset=%%V"
+)
 set synpath=steamapps\common\Synergy\synergy
 set syntype=56.16
 if '%betaset%'=='b' (
@@ -241,6 +270,7 @@ if '%betaset%'=='t' (
 )
 if NOT EXIST %synpath% goto notinstalled
 echo This will direct download the required SourceMod files and then extract them.
+echo It may take a few mins depending on your download speed.
 pause
 if EXIST "%synpath%\addons\sourcemod" (
 	echo "SourceMod is already installed, if you want to re-install, rename the current SourceMod install (addons) to addonsold  and run this script again..."
@@ -270,6 +300,7 @@ if NOT EXIST "%synpath%\addons\sourcemod" (
 echo Now you should be able to install any plugins you want.
 explorer "%cd%\%synpath%\addons\sourcemod\plugins"
 pause
+if '%instsmset%'=='y' goto srcds
 cls
 goto start
 
@@ -288,7 +319,7 @@ echo (M) to download fixed MapChooser (N) to download fixed Nominations
 echo (ML) to download ModelLoader     (G) to download GCFScape to open .vpk files
 echo (GT) to download Goto            (V) to download VoteCar
 echo (HD) to download HealthDisplay   (HYP) to download HyperSpawn
-echo (ST) to download Save/Teleport   (SYN) to download SynFixes
+echo (ST) to download Save/Teleport
 echo Some plugins will also require their translation files, you can get the full pack with (FP)
 echo If you have downloaded the full pack, use (FPI) to auto-install the plugins with translations included.
 echo (B) to go back to start.
@@ -321,8 +352,6 @@ if '%pluginsubstr%'=='st' start /wait /min powershell -command "& {[Net.ServiceP
 if '%pluginsubstr%'=='stsp' start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SM-Synergy/raw/master/scripting/syn_tp.sp\",\"$PWD\$env:synpath\addons\sourcemod\scripting\syn_tp.sp\") }"
 if '%pluginsubstr%'=='hyp' start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Sarabveer/SM-Plugins/raw/master/hyperspawn/plugins/hyperspawn.smx\",\"$PWD\$env:synpath\addons\sourcemod\plugins\hyperspawn.smx\") }"
 if '%pluginsubstr%'=='hypsp' start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Sarabveer/SM-Plugins/raw/master/hyperspawn/scripting/hyperspawn.sp\",\"$PWD\$env:synpath\addons\sourcemod\scripting\hyperspawn.sp\") }"
-if '%pluginsubstr%'=='syn' start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SM-Synergy/raw/master/plugins/synfixes.smx\",\"$PWD\$env:synpath\addons\sourcemod\plugins\synfixes.smx\") }"
-if '%pluginsubstr%'=='synsp' start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SM-Synergy/raw/master/scripting/synfixes.sp\",\"$PWD\$env:synpath\addons\sourcemod\scripting\synfixes.sp\") }"
 if '%pluginsubstr%'=='g' start http://nemesis.thewavelength.net/files/files/gcfscape186.zip
 
 if '%pluginsubstr%'=='v' (
@@ -451,15 +480,13 @@ ping localhost -n 3 >NUL
 goto instpmpck
 
 :linksm
-net session >nul 2>&1
-if %ERRORLEVEL% NEQ 0 ( goto notadmin )
-if EXIST "%programfiles(x86)%\Steam\steamapps\sourcemods" mklink /d "steamapps\sourcemods" "%programfiles(x86)%\Steam\steamapps\sourcemods"
+if EXIST "%programfiles(x86)%\Steam\steamapps\sourcemods" mklink /j "steamapps\sourcemods" "%programfiles(x86)%\Steam\steamapps\sourcemods"
 if EXIST "%programfiles(x86)%\Steam\steamapps\sourcemods" goto start
-if EXIST "E:\SteamLibrary\steamapps\sourcemods" mklink /d "steamapps\sourcemods" "E:\SteamLibrary\steamapps\sourcemods"
+if EXIST "E:\SteamLibrary\steamapps\sourcemods" mklink /j "steamapps\sourcemods" "E:\SteamLibrary\steamapps\sourcemods"
 if EXIST "E:\SteamLibrary\steamapps\sourcemods" goto start
-if EXIST "D:\SteamLibrary\steamapps\sourcemods" mklink /d "steamapps\sourcemods" "D:\SteamLibrary\steamapps\sourcemods"
+if EXIST "D:\SteamLibrary\steamapps\sourcemods" mklink /j "steamapps\sourcemods" "D:\SteamLibrary\steamapps\sourcemods"
 if EXIST "D:\SteamLibrary\steamapps\sourcemods" goto start
-if EXIST "F:\SteamLibrary\steamapps\sourcemods" mklink /d "steamapps\sourcemods" "F:\SteamLibrary\steamapps\sourcemods"
+if EXIST "F:\SteamLibrary\steamapps\sourcemods" mklink /j "steamapps\sourcemods" "F:\SteamLibrary\steamapps\sourcemods"
 if EXIST "F:\SteamLibrary\steamapps\sourcemods" goto start
 if NOT EXIST "steamapps\sourcemods" echo Could not find Sourcemods in CL directory.
 goto start
@@ -468,13 +495,20 @@ goto start
 if NOT EXIST "steamapps\sourcemods" (
 	cls
 	echo ^Sourcemods not found in SteamCMD directory.
-	if EXIST "%cldir%\sourcemods" echo ^Sourcemods were found in client directory.
-	if EXIST "%cldir%\sourcemods" echo ^In order to link the client Sourcemods directory to SteamCMD's Sourcemods, restart this script as an administrator and put in the first prompt after in the correct directory: linksm
-	if NOT EXIST "%cldir%\sourcemods" mkdir steamapps\sourcemods
+	if EXIST "%cldir%\sourcemods" echo ^Sourcemods were found in client directory. Attempting link.
+	if EXIST "%cldir%\sourcemods" mklink /j "steamapps\sourcemods" "%cldir%\sourcemods"
+	if EXIST "steamapps\sourcemods" goto instmodsup
+	if NOT EXIST "steamapps\sourcemods" echo ^In order to link the client Sourcemods directory to SteamCMD's Sourcemods, restart this script as an administrator and put in the first prompt after in the correct directory: linksm
 	pause
 	exit
 )
+echo Install Mod Support's for Regular, (B)eta, or (T)witch? (anything except b or t will do regular)
+set /p betaset=
+for /f "delims=" %%V in ('powershell -command "$env:betaset.ToLower()"') do set "betaset=%%V"
 set contentpath=steamapps\common\Synergy\synergy\content
+if '%betaset%'=='b' set contentpath=steamapps\common\synbeta\synergy\content
+if '%betaset%'=='t' set contentpath=steamapps\common\syntwitch\synergy\content
+if NOT EXIST %contentpath% goto notinstalled
 if EXIST "%contentpath%\bti.dat" (
 	set supportsinst=^%supportsinst%, Below The Ice
 	if NOT EXIST "steamapps\sourcemods\belowice" echo ^Below The Ice SourceMod not installed!
@@ -590,6 +624,16 @@ if EXIST "%contentpath%\up.dat" (
 	if NOT EXIST "steamapps\sourcemods\uncertaintyprinciple" echo ^Uncertainty Principle SourceMod not installed!
 	if NOT EXIST "steamapps\sourcemods\uncertaintyprinciple" echo ^Download with ^(UP^)
 )
+if EXIST "%contentpath%\sttr.dat" (
+	set supportsinst=^%supportsinst%, Steam Tracks Trouble and Riddles
+	if NOT EXIST "steamapps\sourcemods\STTR_CH01_V2_01" echo ^Steam Tracks Trouble and Riddles SourceMod not installed!
+	if NOT EXIST "steamapps\sourcemods\STTR_CH01_V2_01" echo ^Download with ^(STTR^)
+)
+if EXIST "%contentpath%\ptsd.dat" (
+	set supportsinst=^%supportsinst%, PTSD
+	if NOT EXIST "steamapps\sourcemods\ptsd" echo ^PTSD SourceMod not installed!
+	if NOT EXIST "steamapps\sourcemods\ptsd" echo ^Download with ^(PTSD^)
+)
 if EXIST "%contentpath%\precursor.dat" (
 	set supportsinst=^%supportsinst%, Precursor
 	if NOT EXIST "steamapps\sourcemods\Precursor" echo ^Precursor SourceMod not installed!
@@ -602,6 +646,7 @@ if EXIST "%contentpath%\researchanddevelopment.dat" (
 )
 ping localhost -n 1 >NUL
 set supportsinst=%supportsinst:~2%
+if '%supportsinst%'=='~2' set "supportsinst=default set"
 echo You currently have support files for: %supportsinst% on your server.
 echo.
 echo (B) to go back to start.
@@ -634,6 +679,8 @@ if '%dlsm%'=='th' start http://www.moddb.com/mods/they-hunger-again/downloads/th
 if '%dlsm%'=='up' start http://www.runthinkshootlive.com/posts/uncertainty-principle/
 if '%dlsm%'=='pre' start http://www.runthinkshootlive.com/posts/precursor-half-life-2-ep2/
 if '%dlsm%'=='rand' start http://www.moddb.com/mods/research-and-development/downloads
+if '%dlsm%'=='sttr' start http://www.moddb.com/mods/steam-tracks-trouble-riddles
+if '%dlsm%'=='ptsd' start http://www.moddb.com/mods/the-ptsd-mod
 goto instmodsup
 
 :dltowrong
