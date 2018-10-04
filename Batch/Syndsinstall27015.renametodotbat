@@ -14,6 +14,7 @@ if EXIST "D:\SteamLibrary\steamapps\common\Synergy\synergy" set cldir=D:\SteamLi
 if EXIST "F:\SteamLibrary\steamapps\common\Synergy\synergy" set cldir=F:\SteamLibrary\steamapps
 if EXIST "G:\SteamLibrary\steamapps\common\Synergy\synergy" set cldir=G:\SteamLibrary\steamapps
 :start
+if EXIST synergy.exe (if EXIST "..\..\..\steamcmd.exe" cd "..\..\.." )
 set anonset=0
 if NOT EXIST steamcmd.exe goto notindir
 echo Information: enter the letter inside the () and press enter to continue at the prompts.
@@ -45,7 +46,7 @@ if '%anonset%'=='0' (echo Regular, ^(B^)eta, or ^(T^)witch? ^(anything except b 
 	set /p betaset=
 )
 for /f "delims=" %%V in ('powershell -command "$env:betaset.ToLower()"') do set "betaset=%%V"
-if EXIST "C:\Program Files (x86)\Steam" start /min /wait robocopy /NP /NJS /NJH /NS "C:\Program Files (x86)\Steam" "." "ssfn*"
+if EXIST "%programfiles(x86)%\Steam" start /min /wait robocopy /NP /NJS /NJH /NS "%programfiles(x86)%\Steam" "." "ssfn*"
 echo Enter your username here:
 set /p username=
 set anonblck=""
