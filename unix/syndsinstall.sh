@@ -51,6 +51,7 @@ fi
 
 start() {
 anonset=0
+instsmset=0
 if [ ! -f ./steamcmd.sh ];then notindir; fi
 echo "Information: enter the letter inside the () and press enter to continue at the prompts."
 echo "First (I)nstall, (U)pdate, (R)un with auto-restart"
@@ -83,10 +84,12 @@ start
 
 instsourcem() {
 if [ ! -d ./steamapps/common/Synergy/synergy ];then notinstalled;fi
-echo "This function is designed for the current version of Synergy, the development branch may be unstable."
-echo "Install SourceMod for Regular, (B)eta, or (T)witch? (anything except b or t will do regular)"
-read betaset
-betaset=${betaset,,}
+if [ $instsmset = "0" ];then
+	echo "This function is designed for the current version of Synergy, the development branch may be unstable."
+	echo "Install SourceMod for Regular, (B)eta, or (T)witch? (anything except b or t will do regular)"
+	read betaset
+	betaset=${betaset,,}
+fi
 if [ -z $betaset ];then betaset="r" ;fi
 syntype="reg"
 synpath="steamapps/common/Synergy/synergy"
@@ -127,6 +130,7 @@ fi
 # remove nextmap as it does not work in Synergy
 rm -f ./$synpath/addons/sourcemod/plugins/nextmap.smx
 echo "SourceMod installed, you can put plugins in ./$synpath/addons/sourcemod/plugins"
+if [ $instsmset = "y" ];then srcds;fi
 start
 }
 
@@ -266,8 +270,11 @@ if [ ! -f $synpath/synergy/cfg/server2.cfg ];then
 	echo //Change this to a different savenumber for forked servers>>$synpath/synergy/cfg/server2.cfg
 	echo sv_savedir save2/>>$synpath/synergy/cfg/server2.cfg
 fi
-echo "Should be all configured for server running, starting after timeout."
-sleep 5
+echo "Should be all configured for server running. Would you like to also install SourceMod? (Y/N)"
+read instsmset
+instsmset=${instsmset,,}
+if [ $instsmset = "y" ];then instsourcem;fi
+echo "Starting server..."
 srcds
 }
 
