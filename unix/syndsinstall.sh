@@ -127,6 +127,9 @@ if [ $syntype = "nonstand" ];then
 	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/devtwitchgamedata/sdkhooks.games/custom/game.synergy.txt" -P ./$synpath/addons/sourcemod/gamedata/sdkhooks.games/custom
 	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/devtwitchgamedata/sdktools.games/custom/game.synergy.txt" -P ./$synpath/addons/sourcemod/gamedata/sdktools.games/custom
 else
+	if [ ! -d ./$synpath/addons/sourcemod/gamedata/sdktools.games/custom ];then
+		mkdir ./$synpath/addons/sourcemod/gamedata/sdktools.games/custom
+	fi
 	wget -nv "https://raw.githubusercontent.com/Balimbanana/SM-Synergy/master/56.16lin/sdktools.games/custom/game.synergy.txt" -P ./$synpath/addons/sourcemod/gamedata/sdktools.games/custom
 fi
 # remove nextmap as it does not work in Synergy
