@@ -19,7 +19,7 @@ set anonset=0
 if NOT EXIST steamcmd.exe goto notindir
 echo Information: enter the letter inside the () and press enter to continue at the prompts.
 echo First (I)nstall, (U)pdate or (R)un with auto-restart
-echo (RB) To run Synergy 18.7 beta or (IS) to install SourceMod.
+echo (RB) To run Synergy 18.x beta or (IS) to install SourceMod.
 echo (RT) To run Synergy Twich branch.
 if EXIST "steamapps\common\Synergy\synergy\addons\sourcemod\plugins" (
 	echo ^(ISM^) to install additional SourceMod plugins.
@@ -135,7 +135,7 @@ set synpath=steamapps\common\Synergy
 set syntype=56.16
 if '%betaset%'=='b' (
 	set synpath=steamapps\common\synbeta
-	set syntype=18.7
+	set syntype=18.x
 )
 if '%betaset%'=='t' (
 	set synpath=steamapps\common\syntwitch
@@ -332,7 +332,7 @@ echo (M) to download fixed MapChooser (N) to download fixed Nominations
 echo (ML) to download ModelLoader     (G) to download GCFScape to open .vpk files
 echo (GT) to download Goto            (V) to download VoteCar
 echo (HD) to download HealthDisplay   (HYP) to download HyperSpawn
-echo (ST) to download Save/Teleport
+echo (ST) to download Save/Teleport   (SSR) to download SynSaveRestore
 echo Some plugins will also require their translation files, you can get the full pack with (FP)
 echo If you have downloaded the full pack, use (FPI) to auto-install the plugins with translations included.
 echo (B) to go back to start.
@@ -365,6 +365,8 @@ if '%pluginsubstr%'=='st' start /wait /min powershell -command "& {[Net.ServiceP
 if '%pluginsubstr%'=='stsp' start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SM-Synergy/raw/master/scripting/syn_tp.sp\",\"$PWD\$env:synpath\addons\sourcemod\scripting\syn_tp.sp\") }"
 if '%pluginsubstr%'=='hyp' start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Sarabveer/SM-Plugins/raw/master/hyperspawn/plugins/hyperspawn.smx\",\"$PWD\$env:synpath\addons\sourcemod\plugins\hyperspawn.smx\") }"
 if '%pluginsubstr%'=='hypsp' start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Sarabveer/SM-Plugins/raw/master/hyperspawn/scripting/hyperspawn.sp\",\"$PWD\$env:synpath\addons\sourcemod\scripting\hyperspawn.sp\") }"
+if '%pluginsubstr%'=='ssr' start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SM-Synergy/raw/master/plugins/synsaverestore.smx\",\"$PWD\$env:synpath\addons\sourcemod\plugins\synsaverestore.smx\") }"
+if '%pluginsubstr%'=='ssrsp' start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SM-Synergy/raw/master/scripting/synsaverestore.sp\",\"$PWD\$env:synpath\addons\sourcemod\scripting\synsaverestore.sp\") }"
 if '%pluginsubstr%'=='g' start http://nemesis.thewavelength.net/files/files/gcfscape186.zip
 
 if '%pluginsubstr%'=='v' (
