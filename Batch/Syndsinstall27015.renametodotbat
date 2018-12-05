@@ -50,7 +50,7 @@ if EXIST "%programfiles(x86)%\Steam" start /min /wait robocopy /NP /NJS /NJH /NS
 echo Enter your username here:
 set /p username=
 set anonblck=""
-for /f "delims=" %%V in ('powershell -command "$env:username.ToLower()"') do set "anonblck=%%V"
+for /f "delims=" %%V in ('powershell -command "$env:username.ToLower()"') do set 'anonblck=%%V'
 if '%anonblck%'=='anonymous' goto noanon
 if '%betaset%'=='b' goto betainst
 if '%betaset%'=='t' goto twitchinst
