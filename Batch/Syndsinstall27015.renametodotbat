@@ -52,12 +52,27 @@ set /p username=
 set anonblck=""
 for /f "delims=" %%V in ('powershell -command "$env:username.ToLower()"') do set 'anonblck=%%V'
 if '%anonblck%'=='anonymous' goto noanon
+set synpath=steamapps\common\Synergy
+if '%uprun%'=='rb' set synpath=steamapps\common\synbeta
+if '%uprun%'=='rt' set synpath=steamapps\common\syntwitch
+if '%betaset%'=='b' set synpath=steamapps\common\synbeta
+if '%betaset%'=='t' set synpath=steamapps\common\syntwitch
+if NOT EXIST "%synpath%\synergy\synergy_pak.vpk" (
+	if EXIST "%cldir%\common\Synergy\synergy\synergy_pak.vpk" start /min /wait robocopy /NP /NJS /NJH /NS "%cldir%\common\Synergy\synergy" "%synpath%\synergy" "synergy_pak.vpk"
+)
+if NOT EXIST "%synpath%\synergy\zhl2dm_materials_pak.vpk" (
+	if EXIST "%cldir%\common\Synergy\synergy\zhl2dm_materials_pak.vpk" start /min /wait robocopy /NP /NJS /NJH /NS "%cldir%\common\Synergy\synergy" "%synpath%\synergy" "zhl2dm_materials_pak.vpk.vpk"
+)
+if NOT EXIST "%synpath%\synergy\maps" (
+	if EXIST "%cldir%\common\Synergy\synergy\maps" start /min /wait robocopy /NP /NJS /NJH /NS "%cldir%\common\Synergy\synergy\maps" "%synpath%\synergy\maps" "syn_*"
+	if EXIST "%cldir%\common\Synergy\synergy\maps\graphs" start /min /wait robocopy /NP /NJS /NJH /NS "%cldir%\common\Synergy\synergy\maps\graphs" "%synpath%\synergy\maps\graphs" "*"
+)
 if '%betaset%'=='b' goto betainst
 if '%betaset%'=='t' goto twitchinst
 if NOT EXIST steamcmd.exe goto notindir
 echo Updating/installing Synergy DS
 steamcmd.exe +login %username% +app_update 17520 validate +quit
-if NOT EXIST steamapps\common\Synergy (
+if NOT EXIST steamapps\common\Synergy\srcds.exe (
 	echo ^There was an error while attempting to download Synergy...
 	set anonset=15
 	goto firstinstall
@@ -73,7 +88,7 @@ if '%uprun%'=='rb' set synpath=steamapps\common\synbeta
 if '%uprun%'=='rt' set synpath=steamapps\common\syntwitch
 if '%betaset%'=='b' set synpath=steamapps\common\synbeta
 if '%betaset%'=='t' set synpath=steamapps\common\syntwitch
-if NOT EXIST %synpath% goto notinstalled
+if NOT EXIST %synpath%\srcds.exe goto notinstalled
 for /f "delims=" %%V in ('powershell -command "$ab = get-date; $ab.Minute"') do set "starttime=%%V"
 :reds
 echo (%date%)(%time%) SynDS started.
@@ -91,7 +106,7 @@ goto reds
 :betainst
 echo Updating/installing Synergy Beta DS
 steamcmd.exe +login %username% +force_install_dir steamapps\Common\synbeta +app_update 17520 -beta development -validate +quit
-if NOT EXIST steamapps\common\synbeta (
+if NOT EXIST steamapps\common\synbeta\srcds.exe (
 	echo ^There was an error while attempting to download Synergy...
 	set anonset=15
 	goto firstinstall
@@ -106,7 +121,7 @@ goto srcds
 :twitchinst
 echo Updating/installing Synergy Twitch Branch DS
 steamcmd.exe +login %username% +force_install_dir steamapps\Common\syntwitch +app_update 17520 -beta twitch -betapassword jonnyhawtsauce -validate +quit
-if NOT EXIST steamapps\common\syntwitch (
+if NOT EXIST steamapps\common\syntwitch\srcds.exe (
 	echo ^There was an error while attempting to download Synergy...
 	set anonset=15
 	goto firstinstall
@@ -187,13 +202,16 @@ if NOT EXIST "%synpath%\synergy\cfg\workshop_srv.cfg" (
 	echo 1427833667>>"%synpath%\synergy\cfg\workshop_srv.cfg")
 if NOT EXIST "%synpath%\synergy\content" mkdir "%synpath%\synergy\content"
 echo Should be all configured for server running.
+echo Would you like to edit your server config? (Y/N)
+set /p edtconf=
+for /f "delims=" %%V in ('powershell -command "$env:edtconf.ToLower()"') do set "edtconf=%%V"
+if '%edtconf%'=='y' start notepad %synpath%\synergy\cfg\server2.cfg
 echo Would you like to install SourceMod as well? (Y/N)
 set /p instsmset=
 for /f "delims=" %%V in ('powershell -command "$env:instsmset.ToLower()"') do set "instsmset=%%V"
 if '%instsmset%'=='y' goto instsourcem
 cls
 goto srcds
-
 
 :insthl2
 echo Half-Life 2 was not found during setup, press any key to install it first or close the script and install it manually.
