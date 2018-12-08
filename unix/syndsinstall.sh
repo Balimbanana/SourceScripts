@@ -362,7 +362,7 @@ echo "(M) to download fixed MapChooser  (N) to download fixed Nominations"
 echo "(ML) to download ModelLoader      (GT) to download Goto"
 echo "(V) to download VoteCar           (HD) to download HealthDisplay"
 echo "(HYP) to download HyperSpawn      (ST) to download Save/Teleport"
-echo "(SYN) to download SynFixes"
+echo "(SYN) to download SynFixes        (SSR) to download SynSaveRestore"
 echo "Some plugins will also require their translation files, you can get a full pack of these plugins with (FP)"
 echo "(B) to go back to start"
 read pluginsubstr
@@ -442,6 +442,12 @@ if [ $pluginsubstr = "syn" ];then
 fi
 if [ $pluginsubstr = "synsp" ];then
 	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/scripting/synfixes.sp" -P ./$synpath/addons/sourcemod/scripting
+fi
+if [ $pluginsubstr = "ssr" ];then
+	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/plugins/synsaverestore.smx" -P ./$synpath/addons/sourcemod/plugins
+fi
+if [ $pluginsubstr = "ssrsp" ];then
+	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/scripting/synsaverestore.sp" -P ./$synpath/addons/sourcemod/scripting
 fi
 if [ $pluginsubstr = "b" ];then start;fi
 instsourceplugins
