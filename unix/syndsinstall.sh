@@ -199,6 +199,19 @@ echo "Enter your username here:"
 read stusername
 anonblck=${stusername,,}
 if [ $anonblck = "anonymous" ];then noanon;fi
+synpath=./steamapps/common/Synergy
+if [ $betaset = "b" ];then synpath="./steamapps/common/synbeta";fi
+if [ $betaset = "t" ];then synpath="./steamapps/common/syntwitch";fi
+if [ -f $cldir/synergy/synergy_pak.vpk ]; then
+	if [ ! -f $synpath/synergy/synergy_pak.vpk ]; then
+		cp $cldir/synergy/synergy_pak.vpk ./$synpath/synergy/synergy_pak.vpk
+	fi
+fi
+if [ -f $cldir/synergy/zhl2dm_materials_pak.vpk ]; then
+	if [ ! -f $synpath/synergy/zhl2dm_materials_pak.vpk ]; then
+		cp $cldir/synergy/zhl2dm_materials_pak.vpk ./$synpath/synergy/zhl2dm_materials_pak.vpk
+	fi
+fi
 if [ $betaset = "b" ];then betainst;fi
 if [ $betaset = "t" ];then twitchinst;fi
 echo "Updating/installing Synergy DS"
@@ -258,6 +271,8 @@ if [ $betaset = "t" ];then
 	syntype=Twitch
 	uprun="t"
 fi
+rm -f ./$synpath/synergy/scripts/weapon_betagun.txt
+wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/scripts/weapon_betagun.txt" -P ./$synpath/synergy/scripts
 if [ ! -f $synpath/synergy/cfg/server2.cfg ];then
 	echo hostname First Syn $syntype Server>$synpath/synergy/cfg/server2.cfg
 	echo sv_lan 0 >>$synpath/synergy/cfg/server2.cfg
@@ -324,7 +339,7 @@ start
 
 insthl2() {
 echo "Half-Life 2 was not found during setup, press any key to install it, or close the script and install it manually."
-echo "You can also install Ep1 with 1, Ep2 with 2 (will also install Ep1 and HL2), or 3 for HL2, Ep1, Ep2, and Half-Life Source."
+echo "You can also install Ep1 with 1, Ep2 with 2 (will also install Ep1 and HL2), or 3 for HL2, Ep1, Ep2, Lost Coast, and Half-Life Source."
 read hllist
 hllist=${hllist,,}
 re='^[0-9]+$'
@@ -333,6 +348,7 @@ if ! [[ $hllist =~ $re ]];then hllist=0 ;fi
 ./steamcmd.sh +login $stusername +force_install_dir ./steamapps/common/Half-Life\ 2 +app_update 220 validate +quit
 if [ $hllist > 2 ];then
 	./steamcmd.sh +login $stusername +force_install_dir ./steamapps/common/Half-Life\ 2 +app_update 280 validate +quit
+	./steamcmd.sh +login $stusername +force_install_dir ./steamapps/common/Half-Life\ 2 +app_update 340 validate +quit
 fi
 if [ $hllist > 0 ];then
 	./steamcmd.sh +login $stusername +force_install_dir ./steamapps/common/Half-Life\ 2 +app_update 380 validate +quit
