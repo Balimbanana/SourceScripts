@@ -156,6 +156,7 @@ if '%betaset%'=='t' (
 	set synpath=steamapps\common\syntwitch
 	set syntype=Twitch
 )
+powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SM-Synergy/raw/master/scripts/weapon_betagun.txt\",\"$PWD\$env:synpath\synergy\scripts\weapon_betagun.txt\") }"
 if NOT EXIST "%synpath%\synergy\cfg\server2.cfg" (
 	echo hostname First Syn %syntype% Server>"%synpath%\synergy\cfg\server2.cfg"
 	echo sv_lan 0 >>"%synpath%\synergy\cfg\server2.cfg"
@@ -255,7 +256,7 @@ if EXIST "%cd%\steamcmd.zip" set foundcmd=1
 if EXIST "%cd%\steamcmd.zip" goto extractcmd
 if EXIST "%userprofile%\downloads\steamcmd.zip" set foundcmd=2
 if EXIST "%userprofile%\downloads\steamcmd.zip" goto extractcmd
-if '%foundcmd%'=='0' start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://steamcdn-a.akamaihd.net/client/installer/steamcmd.zip\",\"$PWD\steamcmd.zip\" }"
+if '%foundcmd%'=='0' start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://steamcdn-a.akamaihd.net/client/installer/steamcmd.zip\",\"$PWD\steamcmd.zip\") }"
 if EXIST "%cd%\steamcmd.zip" set foundcmd=1
 if EXIST "%cd%\steamcmd.zip" goto extractcmd
 if EXIST "%userprofile%\downloads\steamcmd.zip" set foundcmd=2
