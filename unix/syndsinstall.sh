@@ -290,8 +290,23 @@ if [ ! -f $synpath/synergy/cfg/server2.cfg ];then
 	echo //Change this to a different savenumber for forked servers>>$synpath/synergy/cfg/server2.cfg
 	echo sv_savedir save2/>>$synpath/synergy/cfg/server2.cfg
 fi
-echo "Should be all configured for server running. Would you like to also install SourceMod? (Y/N)"
+echo "Should be all configured for server running."
+echo "Would you like to edit your server config? (y/N)"
+read editconf
+if [ -z $editconf ];then editconf="noneselected" ;fi
+editconf=${editconf,,}
+if [ $editconf = "y" ];then
+	if [ -f /bin/nano ];then
+		nano ./$synpath/synergy/cfg/server2.cfg
+	elif [ -f /usr/bin/gedit ];then
+		gedit ./$synpath/synergy/cfg/server2.cfg
+	else
+		vi ./$synpath/synergy/cfg/server2.cfg
+	fi
+fi
+echo "Would you like to install SourceMod? (y/N)"
 read instsmset
+if [ -z $instsmset ];then instsmset="noneselected" ;fi
 instsmset=${instsmset,,}
 if [ $instsmset = "y" ];then instsourcem;fi
 echo "Starting server..."
