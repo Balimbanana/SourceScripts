@@ -300,12 +300,16 @@ read editconf
 if [ -z $editconf ];then editconf="noneselected" ;fi
 editconf=${editconf,,}
 if [ $editconf = "y" ];then
-	if [ -f /bin/nano ];then
-		nano ./$synpath/synergy/cfg/server2.cfg
+	if [ ! -z $EDITOR ];then
+		$EDITOR $synpath/synergy/cfg/server2.cfg
+	elif [ ! -z $VISUAL ];then
+		$VISUAL $synpath/synergy/cfg/server2.cfg
+	elif [ -f /bin/nano ];then
+		nano $synpath/synergy/cfg/server2.cfg
 	elif [ -f /usr/bin/gedit ];then
-		gedit ./$synpath/synergy/cfg/server2.cfg
+		gedit $synpath/synergy/cfg/server2.cfg
 	else
-		vi ./$synpath/synergy/cfg/server2.cfg
+		vi $synpath/synergy/cfg/server2.cfg
 	fi
 fi
 echo "Would you like to install SourceMod? (y/N)"
