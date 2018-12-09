@@ -432,6 +432,10 @@ goto instpmpckpass
 
 :instpmpckpass
 set linkset=0
+if NOT EXIST "steamapps\workshop" mkdir "steamapps\workshop"
+if NOT EXIST "steamapps\workshop\content" mkdir "steamapps\workshop\content"
+if NOT EXIST "steamapps\workshop\content\17520" mkdir "steamapps\workshop\content\17520"
+ping localhost -n 1 >NUL
 fsutil reparsepoint query "steamapps\workshop\content\17520" | find "Mount Point" >nul && set "linkset=1" || set "linkset=0"
 if '%linkset%'=='0' (
 	start /wait /min robocopy /S /NP /NJS /NJH /NS "steamapps\workshop\content\17520" "steamapps\common\Synergy\synergy\custom"
