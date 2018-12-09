@@ -58,6 +58,11 @@ echo "First (I)nstall, (U)pdate, (R)un with auto-restart"
 echo "(RB) to run Synergy 18.x beta, (RT) to run Synergy Twitch branch."
 echo "(IS) to install SourceMod."
 if [ -d ./steamapps/common/Synergy/synergy/addons/sourcemod/plugins ]; then echo "(ISM) to install additional SourceMod plugins."; fi
+if [ ! -d ./steamapps/common/Synergy/synergy/addons/plr ]; then
+	if [ -d ./steamapps/common/Synergy/synergy/addons/metamod ]; then
+		echo "(PLR) to install Player Limit Remover, allows for up to 64 players (only on 56.16)"
+	fi
+fi
 read uprun
 uprun=${uprun,,}
 if [ -z $uprun ];then uprun="noneselected" ;fi
@@ -69,6 +74,7 @@ if [ $uprun = "r" ]; then srcds;fi
 if [ $uprun = "is" ]; then instsourcem;fi
 if [ $uprun = "ism" ]; then instsourcepluginstop;fi
 if [ $uprun = "linksm" ]; then linksm;fi
+if [ $uprun = "plr" ]; then instplr;fi
 echo "Choose an option."
 start
 }
@@ -343,7 +349,7 @@ reds
 reds() {
 curdatetime=$(date -u)
 echo "$curdatetime SynDS started."
-./$synpath/srcds_run -game synergy -console +maxplayers 10 +sv_lan 0 +map d1_trainstation_06 +exec server2.cfg -ip 0.0.0.0 -port 27015 -nocrashdialog -insecure -nohltv
+./$synpath/srcds_run -game synergy -console +maxplayers 32 +sv_lan 0 +map d1_trainstation_06 +exec server2.cfg -ip 0.0.0.0 -port 27015 -nocrashdialog -insecure -nohltv
 curdatetime=$(date -u)
 echo "$curdatetime WARNING: SynDS closed or crashed, restarting."
 sleep 1
@@ -490,6 +496,22 @@ if [ $pluginsubstr = "ssrsp" ];then
 fi
 if [ $pluginsubstr = "b" ];then start;fi
 instsourceplugins
+}
+
+instplr() {
+if [ ! -d ./steamapps/common/Synergy/synergy/addons/plr ]; then
+	if [ -d ./steamapps/common/Synergy/synergy/addons/metamod ]; then
+		mkdir ./steamapps/common/Synergy/synergy/addons/plr
+		wget -nv "https://raw.githubusercontent.com/FoG-Plugins/Player-Limit-Remover/master/addons/plr.vdf" -P ./steamapps/common/Synergy/synergy/addons
+		wget -nv "https://github.com/FoG-Plugins/Player-Limit-Remover/raw/master/addons/plr/plr.so" -P ./steamapps/common/Synergy/synergy/addons/plr
+	fi
+fi
+if [ -f ./steamapps/common/Synergy/synergy/addons/plr/plr.so ]; then
+	if [ -f ./steamapps/common/Synergy/synergy/addons/plr.vdf ]; then
+		echo "Successfully installed PLR"
+	fi
+fi
+start
 }
 
 start
