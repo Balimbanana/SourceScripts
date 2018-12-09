@@ -55,7 +55,7 @@ instsmset=0
 if [ ! -f ./steamcmd.sh ];then notindir; fi
 echo "Information: enter the letter inside the () and press enter to continue at the prompts."
 echo "First (I)nstall, (U)pdate, (R)un with auto-restart"
-echo "(RB) to run Synergy 18.7 beta, (RT) to run Synergy Twitch branch."
+echo "(RB) to run Synergy 18.x beta, (RT) to run Synergy Twitch branch."
 echo "(IS) to install SourceMod."
 if [ -d ./steamapps/common/Synergy/synergy/addons/sourcemod/plugins ]; then echo "(ISM) to install additional SourceMod plugins."; fi
 read uprun
@@ -203,13 +203,17 @@ synpath=./steamapps/common/Synergy
 if [ $betaset = "b" ];then synpath="./steamapps/common/synbeta";fi
 if [ $betaset = "t" ];then synpath="./steamapps/common/syntwitch";fi
 if [ -f $cldir/synergy/synergy_pak.vpk ]; then
+	if [ ! -d $synpath ]; then mkdir $synpath ;fi
+	if [ ! -d $synpath/synergy ]; then mkdir $synpath/synergy ;fi
 	if [ ! -f $synpath/synergy/synergy_pak.vpk ]; then
-		cp $cldir/synergy/synergy_pak.vpk ./$synpath/synergy/synergy_pak.vpk
+		cp $cldir/synergy/synergy_pak.vpk $synpath/synergy/synergy_pak.vpk
 	fi
 fi
 if [ -f $cldir/synergy/zhl2dm_materials_pak.vpk ]; then
+	if [ ! -d $synpath ]; then mkdir $synpath ;fi
+	if [ ! -d $synpath/synergy ]; then mkdir $synpath/synergy ;fi
 	if [ ! -f $synpath/synergy/zhl2dm_materials_pak.vpk ]; then
-		cp $cldir/synergy/zhl2dm_materials_pak.vpk ./$synpath/synergy/zhl2dm_materials_pak.vpk
+		cp $cldir/synergy/zhl2dm_materials_pak.vpk $synpath/synergy/zhl2dm_materials_pak.vpk
 	fi
 fi
 if [ $betaset = "b" ];then betainst;fi
