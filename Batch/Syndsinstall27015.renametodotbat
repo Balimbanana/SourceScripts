@@ -8,6 +8,7 @@ set pmpck4=0
 set pmpck5=0
 set betaset="reg"
 set instsmset=0
+set synpath=steamapps\common\Synergy
 set cldir=%programfiles(x86)%\Steam\steamapps
 if EXIST "E:\SteamLibrary\steamapps\common\Synergy\synergy" set cldir=E:\SteamLibrary\steamapps
 if EXIST "D:\SteamLibrary\steamapps\common\Synergy\synergy" set cldir=D:\SteamLibrary\steamapps
@@ -421,31 +422,47 @@ if NOT EXIST "%cd%\%synpath%\addons\sourcemod\translations\fpd.phrases.txt" (
 goto instsourceplugins
 
 :instpmpck
-if EXIST steamapps\workshop\content\17520\646159916\646159916_pak.vpk set pmpck1=2
-if EXIST steamapps\workshop\content\17520\703682251\703682251_pak.vpk set pmpck2=2
-if EXIST steamapps\workshop\content\17520\729355384\upload.vpk set pmpck3=2
-if EXIST steamapps\workshop\content\17520\1099811040\m_pack4upd.vpk set pmpck4=2
-if EXIST steamapps\workshop\content\17520\1133952585\1133952585_pak.vpk set pmpck5=2
+echo Install Player Model Packs for Regular, (B)eta, or (T)witch? (anything except b or t will do regular)
+set synpath=steamapps\common\Synergy
+set /p betaset=
+for /f "delims=" %%V in ('powershell -command "$env:betaset.ToLower()"') do set "betaset=%%V"
+if '%betaset%'=='b' set synpath=steamapps\common\synbeta
+if '%betaset%'=='t' set synpath=steamapps\common\syntwitch
+goto instpmpckpass
+
+:instpmpckpass
+set linkset=0
+fsutil reparsepoint query "steamapps\workshop\content\17520" | find "Mount Point" >nul && set "linkset=1" || set "linkset=0"
+if '%linkset%'=='0' (
+	start /wait /min robocopy /S /NP /NJS /NJH /NS "steamapps\workshop\content\17520" "steamapps\common\Synergy\synergy\custom"
+	rd /Q /S steamapps\workshop\content\17520
+	mklink /j steamapps\workshop\content\17520 %synpath%\synergy\custom
+)
 if EXIST "%cldir%\workshop\content\17520\646159916\646159916_pak.vpk" set pmpck1=1
 if EXIST "%cldir%\workshop\content\17520\703682251\703682251_pak.vpk" set pmpck2=1
 if EXIST "%cldir%\workshop\content\17520\729355384\upload.vpk" set pmpck3=1
 if EXIST "%cldir%\workshop\content\17520\1099811040\m_pack4upd.vpk" set pmpck4=1
 if EXIST "%cldir%\workshop\content\17520\1133952585\1133952585_pak.vpk" set pmpck5=1
+if EXIST steamapps\workshop\content\17520\646159916\646159916_pak.vpk set pmpck1=2
+if EXIST steamapps\workshop\content\17520\703682251\703682251_pak.vpk set pmpck2=2
+if EXIST steamapps\workshop\content\17520\729355384\upload.vpk set pmpck3=2
+if EXIST steamapps\workshop\content\17520\1099811040\m_pack4upd.vpk set pmpck4=2
+if EXIST steamapps\workshop\content\17520\1133952585\1133952585_pak.vpk set pmpck5=2
 if '%pmpck1%'=='1' echo Player Model Pack 1 detected in CL workshop dir.
 if '%pmpck2%'=='1' echo Player Model Pack 2 detected in CL workshop dir.
 if '%pmpck3%'=='1' echo Player Model Pack 3 detected in CL workshop dir.
 if '%pmpck4%'=='1' echo Player Model Pack 4 detected in CL workshop dir.
 if '%pmpck5%'=='1' echo Player Model Pack 5 detected in CL workshop dir.
-if '%pmpck1%'=='2' echo Player Model Pack 1 detected in workshop dir.
-if '%pmpck2%'=='2' echo Player Model Pack 2 detected in workshop dir.
-if '%pmpck3%'=='2' echo Player Model Pack 3 detected in workshop dir.
-if '%pmpck4%'=='2' echo Player Model Pack 4 detected in workshop dir.
-if '%pmpck5%'=='2' echo Player Model Pack 5 detected in workshop dir.
-if %pmpck1% GEQ 1 echo (1) To install Pack 1 to your server.
-if %pmpck2% GEQ 1 echo (2) To install Pack 2 to your server.
-if %pmpck3% GEQ 1 echo (3) To install Pack 3 to your server.
-if %pmpck4% GEQ 1 echo (4) To install Pack 4 to your server.
-if %pmpck5% GEQ 1 echo (5) To install Pack 5 to your server.
+if '%pmpck1%'=='2' echo Player Model Pack 1 installed.
+if '%pmpck2%'=='2' echo Player Model Pack 2 installed.
+if '%pmpck3%'=='2' echo Player Model Pack 3 installed.
+if '%pmpck4%'=='2' echo Player Model Pack 4 installed.
+if '%pmpck5%'=='2' echo Player Model Pack 5 installed.
+if %pmpck1% LEQ 1 echo (1) To install Pack 1 to your server.
+if %pmpck2% LEQ 1 echo (2) To install Pack 2 to your server.
+if %pmpck3% LEQ 1 echo (3) To install Pack 3 to your server.
+if %pmpck4% LEQ 1 echo (4) To install Pack 4 to your server.
+if %pmpck5% LEQ 1 echo (5) To install Pack 5 to your server.
 if '%pmpck1%'=='0' echo (DL1) to download Pack 1.
 if '%pmpck2%'=='0' echo (DL2) to download Pack 2.
 if '%pmpck3%'=='0' echo (DL3) to download Pack 3.
@@ -459,48 +476,56 @@ if '%pmpckopt%'=='b' (
 	goto ^start
 )
 if '%pmpckopt%'=='1' (
-	if '%pmpck1%'=='1' set pmpckdir=^%programfiles^(x86^)%\Steam\steamapps\workshop\content\17520\646159916\646159916_pak
-	if '%pmpck1%'=='2' set pmpckdir=^steamapps\workshop\content\17520\646159916\646159916_pak
-	set part=^1
-	set installing=^1
+	if '%pmpck1%'=='1' (
+		set pmpckdir=^%cldir%\workshop\content\17520\646159916
+		set pmpckid=^646159916
+		set part=^1
+		set installing=^1
+	) else echo ^Already installed.
 )
 if '%pmpckopt%'=='2' (
-	if '%pmpck2%'=='1' set pmpckdir=^%programfiles^(x86^)%\Steam\steamapps\workshop\content\17520\703682251\703682251_pak
-	if '%pmpck2%'=='2' set pmpckdir=^steamapps\workshop\content\17520\703682251\703682251_pak
-	set part=^2
-	set installing=^1
+	if '%pmpck2%'=='1' (
+		set pmpckdir=^%cldir%\workshop\content\17520\703682251
+		set pmpckid=^703682251
+		set part=^2
+		set installing=^1
+	) else echo ^Already installed.
 )
 if '%pmpckopt%'=='3' (
-	if '%pmpck3%'=='1' set pmpckdir=^%programfiles^(x86^)%\Steam\steamapps\workshop\content\17520\729355384\upload
-	if '%pmpck3%'=='2' set pmpckdir=^steamapps\workshop\content\17520\729355384\upload
-	set part=^3
-	set installing=^1
+	if '%pmpck3%'=='1' (
+		set pmpckdir=^%cldir%\workshop\content\17520\729355384
+		set pmpckid=^729355384
+		set part=^3
+		set installing=^1
+	) else echo ^Already installed.
 )
 if '%pmpckopt%'=='4' (
-	if '%pmpck4%'=='1' set pmpckdir=^%programfiles^(x86^)%\Steam\steamapps\workshop\content\17520\1099811040\m_pack4upd
-	if '%pmpck4%'=='2' set pmpckdir=^steamapps\workshop\content\17520\1099811040\m_pack4upd
-	set part=^4
-	set installing=^1
+	if '%pmpck4%'=='1' (
+		set pmpckdir=^%cldir%\workshop\content\17520\1099811040
+		set pmpckid=^1099811040
+		set part=^4
+		set installing=^1
+	) else echo ^Already installed.
 )
 if '%pmpckopt%'=='5' (
-	if '%pmpck5%'=='1' set pmpckdir=^%programfiles^(x86^)%\Steam\steamapps\workshop\content\17520\1133952585\1133952585_pak
-	if '%pmpck5%'=='2' set pmpckdir=^steamapps\workshop\content\17520\1133952585\1133952585_pak
-	set part=^5
-	set installing=^1
+	if '%pmpck5%'=='1' (
+		set pmpckdir=^%cldir%\workshop\content\17520\1133952585
+		set pmpckid=^1133952585
+		set part=^5
+		set installing=^1
+	) else echo ^Already installed.
 )
 if '%installing%'=='1' (
-	if NOT EXIST "%pmpckdir%.vpk" echo.
-	if NOT EXIST "%pmpckdir%.vpk" echo ^You do not have this part downloaded...
-	if NOT EXIST "%pmpckdir%.vpk" echo.
-	if NOT EXIST "%pmpckdir%.vpk" set installing=^0
-	if NOT EXIST "%pmpckdir%.vpk" goto ^instpmpck
+	if NOT EXIST "%pmpckdir%" echo.
+	if NOT EXIST "%pmpckdir%" echo ^You do not have this part downloaded...
+	if NOT EXIST "%pmpckdir%" echo.
+	if NOT EXIST "%pmpckdir%" set installing=^0
+	if NOT EXIST "%pmpckdir%" goto ^instpmpck
 )
 if '%installing%'=='1' (
-	start /wait /min steamapps\common\Synergy\bin\vpk.exe %pmpckdir%.vpk
-	start /wait /min robocopy /S /NP /NJS /NJH /NS "%cd%\%pmpckdir%" "steamapps\common\Synergy\synergy"
-	rd /Q /S "%cd%\%pmpckdir%"
+	start /wait /min robocopy /S /NP /NJS /NJH /NS "%pmpckdir%" "%cd%\%synpath%\synergy\custom\%pmpckid%"
 	echo.
-	echo ^Completed extracting Part %part%...
+	echo ^Completed installing Part %part%...
 	echo.
 	set installing=^0
 	set pmpckopt=^0
@@ -511,7 +536,7 @@ if '%pmpckopt%'=='dl3' steamcmd.exe +login anonymous +workshop_download_item 175
 if '%pmpckopt%'=='dl4' steamcmd.exe +login anonymous +workshop_download_item 17520 1099811040 +quit
 if '%pmpckopt%'=='dl5' steamcmd.exe +login anonymous +workshop_download_item 17520 1133952585 +quit
 ping localhost -n 3 >NUL
-goto instpmpck
+goto instpmpckpass
 
 :linksm
 if EXIST "%programfiles(x86)%\Steam\steamapps\sourcemods" mklink /j "steamapps\sourcemods" "%programfiles(x86)%\Steam\steamapps\sourcemods"
