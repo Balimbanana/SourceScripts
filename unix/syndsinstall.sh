@@ -57,10 +57,10 @@ echo "Information: enter the letter inside the () and press enter to continue at
 echo "First (I)nstall, (U)pdate, (R)un with auto-restart"
 echo "(RB) to run Synergy 18.x beta, (RT) to run Synergy Twitch branch."
 echo "(IS) to install SourceMod."
-if [ -d ./steamapps/common/Synergy/synergy/addons/sourcemod/plugins ]; then echo "(ISM) to install additional SourceMod plugins."; fi
+if [ -d ./steamapps/common/Synergy/synergy/addons/sourcemod/plugins ]; then echo "(ISM) to install additional SM plugins. (IMP) to install Player Model Packs."; fi
 if [ ! -d ./steamapps/common/Synergy/synergy/addons/plr ]; then
 	if [ -d ./steamapps/common/Synergy/synergy/addons/metamod ]; then
-		echo "(PLR) to install Player Limit Remover, allows for up to 64 players (only on 56.16)"
+		echo "(PLR) to install Player Limit Remover, allows for up to 64 players (only v56.16)"
 	fi
 fi
 read uprun
@@ -75,6 +75,7 @@ if [ $uprun = "is" ]; then instsourcem;fi
 if [ $uprun = "ism" ]; then instsourcepluginstop;fi
 if [ $uprun = "linksm" ]; then linksm;fi
 if [ $uprun = "plr" ]; then instplr;fi
+if [ $uprun = "imp" ]; then instpmpck;fi
 echo "Choose an option."
 start
 }
@@ -226,7 +227,13 @@ srcds
 }
 
 noanon() {
-echo "You cannot use anonymous to install Synergy..."
+if [ $anonset = 0 ];then echo "You cannot use anonymous to install Synergy...";fi
+if [ $anonset = 2 ];then
+	echo "You cannot use anonymous to install HL2..."
+	stusername=""
+	anonset=0
+	insthl2
+fi
 anonset=1
 firstinstall
 }
@@ -327,7 +334,7 @@ if [ $uprun = "b" ];then synpath="steamapps/common/synbeta";fi
 if [ $uprun = "rt" ];then synpath="steamapps/common/syntwitch";fi
 if [ $uprun = "t" ];then synpath="steamapps/common/syntwitch";fi
 if [ ! -f ./$synpath/srcds_run ];then notinstalled;fi
-if [ ! -d ./steamapps/common/Half-Life\ 2 ];then insthl2;fi
+if [ ! -d ./steamapps/common/Half-Life\ 2/hl2 ];then insthl2;fi
 if [ ! -L ./$synpath/bin/libtier0.so ];then
 	mv ./$synpath/bin/libtier0.so ./$synpath/bin/libtier0.so.bak
 	ln -s libtier0_srv.so ./$synpath/bin/libtier0.so
@@ -360,13 +367,20 @@ start
 }
 
 insthl2() {
-echo "Half-Life 2 was not found during setup, press any key to install it, or close the script and install it manually."
+echo "Half-Life 2 was not found during setup, press enter to install it, or close the script and install it manually."
 echo "You can also install Ep1 with 1, Ep2 with 2 (will also install Ep1 and HL2), or 3 for HL2, Ep1, Ep2, Lost Coast, and Half-Life Source."
 read hllist
 hllist=${hllist,,}
 re='^[0-9]+$'
 if [ -z $hllist ];then hllist=0 ;fi
 if ! [[ $hllist =~ $re ]];then hllist=0 ;fi
+if [ -z $stusername ];then
+	echo "Enter your username here:"
+	read stusername
+	anonset=2
+	anonblck=${stusername,,}
+	if [ $anonblck = "anonymous" ];then noanon;fi
+fi
 ./steamcmd.sh +login $stusername +force_install_dir ./steamapps/common/Half-Life\ 2 +app_update 220 validate +quit
 if [ $hllist > 2 ];then
 	./steamcmd.sh +login $stusername +force_install_dir ./steamapps/common/Half-Life\ 2 +app_update 280 validate +quit
@@ -505,6 +519,115 @@ if [ -f ./steamapps/common/Synergy/synergy/addons/plr/plr.so ]; then
 	fi
 fi
 start
+}
+
+instpmpck() {
+echo "Install Player Model Packs for Regular, (B)eta, or (T)witch? (anything except b or t will do regular)"
+read betaset
+betaset=${betaset,,}
+if [ -z $betaset ];then betaset="regular";fi
+synpath="steamapps/common/Synergy/synergy"
+if [ $betaset = "b" ];then synpath="steamapps/common/synbeta/synergy";fi
+if [ $betaset = "t" ];then synpath="steamapps/common/syntwitch/synergy";fi
+if [ ! -d $synpath ];then notinstalled;fi
+instpmpckpass
+}
+
+instpmpckpass() {
+if [ ! -d "steamapps/workshop" ];then mkdir "./steamapps/workshop" ;fi
+if [ ! -d "steamapps/workshop/content" ];then mkdir "./steamapps/workshop/content" ;fi
+if [ ! -d "steamapps/workshop/content/17520" ];then mkdir "./steamapps/workshop/content/17520" ;fi
+if [ ! -L "steamapps/workshop/content/17520" ];then
+	rsync --remove-source-files -a ./steamapps/workshop/content/17520/* ./steamapps/common/Synergy/synergy/custom
+	rm -rf ./steamapps/workshop/content/17520
+	ln -s "../../common/Synergy/synergy/custom" "./steamapps/workshop/content/17520"
+fi
+pmpck1="0"
+pmpck2="0"
+pmpck3="0"
+pmpck4="0"
+pmpck5="0"
+if [ -f "$cldir/workshop/content/17520/646159916/646159916_pak.vpk" ];then pmpck1="1" ;fi
+if [ -f "$cldir/workshop/content/17520/703682251/703682251_pak.vpk" ];then pmpck2="1" ;fi
+if [ -f "$cldir/workshop/content/17520/729355384/upload.vpk" ];then pmpck3="1" ;fi
+if [ -f "$cldir/workshop/content/17520/1099811040/m_pack4upd.vpk" ];then pmpck4="1" ;fi
+if [ -f "$cldir/workshop/content/17520/1133952585/1133952585_pak.vpk" ];then pmpck5="1" ;fi
+if [ -f "./steamapps/workshop/content/17520/646159916/646159916_pak.vpk" ];then pmpck1="2" ;fi
+if [ -f "./steamapps/workshop/content/17520/703682251/703682251_pak.vpk" ];then pmpck2="2" ;fi
+if [ -f "./steamapps/workshop/content/17520/729355384/upload.vpk" ];then pmpck3="2" ;fi
+if [ -f "./steamapps/workshop/content/17520/1099811040/m_pack4upd.vpk" ];then pmpck4="2" ;fi
+if [ -f "./steamapps/workshop/content/17520/1133952585/1133952585_pak.vpk" ];then pmpck5="2" ;fi
+if [ "$pmpck1" = "1" ];then echo "Player Model Pack 1 detected in CL workshop dir.";fi
+if [ "$pmpck2" = "1" ];then echo "Player Model Pack 2 detected in CL workshop dir.";fi
+if [ "$pmpck3" = "1" ];then echo "Player Model Pack 3 detected in CL workshop dir.";fi
+if [ "$pmpck4" = "1" ];then echo "Player Model Pack 4 detected in CL workshop dir.";fi
+if [ "$pmpck5" = "1" ];then echo "Player Model Pack 5 detected in CL workshop dir.";fi
+if [ "$pmpck1" = "2" ];then echo "Player Model Pack 1 installed.";fi
+if [ "$pmpck2" = "2" ];then echo "Player Model Pack 2 installed.";fi
+if [ "$pmpck3" = "2" ];then echo "Player Model Pack 3 installed.";fi
+if [ "$pmpck4" = "2" ];then echo "Player Model Pack 4 installed.";fi
+if [ "$pmpck5" = "2" ];then echo "Player Model Pack 5 installed.";fi
+if [ "$pmpck1" = "1" ];then echo "(1) To install Pack 1 to your server.";fi
+if [ "$pmpck2" = "1" ];then echo "(2) To install Pack 2 to your server.";fi
+if [ "$pmpck3" = "1" ];then echo "(3) To install Pack 3 to your server.";fi
+if [ "$pmpck4" = "1" ];then echo "(4) To install Pack 4 to your server.";fi
+if [ "$pmpck5" = "1" ];then echo "(5) To install Pack 5 to your server.";fi
+if [ "$pmpck1" = "0" ];then echo "(DL1) to download Pack 1.";fi
+if [ "$pmpck2" = "0" ];then echo "(DL2) to download Pack 2.";fi
+if [ "$pmpck3" = "0" ];then echo "(DL3) to download Pack 3.";fi
+if [ "$pmpck4" = "0" ];then echo "(DL4) to download Pack 4.";fi
+if [ "$pmpck5" = "0" ];then echo "(DL5) to download Pack 5.";fi
+echo "(B) to go back to start."
+read pmpckopt
+if [ -z $pmpckopt ];then pmpckopt="notset";fi
+pmpckopt=${pmpckopt,,}
+if [ $pmpckopt = "b" ]; then start ;fi
+if [ $pmpckopt = "dl1" ]; then ./steamcmd.sh +login anonymous +workshop_download_item 17520 646159916 +quit;fi
+if [ $pmpckopt = "dl2" ]; then ./steamcmd.sh +login anonymous +workshop_download_item 17520 703682251 +quit;fi
+if [ $pmpckopt = "dl3" ]; then ./steamcmd.sh +login anonymous +workshop_download_item 17520 729355384 +quit;fi
+if [ $pmpckopt = "dl4" ]; then ./steamcmd.sh +login anonymous +workshop_download_item 17520 1099811040 +quit;fi
+if [ $pmpckopt = "dl5" ]; then ./steamcmd.sh +login anonymous +workshop_download_item 17520 1133952585 +quit;fi
+if [ $pmpckopt = "1" ]; then
+	if [ -f "./steamapps/workshop/content/17520/646159916/646159916_pak.vpk" ]; then
+		echo "Already installed."
+		instpmpckpass
+	fi
+	if [ ! -d "./steamapps/workshop/content/17520/646159916" ]; then mkdir "./steamapps/workshop/content/17520/646159916";fi
+	cp "$cldir/workshop/content/17520/646159916/646159916_pak.vpk" "./steamapps/workshop/content/17520/646159916/646159916_pak.vpk"
+fi
+if [ $pmpckopt = "2" ]; then
+	if [ -f "./steamapps/workshop/content/17520/703682251/703682251_pak.vpk" ]; then
+		echo "Already installed."
+		instpmpckpass
+	fi
+	if [ ! -d "./steamapps/workshop/content/17520/703682251" ]; then mkdir "./steamapps/workshop/content/17520/703682251";fi
+	cp "$cldir/workshop/content/17520/703682251/703682251_pak.vpk" "./steamapps/workshop/content/17520/703682251/703682251_pak.vpk"
+fi
+if [ $pmpckopt = "3" ]; then
+	if [ -f "./steamapps/workshop/content/17520/729355384/upload.vpk" ]; then
+		echo "Already installed."
+		instpmpckpass
+	fi
+	if [ ! -d "./steamapps/workshop/content/17520/729355384" ]; then mkdir "./steamapps/workshop/content/17520/729355384";fi
+	cp "$cldir/workshop/content/17520/729355384/upload.vpk" "./steamapps/workshop/content/17520/729355384/upload.vpk"
+fi
+if [ $pmpckopt = "4" ]; then
+	if [ -f "./steamapps/workshop/content/17520/1099811040/m_pack4upd.vpk" ]; then
+		echo "Already installed."
+		instpmpckpass
+	fi
+	if [ ! -d "./steamapps/workshop/content/17520/1099811040" ]; then mkdir "./steamapps/workshop/content/17520/1099811040";fi
+	cp "$cldir/workshop/content/17520/1099811040/m_pack4upd.vpk" "./steamapps/workshop/content/17520/1099811040/m_pack4upd.vpk"
+fi
+if [ $pmpckopt = "5" ]; then
+	if [ -f "./steamapps/workshop/content/17520/1133952585/1133952585_pak.vpk" ]; then
+		echo "Already installed."
+		instpmpckpass
+	fi
+	if [ ! -d "./steamapps/workshop/content/17520/1133952585" ]; then mkdir "./steamapps/workshop/content/17520/1133952585";fi
+	cp "$cldir/workshop/content/17520/1133952585/1133952585_pak.vpk" "./steamapps/workshop/content/17520/1133952585/1133952585_pak.vpk"
+fi
+instpmpckpass
 }
 
 start
