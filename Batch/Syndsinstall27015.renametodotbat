@@ -91,6 +91,16 @@ if '%uprun%'=='rt' set synpath=steamapps\common\syntwitch
 if '%betaset%'=='b' set synpath=steamapps\common\synbeta
 if '%betaset%'=='t' set synpath=steamapps\common\syntwitch
 if NOT EXIST %synpath%\srcds.exe goto notinstalled
+set linkset=0
+if NOT EXIST "%synpath%\synergy\download" mkdir "%synpath%\synergy\download"
+if NOT EXIST "%synpath%\synergy\download\user_custom" mkdir "%synpath%\synergy\download\user_custom"
+if NOT EXIST "%synpath%\synergy\user_custom" mklink /j "%synpath%\synergy\user_custom" "%synpath%\synergy\download\user_custom">NUL
+ping localhost -n 1 >NUL
+fsutil reparsepoint query "%synpath%\synergy\user_custom" | find "Mount Point" >nul && set "linkset=1" || set "linkset=0"
+if '%linkset%'=='0' (
+	rmdir "%synpath%\synergy\user_custom"
+	mklink /j "%synpath%\synergy\user_custom" "%synpath%\synergy\download\user_custom">NUL
+)
 for /f "delims=" %%V in ('powershell -command "$ab = get-date; $ab.Minute"') do set "starttime=%%V"
 :reds
 echo (%date%)(%time%) SynDS started.
