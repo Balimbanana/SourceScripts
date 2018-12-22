@@ -413,6 +413,7 @@ echo "Install plugins for Regular, (B)eta, or (T)witch? (anything except b or t 
 read betaset
 betaset=${betaset,,}
 synpath="steamapps/common/Synergy/synergy"
+if [ -z $betaset ];then betaset=reg ;fi
 if [ $betaset = "b" ];then synpath="steamapps/common/synbeta/synergy";fi
 if [ $betaset = "t" ];then synpath="steamapps/common/syntwitch/synergy";fi
 if [ ! -d $synpath ];then notinstalled;fi
