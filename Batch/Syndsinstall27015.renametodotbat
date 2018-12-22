@@ -309,11 +309,11 @@ set synpath=steamapps\common\Synergy\synergy
 set syntype=56.16
 if '%betaset%'=='b' (
 	set synpath=steamapps\common\synbeta\synergy
-	set syntype=nonstand
+	set syntype=dev
 )
 if '%betaset%'=='t' (
 	set synpath=steamapps\common\syntwitch\synergy
-	set syntype=nonstand
+	set syntype=twitch
 )
 if NOT EXIST %synpath% goto notinstalled
 echo This will direct download the required SourceMod files and then extract them.
@@ -335,9 +335,13 @@ if '%dlloc%'=='1' start /wait /min powershell -command "& {Add-Type -AssemblyNam
 if '%dlloc%'=='2' start /wait /min powershell -command "& {Add-Type -AssemblyName System.IO.Compression.FileSystem; [System.IO.Compression.ZipFile]::ExtractToDirectory(\"$PWD\sourcemod-1.9.0-git6229-windows.zip\", \"$PWD\$env:synpath\"); [System.IO.Compression.ZipFile]::ExtractToDirectory(\"$PWD\mmsource-1.11.0-git1105-windows.zip\", \"$PWD\$env:synpath\"); [System.IO.Compression.ZipFile]::ExtractToDirectory(\"$PWD\SteamWorks-git121-windows.zip\", \"$PWD\$env:synpath\") }"
 if NOT EXIST "%synpath%\addons\sourcemod\gamedata\sdkhooks.games\custom" mkdir "%synpath%\addons\sourcemod\gamedata\sdkhooks.games\custom"
 if NOT EXIST "%synpath%\addons\sourcemod\gamedata\sdktools.games\custom" mkdir "%synpath%\addons\sourcemod\gamedata\sdktools.games\custom"
-if '%syntype%'=='nonstand' (
+if '%syntype%'=='dev' (
 	start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SM-Synergy/raw/master/devtwitchgamedata/sdkhooks.games/custom/game.synergy.txt\", \"$PWD\$env:synpath\addons\sourcemod\gamedata\sdkhooks.games\custom\game.synergy.txt\") }"
 	start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SM-Synergy/raw/master/devtwitchgamedata/sdktools.games/custom/game.synergy.txt\", \"$PWD\$env:synpath\addons\sourcemod\gamedata\sdktools.games\custom\game.synergy.txt\") }"
+)
+if '%syntype%'=='twitch' (
+	start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SM-Synergy/raw/master/twitchbranchgamedata/sdkhooks.games/custom/game.synergy.txt\", \"$PWD\$env:synpath\addons\sourcemod\gamedata\sdkhooks.games\custom\game.synergy.txt\") }"
+	start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SM-Synergy/raw/master/twitchbranchgamedata/sdktools.games/custom/game.synergy.txt\", \"$PWD\$env:synpath\addons\sourcemod\gamedata\sdktools.games\custom\game.synergy.txt\") }"
 )
 if NOT EXIST "%synpath%\addons\sourcemod" (
 	echo Failed to auto-install SourceMod, you may have an outdated PowerShell, or something else went wrong somewhere.
