@@ -459,6 +459,34 @@ if [ $pluginsubstr = "ml" ];then
 	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/plugins/modelloader.smx" -P ./$synpath/addons/sourcemod/plugins
 	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/translations/modelloader.phrases.txt" -P ./$synpath/addons/sourcemod/translations
 	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/translations/chi/modelloader.phrases.txt" -P ./$synpath/addons/sourcemod/translations/chi
+	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/translations/ar/modelloader.phrases.txt" -P ./$synpath/addons/sourcemod/translations/ar
+	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/translations/bg/modelloader.phrases.txt" -P ./$synpath/addons/sourcemod/translations/bg
+	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/translations/cze/modelloader.phrases.txt" -P ./$synpath/addons/sourcemod/translations/cze
+	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/translations/da/modelloader.phrases.txt" -P ./$synpath/addons/sourcemod/translations/da
+	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/translations/de/modelloader.phrases.txt" -P ./$synpath/addons/sourcemod/translations/de
+	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/translations/el/modelloader.phrases.txt" -P ./$synpath/addons/sourcemod/translations/el
+	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/translations/es/modelloader.phrases.txt" -P ./$synpath/addons/sourcemod/translations/es
+	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/translations/fi/modelloader.phrases.txt" -P ./$synpath/addons/sourcemod/translations/fi
+	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/translations/fr/modelloader.phrases.txt" -P ./$synpath/addons/sourcemod/translations/fr
+	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/translations/he/modelloader.phrases.txt" -P ./$synpath/addons/sourcemod/translations/he
+	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/translations/hu/modelloader.phrases.txt" -P ./$synpath/addons/sourcemod/translations/hu
+	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/translations/it/modelloader.phrases.txt" -P ./$synpath/addons/sourcemod/translations/it
+	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/translations/jp/modelloader.phrases.txt" -P ./$synpath/addons/sourcemod/translations/jp
+	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/translations/ko/modelloader.phrases.txt" -P ./$synpath/addons/sourcemod/translations/ko
+	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/translations/lt/modelloader.phrases.txt" -P ./$synpath/addons/sourcemod/translations/lt
+	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/translations/lv/modelloader.phrases.txt" -P ./$synpath/addons/sourcemod/translations/lv
+	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/translations/nl/modelloader.phrases.txt" -P ./$synpath/addons/sourcemod/translations/nl
+	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/translations/no/modelloader.phrases.txt" -P ./$synpath/addons/sourcemod/translations/no
+	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/translations/pl/modelloader.phrases.txt" -P ./$synpath/addons/sourcemod/translations/pl
+	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/translations/pt/modelloader.phrases.txt" -P ./$synpath/addons/sourcemod/translations/pt
+	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/translations/pt_p/modelloader.phrases.txt" -P ./$synpath/addons/sourcemod/translations/pt_p
+	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/translations/ro/modelloader.phrases.txt" -P ./$synpath/addons/sourcemod/translations/ro
+	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/translations/ru/modelloader.phrases.txt" -P ./$synpath/addons/sourcemod/translations/ru
+	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/translations/sk/modelloader.phrases.txt" -P ./$synpath/addons/sourcemod/translations/sk
+	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/translations/sv/modelloader.phrases.txt" -P ./$synpath/addons/sourcemod/translations/sv
+	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/translations/tr/modelloader.phrases.txt" -P ./$synpath/addons/sourcemod/translations/tr
+	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/translations/ua/modelloader.phrases.txt" -P ./$synpath/addons/sourcemod/translations/ua
+	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/translations/zho/modelloader.phrases.txt" -P ./$synpath/addons/sourcemod/translations/zho
 	if [ -f ./$synpath/addons/sourcemod/translations/modelloader.phrases ];then echo "Installed!";fi
 fi
 if [ $pluginsubstr = "mlsp" ];then echo "SP file not available for this plugin, sorry.";fi
