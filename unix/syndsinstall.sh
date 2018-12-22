@@ -102,11 +102,11 @@ syntype="reg"
 synpath="steamapps/common/Synergy/synergy"
 if [ $betaset = "b" ];then
 	synpath="steamapps/common/synbeta/synergy";
-	syntype="nonstand"
+	syntype="dev"
 fi
 if [ $betaset = "t" ];then
 	synpath="steamapps/common/syntwitch/synergy";
-	syntype="nonstand"
+	syntype="twitch"
 fi
 if [ ! -d $synpath ];then notinstalled;fi
 echo "This will direct download the required SourceMod files and then extract them."
@@ -130,8 +130,16 @@ fi
 if [ ! -d ./$synpath/addons/sourcemod/gamedata/sdktools.games/custom ];then
 	mkdir ./$synpath/addons/sourcemod/gamedata/sdktools.games/custom
 fi
-wget -nv "https://raw.githubusercontent.com/Balimbanana/SM-Synergy/master/56.16lin/sdkhooks.games/custom/game.synergy.txt" -P ./$synpath/addons/sourcemod/gamedata/sdkhooks.games/custom
-wget -nv "https://raw.githubusercontent.com/Balimbanana/SM-Synergy/master/56.16lin/sdktools.games/custom/game.synergy.txt" -P ./$synpath/addons/sourcemod/gamedata/sdktools.games/custom
+if [ syntype = "dev" ];then
+	wget -nv "https://raw.githubusercontent.com/Balimbanana/SM-Synergy/master/devtwitchgamedata/sdkhooks.games/custom/game.synergy.txt" -P ./$synpath/addons/sourcemod/gamedata/sdkhooks.games/custom
+	wget -nv "https://raw.githubusercontent.com/Balimbanana/SM-Synergy/master/devtwitchgamedata/sdktools.games/custom/game.synergy.txt" -P ./$synpath/addons/sourcemod/gamedata/sdktools.games/custom
+elif [ syntype = "twitch" ];then
+	wget -nv "https://raw.githubusercontent.com/Balimbanana/SM-Synergy/master/twitchbranchgamedata/sdkhooks.games/custom/game.synergy.txt" -P ./$synpath/addons/sourcemod/gamedata/sdkhooks.games/custom
+	wget -nv "https://raw.githubusercontent.com/Balimbanana/SM-Synergy/master/twitchbranchgamedata/sdktools.games/custom/game.synergy.txt" -P ./$synpath/addons/sourcemod/gamedata/sdktools.games/custom
+else
+	wget -nv "https://raw.githubusercontent.com/Balimbanana/SM-Synergy/master/56.16lin/sdkhooks.games/custom/game.synergy.txt" -P ./$synpath/addons/sourcemod/gamedata/sdkhooks.games/custom
+	wget -nv "https://raw.githubusercontent.com/Balimbanana/SM-Synergy/master/56.16lin/sdktools.games/custom/game.synergy.txt" -P ./$synpath/addons/sourcemod/gamedata/sdktools.games/custom
+fi
 # remove nextmap as it does not work in Synergy
 rm -f ./$synpath/addons/sourcemod/plugins/nextmap.smx
 echo "SourceMod installed, you can put plugins in ./$synpath/addons/sourcemod/plugins"
