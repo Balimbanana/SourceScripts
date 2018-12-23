@@ -9,6 +9,7 @@ set pmpck4=0
 set pmpck5=0
 set betaset="reg"
 set instsmset=0
+set username=""
 set synpath=steamapps\common\Synergy
 set cldir=%programfiles(x86)%\Steam\steamapps
 if EXIST "E:\SteamLibrary\steamapps\common\Synergy\synergy" set cldir=E:\SteamLibrary\steamapps
@@ -52,8 +53,8 @@ if EXIST "%programfiles(x86)%\Steam" start /min /wait robocopy /NP /NJS /NJH /NS
 echo Enter your username here:
 set /p username=
 set anonblck=""
-for /f "delims=" %%V in ('powershell -command "$env:username.ToLower()"') do set 'anonblck=%%V'
-if '%anonblck%'=='anonymous' goto noanon
+for /f "delims=" %%V in ('powershell -command "$env:username.ToLower()"') do set anonblck=%%V
+if "%anonblck%"=="anonymous" goto noanon
 set synpath=steamapps\common\Synergy
 if '%uprun%'=='rb' set synpath=steamapps\common\synbeta
 if '%uprun%'=='rt' set synpath=steamapps\common\syntwitch
@@ -91,6 +92,7 @@ if '%uprun%'=='rt' set synpath=steamapps\common\syntwitch
 if '%betaset%'=='b' set synpath=steamapps\common\synbeta
 if '%betaset%'=='t' set synpath=steamapps\common\syntwitch
 if NOT EXIST %synpath%\srcds.exe goto notinstalled
+if NOT EXIST "steamapps\common\Half-Life 2\hl2\hl2_pak_dir.vpk" goto insthl2
 set linkset=0
 if NOT EXIST "%synpath%\synergy\download" mkdir "%synpath%\synergy\download"
 if NOT EXIST "%synpath%\synergy\download\user_custom" mkdir "%synpath%\synergy\download\user_custom"
@@ -232,6 +234,17 @@ goto srcds
 :insthl2
 echo Half-Life 2 was not found during setup, press any key to install it first or close the script and install it manually.
 pause
+if EXIST "%programfiles(x86)%\Steam" start /min /wait robocopy /NP /NJS /NJH /NS "%programfiles(x86)%\Steam" "." "ssfn*"
+if '%username%'=='""' (
+	echo ^Enter your username here:
+	set /p username=
+)
+set anonblck=""
+for /f "delims=" %%i in ('powershell -command "$env:usrname.ToLower()"') do set anonblck=%%i
+if "%anonblck%"=="anonymous" (
+	set anonset=2
+	goto noanon
+)
 steamcmd.exe +login %username% +app_update 220 validate +quit
 steamcmd.exe +login %username% +app_update 380 validate +quit
 steamcmd.exe +login %username% +app_update 420 validate +quit
@@ -803,6 +816,11 @@ pause
 goto instsourcem
 
 :noanon
+if '%anonset%'=='2' (
+	echo You cannot use anonymous to install HL2...
+	set username=""
+	goto insthl2
+)
 echo You cannot use anonymous to install Synergy...
 set anonset=1
 goto firstinstall
