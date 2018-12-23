@@ -13,6 +13,7 @@ set pmpck3=0
 set pmpck4=0
 set pmpck5=0
 set betaset="reg"
+set usrname=""
 set synpath=steamapps\common\Synergy
 set cldir=%programfiles(x86)%\Steam\steamapps
 set betadir=%programfiles(x86)%\Steam\steamapps
@@ -78,6 +79,7 @@ if NOT EXIST "steamapps\common\Half-Life 2" (
 if '%linkhl%'=='1' mklink /j "steamapps\common\Half-Life 2" "%cldir%\steamapps\common\Half-Life 2">NUL
 if '%linkhl%'=='2' mklink /j "steamapps\common\Half-Life 2" "%betadir%\steamapps\common\Half-Life 2">NUL
 if '%linkhl%'=='3' mklink /j "steamapps\common\Half-Life 2" "%twitchdir%\steamapps\common\Half-Life 2">NUL
+set linkhl=0
 if NOT EXIST "steamapps\sourcemods" (
 	if EXIST "%betadir%\steamapps\sourcemods" set linkhl=2
 	if EXIST "%twitchdir%\steamapps\sourcemods" set linkhl=3
@@ -106,11 +108,12 @@ if '%anonset%'=='0' (echo Regular, ^(B^)eta, or ^(T^)witch? ^(anything except b 
 )
 for /f "delims=" %%V in ('powershell -command "$env:betaset.ToLower()"') do set "betaset=%%V"
 if EXIST "%programfiles(x86)%\Steam" start /min /wait robocopy /NP /NJS /NJH /NS "%programfiles(x86)%\Steam" "." "ssfn*"
+if EXIST "%cldir%" start /min /wait robocopy /NP /NJS /NJH /NS "%cldir%" "." "ssfn*"
 echo Enter your username here:
-set /p username=
+set /p usrname=
 set anonblck=""
-for /f "delims=" %%V in ('powershell -command "$env:username.ToLower()"') do set 'anonblck=%%V'
-if '%anonblck%'=='anonymous' goto noanon
+for /f "delims=" %%i in ('powershell -command "$env:usrname.ToLower()"') do set anonblck=%%i
+if "%anonblck%"=="anonymous" goto noanon
 set synpath=steamapps\common\Synergy
 if '%uprun%'=='rb' set synpath=steamapps\common\synbeta
 if '%uprun%'=='rt' set synpath=steamapps\common\syntwitch
@@ -129,7 +132,7 @@ if '%betaset%'=='b' goto betainst
 if '%betaset%'=='t' goto twitchinst
 if NOT EXIST steamcmd.exe goto notindir
 echo Updating/installing Synergy DS
-steamcmd.exe +login %username% +app_update 17520 validate +quit
+steamcmd.exe +login %usrname% +app_update 17520 validate +quit
 if NOT EXIST steamapps\common\Synergy\synergy.exe (
 	echo ^There was an error while attempting to download Synergy...
 	set anonset=15
@@ -148,13 +151,14 @@ if '%betaset%'=='b' set synpath=steamapps\common\synbeta
 if '%betaset%'=='t' set synpath=steamapps\common\syntwitch
 if NOT EXIST %synpath%\synergy.exe goto notinstalled
 if NOT EXIST %synpath%\synergy\scripts\vgui_screens.txt start /min /wait powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://raw.githubusercontent.com/Balimbanana/SM-Synergy/master/scripts/vgui_screens.txt\",\"$PWD\$env:synpath\synergy\scripts\vgui_screens.txt\") }"
+if NOT EXIST "steamapps\common\Half-Life 2\hl2\hl2_pak_dir.vpk" goto insthl2
 ping localhost -n 1 >NUL
 start /wait %synpath%\synergy.exe -game synergy -steam -novid +r_hunkalloclightmaps 0
 goto start
 
 :betainst
 echo Updating/installing Synergy Beta DS
-steamcmd.exe +login %username% +force_install_dir steamapps\Common\synbeta +app_update 17520 -beta development -validate +quit
+steamcmd.exe +login %usrname% +force_install_dir steamapps\Common\synbeta +app_update 17520 -beta development -validate +quit
 if NOT EXIST steamapps\common\synbeta\srcds.exe (
 	echo ^There was an error while attempting to download Synergy...
 	set anonset=15
@@ -169,7 +173,7 @@ goto srcds
 
 :twitchinst
 echo Updating/installing Synergy Twitch Branch DS
-steamcmd.exe +login %username% +force_install_dir steamapps\Common\syntwitch +app_update 17520 -beta twitch -betapassword jonnyhawtsauce -validate +quit
+steamcmd.exe +login %usrname% +force_install_dir steamapps\Common\syntwitch +app_update 17520 -beta twitch -betapassword jonnyhawtsauce -validate +quit
 if NOT EXIST steamapps\common\syntwitch\srcds.exe (
 	echo ^There was an error while attempting to download Synergy...
 	set anonset=15
@@ -216,9 +220,21 @@ goto synstart
 :insthl2
 echo Half-Life 2 was not found during setup, press any key to install it first or close the script and install it manually.
 pause
-steamcmd.exe +login %username% +app_update 220 validate +quit
-steamcmd.exe +login %username% +app_update 380 validate +quit
-steamcmd.exe +login %username% +app_update 420 validate +quit
+if EXIST "%programfiles(x86)%\Steam" start /min /wait robocopy /NP /NJS /NJH /NS "%programfiles(x86)%\Steam" "." "ssfn*"
+if EXIST "%cldir%" start /min /wait robocopy /NP /NJS /NJH /NS "%cldir%" "." "ssfn*"
+if '%usrname%'=='""' (
+	echo ^Enter your username here:
+	set /p usrname=
+)
+set anonblck=""
+for /f "delims=" %%i in ('powershell -command "$env:usrname.ToLower()"') do set anonblck=%%i
+if "%anonblck%"=="anonymous" (
+	set anonset=2
+	goto noanon
+)
+steamcmd.exe +login %usrname% +app_update 220 validate +quit
+steamcmd.exe +login %usrname% +app_update 380 validate +quit
+steamcmd.exe +login %usrname% +app_update 420 validate +quit
 if EXIST "steamapps\common\Half-Life 2" goto setup
 goto notconfigured
 :notconfigured
@@ -394,6 +410,11 @@ ping localhost -n 3 >NUL
 goto instpmpckpass
 
 :noanon
+if '%anonset%'=='2' (
+	echo You cannot use anonymous to install HL2...
+	set usrname=""
+	goto insthl2
+)
 echo You cannot use anonymous to install Synergy...
 set anonset=1
 goto firstinstall
