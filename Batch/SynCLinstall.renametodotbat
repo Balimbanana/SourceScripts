@@ -159,7 +159,7 @@ goto start
 :betainst
 echo Updating/installing Synergy Beta DS
 steamcmd.exe +login %usrname% +force_install_dir steamapps\Common\synbeta +app_update 17520 -beta development -validate +quit
-if NOT EXIST steamapps\common\synbeta\srcds.exe (
+if NOT EXIST steamapps\common\synbeta\synergy.exe (
 	echo ^There was an error while attempting to download Synergy...
 	set anonset=15
 	goto firstinstall
@@ -169,12 +169,12 @@ echo If there were errors above, close the script and log into SteamCMD.exe sepa
 timeout -T 10
 if '%uprun%'=='i' goto setup
 cls
-goto srcds
+goto synstart
 
 :twitchinst
 echo Updating/installing Synergy Twitch Branch DS
 steamcmd.exe +login %usrname% +force_install_dir steamapps\Common\syntwitch +app_update 17520 -beta twitch -betapassword jonnyhawtsauce -validate +quit
-if NOT EXIST steamapps\common\syntwitch\srcds.exe (
+if NOT EXIST steamapps\common\syntwitch\synergy.exe (
 	echo ^There was an error while attempting to download Synergy...
 	set anonset=15
 	goto firstinstall
@@ -184,7 +184,7 @@ echo If there were errors above, close the script and log into SteamCMD.exe sepa
 timeout -T 10
 if '%uprun%'=='i' goto setup
 cls
-goto srcds
+goto synstart
 
 :setup
 set s=1
