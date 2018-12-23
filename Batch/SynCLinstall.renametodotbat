@@ -153,7 +153,7 @@ if NOT EXIST %synpath%\synergy.exe goto notinstalled
 if NOT EXIST %synpath%\synergy\scripts\vgui_screens.txt start /min /wait powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://raw.githubusercontent.com/Balimbanana/SM-Synergy/master/scripts/vgui_screens.txt\",\"$PWD\$env:synpath\synergy\scripts\vgui_screens.txt\") }"
 if NOT EXIST "steamapps\common\Half-Life 2\hl2\hl2_pak_dir.vpk" goto insthl2
 ping localhost -n 1 >NUL
-start /wait %synpath%\synergy.exe -game synergy -steam -novid +r_hunkalloclightmaps 0
+start /wait %synpath%\synergy.exe -game synergy -steam -novid -windowed -noborder +r_hunkalloclightmaps 0
 goto start
 
 :betainst
