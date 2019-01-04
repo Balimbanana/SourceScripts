@@ -10,12 +10,24 @@ set pmpck5=0
 set betaset="reg"
 set instsmset=0
 set username=""
+set pnum=27015
+set configdir="server2.cfg"
+set skipstep=0
 set synpath=steamapps\common\Synergy
+set sm_basepath=addons/sourcemod
+set smset=0
+set createconf="n"
 set cldir=%programfiles(x86)%\Steam\steamapps
+if EXIST "C:\SteamLibrary\steamapps\common\Synergy\synergy" set cldir=C:\SteamLibrary\steamapps
 if EXIST "E:\SteamLibrary\steamapps\common\Synergy\synergy" set cldir=E:\SteamLibrary\steamapps
 if EXIST "D:\SteamLibrary\steamapps\common\Synergy\synergy" set cldir=D:\SteamLibrary\steamapps
 if EXIST "F:\SteamLibrary\steamapps\common\Synergy\synergy" set cldir=F:\SteamLibrary\steamapps
 if EXIST "G:\SteamLibrary\steamapps\common\Synergy\synergy" set cldir=G:\SteamLibrary\steamapps
+if EXIST "C:\Steam\steamapps\common\Synergy\synergy" set cldir=C:\Steam\steamapps
+if EXIST "E:\Steam\steamapps\common\Synergy\synergy" set cldir=E:\Steam\steamapps
+if EXIST "D:\Steam\steamapps\common\Synergy\synergy" set cldir=D:\Steam\steamapps
+if EXIST "F:\Steam\steamapps\common\Synergy\synergy" set cldir=F:\Steam\steamapps
+if EXIST "G:\Steam\steamapps\common\Synergy\synergy" set cldir=G:\Steam\steamapps
 :start
 if EXIST synergy.exe (if EXIST "..\..\..\steamcmd.exe" cd "..\..\.." )
 set anonset=0
@@ -24,6 +36,7 @@ echo Information: enter the letter inside the () and press enter to continue at 
 echo First (I)nstall, (U)pdate or (R)un with auto-restart
 echo (RB) To run Synergy 18.x beta or (IS) to install SourceMod.
 echo (RT) To run Synergy Twich branch.
+echo (RF) to run custom or forked servers.
 if EXIST "steamapps\common\Synergy\synergy\addons\sourcemod\plugins" (
 	echo ^(ISM^) to install additional SourceMod plugins.
 	echo ^(IMP^) to list/install Player Model Packs.
@@ -36,6 +49,7 @@ if '%uprun%'=='i' goto firstinstall
 if '%uprun%'=='rb' goto srcds
 if '%uprun%'=='rt' goto srcds
 if '%uprun%'=='r' goto srcds
+if '%uprun%'=='rf' goto srcdscustom
 if '%uprun%'=='is' goto instsourcem
 if '%uprun%'=='ism' goto instsourcepluginstop
 if '%uprun%'=='imp' goto instpmpck
@@ -106,7 +120,8 @@ if '%linkset%'=='0' (
 for /f "delims=" %%V in ('powershell -command "$ab = get-date; $ab.Minute"') do set "starttime=%%V"
 :reds
 echo (%date%)(%time%) SynDS started.
-start /wait %synpath%\srcds.exe -console -game synergy +maxplayers 10 +sv_lan 0 +map d1_trainstation_06 +exec server2.cfg -ip 0.0.0.0 -port 27015 -nocrashdialog -insecure -nohltv
+if %smset%==1 start /wait %synpath%\srcds.exe -console -game synergy +maxplayers 16 +sv_lan 0 +map d1_trainstation_06 +exec %configdir% -ip 0.0.0.0 -port %pnum% -nocrashdialog -insecure -nohltv +sm_basepath %sm_basepath%
+if %smset%==0 start /wait %synpath%\srcds.exe -console -game synergy +maxplayers 10 +sv_lan 0 +map d1_trainstation_06 +exec %configdir% -ip 0.0.0.0 -port %pnum% -nocrashdialog -insecure -nohltv
 echo (%date%)(%time%) WARNING: SynDS closed or crashed, restarting.
 for /f "delims=" %%V in ('powershell -command "$ab = get-date; $ab.Minute"') do set "ctime=%%V"
 set /a cttime=ctime-starttime
@@ -116,6 +131,97 @@ if %cttime%==0 (
 )
 for /f "delims=" %%V in ('powershell -command "$ab = get-date; $ab.Minute"') do set "starttime=%%V"
 goto reds
+
+:srcdscustom
+if %skipstep% LEQ 0 (echo Regular, ^(B^)eta, or ^(T^)witch? ^(anything except b or t will do regular^)
+	set /p betaset=
+	set skipstep=1
+)
+for /f "delims=" %%V in ('powershell -command "$env:betaset.ToLower()"') do set "betaset=%%V"
+set synpath=steamapps\common\Synergy
+set syntype=56.16
+if '%betaset%'=='b' (
+	set synpath=steamapps\common\synbeta
+	set syntype=18.x
+)
+if '%betaset%'=='t' (
+	set synpath=steamapps\common\syntwitch
+	set syntype=Twitch
+)
+if NOT EXIST %synpath%\srcds.exe goto notinstalled
+if NOT EXIST "steamapps\common\Half-Life 2\hl2\hl2_pak_dir.vpk" goto insthl2
+if NOT EXIST %synpath%\synergy\addons\sourcemod (
+	set instsmset=1
+	echo ^This forked setup will fork SourceMod as well, and you do not have SourceMod installed....
+	goto instsourcem
+)
+if %skipstep% LEQ 1 (
+	echo ^Set port number here:
+	set /p pnum=
+)
+set portinuse=0
+netstat -p TCP -a -n | findstr .:%pnum% >nul && set portinuse=1 || set portinuse=0
+if %portinuse%==1 (
+	echo ^Port %pnum% is in use
+	goto srcdscustom
+) else if %skipstep% LEQ 1 set skipstep=2
+if %skipstep% LEQ 2 (
+	echo ^Set config to exec here ^(must have a separate sv_savedir than default if running forked servers^):
+	set /p configdir=
+) else set skipstep=3
+echo %configdir% | findstr .cfg>nul && set configdir=%configdir% || set configdir=%configdir%.cfg
+if NOT EXIST %synpath%\synergy\cfg\%configdir% (
+	echo ^Could not find config %configdir%
+	echo ^Would you like to create a template config named %configdir%? ^(y/N^)
+	set /p createconf=
+)
+for /f "delims=" %%V in ('powershell -command "$env:createconf.ToLower()"') do set "createconf=%%V"
+if '%createconf%'=='y' (goto createtemplate) else goto srcdscustom
+set smset=1
+set sm_basepath=addons/sourcemod%pnum%
+goto srcds
+
+:createtemplate
+if NOT EXIST %synpath%\synergy\cfg\%configdir% (
+	echo hostname Forked %syntype% Server>"%synpath%\synergy\cfg\%configdir%"
+	echo sv_lan 0 >>"%synpath%\synergy\cfg\%configdir%"
+	echo mp_friendlyfire 0 >>"%synpath%\synergy\cfg\%configdir%"
+	echo mp_reset 1 >>"%synpath%\synergy\cfg\%configdir%"
+	echo mp_transition_time 45>>"%synpath%\synergy\cfg\%configdir%"
+	echo mp_transition_percent 68>>"%synpath%\synergy\cfg\%configdir%"
+	echo sv_vote_enable 1 >>"%synpath%\synergy\cfg\%configdir%"
+	echo sv_vote_failure_timer 300>>"%synpath%\synergy\cfg\%configdir%"
+	echo sv_vote_interval 10>>"%synpath%\synergy\cfg\%configdir%"
+	echo sv_vote_percent_difficulty 67>>"%synpath%\synergy\cfg\%configdir%"
+	echo sv_vote_percent_kick 67>>"%synpath%\synergy\cfg\%configdir%"
+	echo sv_vote_percent_map 67>>"%synpath%\synergy\cfg\%configdir%"
+	echo sv_vote_percent_restore 67>>"%synpath%\synergy\cfg\%configdir%"
+	echo //Change this to a different savenumber for forked servers>>"%synpath%\synergy\cfg\%configdir%"
+	echo sv_savedir savefork/%pnum%>>"%synpath%\synergy\cfg\%configdir%")
+if NOT EXIST %synpath%\synergy\addons\sourcemod%pnum% (
+	mkdir %synpath%\synergy\addons\sourcemod%pnum%
+	mkdir %synpath%\synergy\addons\sourcemod%pnum%\gamedata
+	start /min /wait robocopy /NP /NJS /NJH /NS /S "%synpath%\synergy\addons\sourcemod\gamedata" "%synpath%\synergy\addons\sourcemod%pnum%\gamedata" "*"
+	mkdir %synpath%\synergy\addons\sourcemod%pnum%\plugins
+	start /min /wait robocopy /NP /NJS /NJH /NS /S "%synpath%\synergy\addons\sourcemod\plugins" "%synpath%\synergy\addons\sourcemod%pnum%\plugins" "*"
+	mkdir %synpath%\synergy\addons\sourcemod%pnum%\bin
+	start /min /wait robocopy /NP /NJS /NJH /NS /S "%synpath%\synergy\addons\sourcemod\bin" "%synpath%\synergy\addons\sourcemod%pnum%\bin" "*"
+	mkdir %synpath%\synergy\addons\sourcemod%pnum%\extensions
+	start /min /wait robocopy /NP /NJS /NJH /NS /S "%synpath%\synergy\addons\sourcemod\extensions" "%synpath%\synergy\addons\sourcemod%pnum%\extensions" "*"
+	mkdir %synpath%\synergy\addons\sourcemod%pnum%\logs
+	mklink /j "%synpath%\synergy\addons\sourcemod%pnum%\translations" "%synpath%\synergy\addons\sourcemod\translations">NUL
+	mklink /j "%synpath%\synergy\addons\sourcemod%pnum%\scripting" "%synpath%\synergy\addons\sourcemod\scripting">NUL
+	mklink /j "%synpath%\synergy\addons\sourcemod%pnum%\data" "%synpath%\synergy\addons\sourcemod\data">NUL
+	mklink /j "%synpath%\synergy\addons\sourcemod%pnum%\configs" "%synpath%\synergy\addons\sourcemod\configs">NUL
+)
+echo Would you like to edit your server config? (y/N)
+set /p edtconf=
+for /f "delims=" %%V in ('powershell -command "$env:edtconf.ToLower()"') do set "edtconf=%%V"
+if '%edtconf%'=='y' start /wait notepad %synpath%\synergy\cfg\%configdir%
+set smset=1
+set sm_basepath=addons/sourcemod%pnum%
+set skipstep=3
+goto srcds
 
 :betainst
 echo Updating/installing Synergy Beta DS
@@ -336,9 +442,18 @@ if EXIST "%synpath%\addons\sourcemod" (
 	echo "SourceMod is already installed, if you want to re-install, rename the current SourceMod install (addons) to addonsold  and run this script again..."
 	pause
 	goto start )
-start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://sm.alliedmods.net/smdrop/1.9/sourcemod-1.9.0-git6229-windows.zip\",\"$PWD\sourcemod-1.9.0-git6229-windows.zip\") }"
-start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://mms.alliedmods.net/mmsdrop/1.11/mmsource-1.11.0-git1105-windows.zip\",\"$PWD\mmsource-1.11.0-git1105-windows.zip\") }"
-start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://users.alliedmods.net/~kyles/builds/SteamWorks/SteamWorks-git121-windows.zip\",\"$PWD\SteamWorks-git121-windows.zip\") }"
+set dlloc=0
+if EXIST "%userprofile%\downloads\sourcemod-1.9.0-git6229-windows.zip" set dlloc=1
+if EXIST "sourcemod-1.9.0-git6229-windows.zip" set dlloc=2
+if '%dlloc%'=='0' start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://sm.alliedmods.net/smdrop/1.9/sourcemod-1.9.0-git6229-windows.zip\",\"$PWD\sourcemod-1.9.0-git6229-windows.zip\") }"
+set dlloc=0
+if EXIST "%userprofile%\downloads\mmsource-1.11.0-git1105-windows.zip" set dlloc=1
+if EXIST "mmsource-1.11.0-git1105-windows.zip" set dlloc=2
+if '%dlloc%'=='0' start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://mms.alliedmods.net/mmsdrop/1.11/mmsource-1.11.0-git1105-windows.zip\",\"$PWD\mmsource-1.11.0-git1105-windows.zip\") }"
+set dlloc=0
+if EXIST "%userprofile%\downloads\SteamWorks-git121-windows.zip" set dlloc=1
+if EXIST "SteamWorks-git121-windows.zip" set dlloc=2
+if '%dlloc%'=='0' start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://users.alliedmods.net/~kyles/builds/SteamWorks/SteamWorks-git121-windows.zip\",\"$PWD\SteamWorks-git121-windows.zip\") }"
 set dlloc=0
 if EXIST "%userprofile%\downloads\sourcemod-1.9.0-git6229-windows.zip" set dlloc=1
 if EXIST "sourcemod-1.9.0-git6229-windows.zip" set dlloc=2
@@ -346,6 +461,22 @@ if '%dlloc%'=='0' goto dltowrong
 echo This may take a minute or two, just wait for the next message after PowerShell finishes extracting SourceMod...
 if '%dlloc%'=='1' start /wait /min powershell -command "& {Add-Type -AssemblyName System.IO.Compression.FileSystem; [System.IO.Compression.ZipFile]::ExtractToDirectory(\"$HOME\downloads\sourcemod-1.9.0-git6229-windows.zip\", \"$PWD\$env:synpath\"); [System.IO.Compression.ZipFile]::ExtractToDirectory(\"$HOME\downloads\mmsource-1.11.0-git1105-windows.zip\", \"$PWD\$env:synpath\"); [System.IO.Compression.ZipFile]::ExtractToDirectory(\"$HOME\downloads\SteamWorks-git121-windows.zip\", \"$PWD\$env:synpath\") }"
 if '%dlloc%'=='2' start /wait /min powershell -command "& {Add-Type -AssemblyName System.IO.Compression.FileSystem; [System.IO.Compression.ZipFile]::ExtractToDirectory(\"$PWD\sourcemod-1.9.0-git6229-windows.zip\", \"$PWD\$env:synpath\"); [System.IO.Compression.ZipFile]::ExtractToDirectory(\"$PWD\mmsource-1.11.0-git1105-windows.zip\", \"$PWD\$env:synpath\"); [System.IO.Compression.ZipFile]::ExtractToDirectory(\"$PWD\SteamWorks-git121-windows.zip\", \"$PWD\$env:synpath\") }"
+set use7z=0
+if NOT EXIST "%synpath%\addons\sourcemod" (
+	if EXIST "C:\Program Files\7-Zip\7z.exe" set use7z=1
+)
+if '%use7z%'=='1' (
+	if '%dlloc%'=='1' (
+		start /min /wait "7z" "C:\Program Files\7-Zip\7z.exe" x sourcemod-1.9.0-git6229-windows.zip -o"%cd%\%synpath%"
+		start /min /wait "7z" "C:\Program Files\7-Zip\7z.exe" x mmsource-1.11.0-git1105-windows.zip -o"%cd%\%synpath%"
+		start /min /wait "7z" "C:\Program Files\7-Zip\7z.exe" x SteamWorks-git121-windows.zip -o"%cd%\%synpath%"
+	)
+	if '%dlloc%'=='2' (
+		start /min /wait "7z" "C:\Program Files\7-Zip\7z.exe" x "%userprofile%\downloads\sourcemod-1.9.0-git6229-windows.zip" -o"%cd%\%synpath%"
+		start /min /wait "7z" "C:\Program Files\7-Zip\7z.exe" x "%userprofile%\downloads\mmsource-1.11.0-git1105-windows.zip" -o"%cd%\%synpath%"
+		start /min /wait "7z" "C:\Program Files\7-Zip\7z.exe" x "%userprofile%\downloads\SteamWorks-git121-windows.zip" -o"%cd%\%synpath%"
+	)
+)
 if NOT EXIST "%synpath%\addons\sourcemod\gamedata\sdkhooks.games\custom" mkdir "%synpath%\addons\sourcemod\gamedata\sdkhooks.games\custom"
 if NOT EXIST "%synpath%\addons\sourcemod\gamedata\sdktools.games\custom" mkdir "%synpath%\addons\sourcemod\gamedata\sdktools.games\custom"
 if '%syntype%'=='dev' (
@@ -356,11 +487,11 @@ if '%syntype%'=='twitch' (
 	start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SM-Synergy/raw/master/twitchbranchgamedata/sdkhooks.games/custom/game.synergy.txt\", \"$PWD\$env:synpath\addons\sourcemod\gamedata\sdkhooks.games\custom\game.synergy.txt\") }"
 	start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SM-Synergy/raw/master/twitchbranchgamedata/sdktools.games/custom/game.synergy.txt\", \"$PWD\$env:synpath\addons\sourcemod\gamedata\sdktools.games\custom\game.synergy.txt\") }"
 )
-if NOT EXIST "%synpath%\addons\sourcemod" (
+if NOT EXIST "%synpath%\addons\metamod.vdf" (
 	echo Failed to auto-install SourceMod, you may have an outdated PowerShell, or something else went wrong somewhere.
 	echo You should still be able to manually install it from the downloads earlier.
 	pause
-	exit )
+	goto start )
 echo Now you should be able to install any plugins you want.
 explorer "%cd%\%synpath%\addons\sourcemod\plugins"
 pause
