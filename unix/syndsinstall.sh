@@ -427,6 +427,7 @@ echo "(ML) to download ModelLoader      (GT) to download Goto"
 echo "(V) to download VoteCar           (HD) to download HealthDisplay"
 echo "(HYP) to download HyperSpawn      (ST) to download Save/Teleport"
 echo "(SYN) to download SynFixes        (SSR) to download SynSaveRestore"
+echo "(ET) to download EntTools         (FPD) to download FirstPersonDeaths"
 echo "Some plugins will also require their translation files, you can get a full pack of these plugins with (FP)"
 echo "(B) to go back to start"
 read pluginsubstr
@@ -540,6 +541,18 @@ if [ $pluginsubstr = "ssr" ];then
 fi
 if [ $pluginsubstr = "ssrsp" ];then
 	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/scripting/synsaverestore.sp" -P ./$synpath/addons/sourcemod/scripting
+fi
+if [ $pluginsubstr = "et" ];then
+	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/plugins/enttools.smx" -P ./$synpath/addons/sourcemod/plugins
+fi
+if [ $pluginsubstr = "etsp" ];then
+	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/scripting/enttools.sp" -P ./$synpath/addons/sourcemod/scripting
+fi
+if [ $pluginsubstr = "fpd" ];then
+	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/plugins/fpd.smx" -P ./$synpath/addons/sourcemod/plugins
+fi
+if [ $pluginsubstr = "fpdsp" ];then
+	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/scripting/fpd.sp" -P ./$synpath/addons/sourcemod/scripting
 fi
 if [ $pluginsubstr = "b" ];then start;fi
 instsourceplugins
