@@ -140,6 +140,7 @@ else
 	wget -nv "https://raw.githubusercontent.com/Balimbanana/SM-Synergy/master/56.16lin/sdkhooks.games/custom/game.synergy.txt" -P ./$synpath/addons/sourcemod/gamedata/sdkhooks.games/custom
 	wget -nv "https://raw.githubusercontent.com/Balimbanana/SM-Synergy/master/56.16lin/sdktools.games/custom/game.synergy.txt" -P ./$synpath/addons/sourcemod/gamedata/sdktools.games/custom
 fi
+if [ -f ./$synpath/addons/sourcemod/plugins/updater.smx ];then wget -nv "https://bitbucket.org/GoD_Tony/updater/downloads/updater.smx" -P ./$synpath/addons/sourcemod/plugins ;fi
 # remove nextmap as it does not work in Synergy
 rm -f ./$synpath/addons/sourcemod/plugins/nextmap.smx
 echo "SourceMod installed, you can put plugins in ./$synpath/addons/sourcemod/plugins"
@@ -433,7 +434,7 @@ echo "(B) to go back to start"
 read pluginsubstr
 pluginsubstr=${pluginsubstr,,}
 if [ $pluginsubstr = "m" ];then
-	rm -f ./$synpath/addons/sourcemod/plugins/mapchooser.smx
+	if [ -f ./$synpath/addons/sourcemod/plugins/mapchooser.smx ];then rm -f ./$synpath/addons/sourcemod/plugins/mapchooser.smx;fi
 	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/plugins/mapchooser.smx" -P ./$synpath/addons/sourcemod/plugins
 	if [ ! -f ./$synpath/cfg/mapcyclecfg.txt ];then
 		cat ./$synpath/mapcycle.txt | grep d1>./$synpath/cfg/mapcyclecfg.txt
@@ -445,7 +446,7 @@ if [ $pluginsubstr = "m" ];then
 	echo "Installed!"
 fi
 if [ $pluginsubstr = "n" ];then
-	rm -f ./$synpath/addons/sourcemod/plugins/nominations.smx
+	if [ -f ./$synpath/addons/sourcemod/plugins/nominations.smx ];then rm -f ./$synpath/addons/sourcemod/plugins/nominations.smx;fi
 	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/plugins/nominations.smx" -P ./$synpath/addons/sourcemod/plugins
 fi
 if [ $pluginsubstr = "msp" ];then
@@ -457,6 +458,7 @@ if [ $pluginsubstr = "nsp" ];then
 	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/scripting/nominations.sp" -P ./$synpath/addons/sourcemod/scripting
 fi
 if [ $pluginsubstr = "ml" ];then
+	if [ -f ./$synpath/addons/sourcemod/plugins/modelloader.smx ];then rm -f ./$synpath/addons/sourcemod/plugins/modelloader.smx;fi
 	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/plugins/modelloader.smx" -P ./$synpath/addons/sourcemod/plugins
 	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/translations/modelloader.phrases.txt" -P ./$synpath/addons/sourcemod/translations
 	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/translations/chi/modelloader.phrases.txt" -P ./$synpath/addons/sourcemod/translations/chi
@@ -498,6 +500,7 @@ if [ $pluginsubstr = "gtsp" ];then
 	wget -nv "http://www.forums.alliedmods.net/attachment.php?attachmentid=58625" -P ./$synpath/addons/sourcemod/scripting
 fi
 if [ $pluginsubstr = "v" ];then
+	if [ -f ./$synpath/addons/sourcemod/plugins/votecar.smx ];then rm -f ./$synpath/addons/sourcemod/plugins/votecar.smx;fi
 	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/plugins/votecar.smx" -P ./$synpath/addons/sourcemod/plugins
 	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/translations/votecar.phrases.txt" -P ./$synpath/addons/sourcemod/translations
 fi
@@ -507,48 +510,62 @@ fi
 if [ $pluginsubstr = "fp" ];then
 	wget -nv "https://github.com/Balimbanana/SM-Synergy/archive/master.zip" -P .
 	unzip -qq ./master.zip -d ./$synpath/addons/sourcemod
+	rm -rf ./$synpath/addons/sourcemod/SM-Synergy-master/56.16lin
+	rm -rf ./$synpath/addons/sourcemod/SM-Synergy-master/devtwitchgamedata
+	rm -rf ./$synpath/addons/sourcemod/SM-Synergy-master/twitchbranchgamedata
+	rm -f ./$synpath/addons/sourcemod/SM-Synergy-master/healthdisplayupdater.txt
+	rm -f ./$synpath/addons/sourcemod/SM-Synergy-master/enttoolsupdater.txt
+	rm -f ./$synpath/addons/sourcemod/SM-Synergy-master/synbhopupdater.txt
+	rm -f ./$synpath/addons/sourcemod/SM-Synergy-master/synfixesupdater.txt
 	rsync --remove-source-files -a ./$synpath/addons/sourcemod/SM-Synergy-master/* ./$synpath/addons/sourcemod
 	rm -f ./master.zip
 	rm -rf ./$synpath/addons/sourcemod/SM-Synergy-master
 	echo "Installed!"
 fi
 if [ $pluginsubstr = "hd" ];then
+	if [ -f ./$synpath/addons/sourcemod/plugins/healthdisplay.smx ];then rm -f ./$synpath/addons/sourcemod/plugins/healthdisplay.smx;fi
 	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/plugins/healthdisplay.smx" -P ./$synpath/addons/sourcemod/plugins
 fi
 if [ $pluginsubstr = "hdsp" ];then
 	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/scripting/healthdisplay.sp" -P ./$synpath/addons/sourcemod/scripting
 fi
 if [ $pluginsubstr = "hyp" ];then
+	if [ -f ./$synpath/addons/sourcemod/plugins/hyperspawn.smx ];then rm -f ./$synpath/addons/sourcemod/plugins/hyperspawn.smx;fi
 	wget -nv "https://github.com/Sarabveer/SM-Plugins/raw/master/hyperspawn/plugins/hyperspawn.smx" -P ./$synpath/addons/sourcemod/plugins
 fi
 if [ $pluginsubstr = "hypsp" ];then
 	wget -nv "https://github.com/Sarabveer/SM-Plugins/raw/master/hyperspawn/scripting/hyperspawn.sp" -P ./$synpath/addons/sourcemod/scripting
 fi
 if [ $pluginsubstr = "st" ];then
+	if [ -f ./$synpath/addons/sourcemod/plugins/syn_tp.smx ];then rm -f ./$synpath/addons/sourcemod/plugins/syn_tp.smx;fi
 	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/plugins/syn_tp.smx" -P ./$synpath/addons/sourcemod/plugins
 fi
 if [ $pluginsubstr = "stsp" ];then
 	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/scripting/syn_tp.sp" -P ./$synpath/addons/sourcemod/scripting
 fi
 if [ $pluginsubstr = "syn" ];then
+	if [ -f ./$synpath/addons/sourcemod/plugins/synfixes.smx ];then rm -f ./$synpath/addons/sourcemod/plugins/synfixes.smx;fi
 	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/plugins/synfixes.smx" -P ./$synpath/addons/sourcemod/plugins
 fi
 if [ $pluginsubstr = "synsp" ];then
 	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/scripting/synfixes.sp" -P ./$synpath/addons/sourcemod/scripting
 fi
 if [ $pluginsubstr = "ssr" ];then
+	if [ -f ./$synpath/addons/sourcemod/plugins/synsaverestore.smx ];then rm -f ./$synpath/addons/sourcemod/plugins/synsaverestore.smx;fi
 	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/plugins/synsaverestore.smx" -P ./$synpath/addons/sourcemod/plugins
 fi
 if [ $pluginsubstr = "ssrsp" ];then
 	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/scripting/synsaverestore.sp" -P ./$synpath/addons/sourcemod/scripting
 fi
 if [ $pluginsubstr = "et" ];then
+	if [ -f ./$synpath/addons/sourcemod/plugins/enttools.smx ];then rm -f ./$synpath/addons/sourcemod/plugins/enttools.smx;fi
 	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/plugins/enttools.smx" -P ./$synpath/addons/sourcemod/plugins
 fi
 if [ $pluginsubstr = "etsp" ];then
 	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/scripting/enttools.sp" -P ./$synpath/addons/sourcemod/scripting
 fi
 if [ $pluginsubstr = "fpd" ];then
+	if [ -f ./$synpath/addons/sourcemod/plugins/fpd.smx ];then rm -f ./$synpath/addons/sourcemod/plugins/fpd.smx;fi
 	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/plugins/fpd.smx" -P ./$synpath/addons/sourcemod/plugins
 fi
 if [ $pluginsubstr = "fpdsp" ];then
