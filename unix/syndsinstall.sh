@@ -231,6 +231,10 @@ echo "Updating/installing Synergy DS"
 ./steamcmd.sh +login $stusername +force_install_dir ./steamapps/common/Synergy +app_update 17520 validate +quit
 echo "Update/installation Complete"
 echo "If there were errors above, close the script and log in to steamcmd.sh separately, then restart the script."
+if [ ! -f $synpath/synergy/synergy_pak.vpk ]; then
+	echo "Failed to install"
+	goto start
+fi
 if [ $uprun = "i" ];then setup;fi
 srcds
 }
@@ -252,6 +256,10 @@ echo "Updating/installing Synergy Twitch Branch DS"
 ./steamcmd.sh +login $stusername +force_install_dir ./steamapps/common/syntwitch +app_update 17520 -beta twitch -betapassword jonnyhawtsauce -validate +quit
 echo "Update/installation Complete"
 echo "If there were errors above, close the script and log in to steamcmd.sh separately, then restart this script."
+if [ ! -f $synpath/synergy/synergy_pak.vpk ]; then
+	echo "Failed to install"
+	goto start
+fi
 if [ $uprun = "i" ];then setup;fi
 uprun="t"
 srcds
@@ -262,6 +270,10 @@ echo "Updating/installing Synergy Beta DS"
 ./steamcmd.sh +login $stusername +force_install_dir ./steamapps/common/synbeta +app_update 17520 -beta development -validate +quit
 echo "Update/installation Complete"
 echo "If there were errors above, close the script and log in to steamcmd.sh separately, then restart this script."
+if [ ! -f $synpath/synergy/synergy_pak.vpk ]; then
+	echo "Failed to install"
+	goto start
+fi
 if [ $uprun = "i" ];then setup;fi
 uprun="b"
 srcds
