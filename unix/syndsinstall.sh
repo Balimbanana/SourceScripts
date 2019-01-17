@@ -233,7 +233,7 @@ echo "Update/installation Complete"
 echo "If there were errors above, close the script and log in to steamcmd.sh separately, then restart the script."
 if [ ! -f $synpath/synergy/synergy_pak.vpk ]; then
 	echo "Failed to install"
-	goto start
+	start
 fi
 if [ $uprun = "i" ];then setup;fi
 srcds
@@ -258,7 +258,7 @@ echo "Update/installation Complete"
 echo "If there were errors above, close the script and log in to steamcmd.sh separately, then restart this script."
 if [ ! -f $synpath/synergy/synergy_pak.vpk ]; then
 	echo "Failed to install"
-	goto start
+	start
 fi
 if [ $uprun = "i" ];then setup;fi
 uprun="t"
@@ -272,7 +272,7 @@ echo "Update/installation Complete"
 echo "If there were errors above, close the script and log in to steamcmd.sh separately, then restart this script."
 if [ ! -f $synpath/synergy/synergy_pak.vpk ]; then
 	echo "Failed to install"
-	goto start
+	start
 fi
 if [ $uprun = "i" ];then setup;fi
 uprun="b"
