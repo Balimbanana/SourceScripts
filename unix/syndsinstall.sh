@@ -180,6 +180,7 @@ if [[ ${changedir:0:1} == "~" ]]; then
 fi
 if [[ ${changedir:0:1} == "" ]];then
 	changedir=.
+	inststeam
 fi
 cd $changedir
 if [ -f $changedir/steamcmd.sh ]; then
