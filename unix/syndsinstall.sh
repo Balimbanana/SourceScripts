@@ -43,7 +43,7 @@ fi
 if [ -f /usr/bin/dnf ];then
 	if [[ ! $(dnf list glibc) ]];then missinglib=1;fi
 	if [[ ! $(dnf list libstdc++) ]];then missinglib=1;fi
-	if [[ ! $(dnf list libc.so.6) ]];then missinglib=1;fi
+	if [[ ! $(dnf list glibc.i686) ]];then missinglib=1;fi
 	if [[ $missinglib = "1" ]];then
 		packageinf="sudo dnf install glibc libstdc++ libc.so.6"
 		missingdeps
