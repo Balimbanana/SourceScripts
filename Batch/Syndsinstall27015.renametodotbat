@@ -492,6 +492,7 @@ if NOT EXIST "%synpath%\addons\metamod.vdf" (
 	echo You should still be able to manually install it from the downloads earlier.
 	pause
 	goto start )
+if NOT EXIST "%synpath%\addons\sourcemod\plugins\updater.smx" start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://bitbucket.org/GoD_Tony/updater/downloads/updater.smx\", \"$PWD\$env:synpath\addons\sourcemod\plugins\updater.smx\") }"
 echo Now you should be able to install any plugins you want.
 explorer "%cd%\%synpath%\addons\sourcemod\plugins"
 pause
