@@ -618,13 +618,17 @@ instpmpckpass
 }
 
 instpmpckpass() {
-if [ ! -d "steamapps/workshop" ];then mkdir "./steamapps/workshop" ;fi
-if [ ! -d "steamapps/workshop/content" ];then mkdir "./steamapps/workshop/content" ;fi
-if [ ! -d "steamapps/workshop/content/17520" ];then mkdir "./steamapps/workshop/content/17520" ;fi
-if [ ! -L "steamapps/workshop/content/17520" ];then
+if [ ! -d "./steamapps/workshop" ];then mkdir "./steamapps/workshop" ;fi
+if [ ! -d "./steamapps/workshop/content" ];then mkdir "./steamapps/workshop/content" ;fi
+if [ ! -d "./steamapps/workshop/content/17520" ];then
+	mkdir "./steamapps/workshop/content/17520"
+	touch ./steamapps/workshop/content/17520/tmpfile
+fi
+if [ ! -L "./steamapps/workshop/content/17520" ];then
 	rsync --remove-source-files -a ./steamapps/workshop/content/17520/* ./steamapps/common/Synergy/synergy/custom
 	rm -rf ./steamapps/workshop/content/17520
 	ln -s "../../common/Synergy/synergy/custom" "./steamapps/workshop/content/17520"
+	if [ -f "./steamapps/common/Synergy/synergy/custom/tmpfile" ];then rm ./steamapps/common/Synergy/synergy/custom/tmpfile ;fi
 fi
 pmpck1="0"
 pmpck2="0"
