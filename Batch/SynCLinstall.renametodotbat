@@ -128,6 +128,17 @@ if NOT EXIST "%synpath%\synergy\zhl2dm_materials_pak.vpk" (
 if NOT EXIST "%synpath%\synergy\maps" (
 	if EXIST "%cldir%\steamapps\common\Synergy\synergy\maps" mklink /j "%cldir%\steamapps\common\Synergy\synergy\maps" "%synpath%\synergy\maps">NUL
 )
+if EXIST "%synpath%\synergy\content\aoc.dat" del "%synpath%\synergy\content\aoc.dat"
+if EXIST "%synpath%\synergy\content\bm.dat" del "%synpath%\synergy\content\bm.dat"
+if EXIST "%synpath%\synergy\content\bms.dat" del "%synpath%\synergy\content\bms.dat"
+if EXIST "%synpath%\synergy\content\css.dat" del "%synpath%\synergy\content\css.dat"
+if EXIST "%synpath%\synergy\content\dod.dat" del "%synpath%\synergy\content\dod.dat"
+if EXIST "%synpath%\synergy\content\eternal.dat" del "%synpath%\synergy\content\eternal.dat"
+if EXIST "%synpath%\synergy\content\hl2u.dat" del "%synpath%\synergy\content\hl2u.dat"
+if EXIST "%synpath%\synergy\content\neotokyo.dat" del "%synpath%\synergy\content\neotokyo.dat"
+if EXIST "%synpath%\synergy\content\SiN.dat" del "%synpath%\synergy\content\SiN.dat"
+if EXIST "%synpath%\synergy\content\tf2.dat" del "%synpath%\synergy\content\tf2.dat"
+if EXIST "%synpath%\synergy\content\zps.dat" del "%synpath%\synergy\content\zps.dat"
 if '%betaset%'=='b' goto betainst
 if '%betaset%'=='t' goto twitchinst
 if NOT EXIST steamcmd.exe goto notindir
