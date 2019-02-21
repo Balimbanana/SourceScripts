@@ -506,7 +506,9 @@ if [ $pluginsubstr = "ml" ];then
 	if [ ! -f ./$synpath/addons/sourcemod/translations/zho/modelloader.phrases.txt ];then wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/translations/zho/modelloader.phrases.txt" -P ./$synpath/addons/sourcemod/translations/zho ;fi
 	if [ -f ./$synpath/addons/sourcemod/translations/modelloader.phrases.txt ];then echo "Installed!";fi
 fi
-if [ $pluginsubstr = "mlsp" ];then echo "SP file not available for this plugin, sorry.";fi
+if [ $pluginsubstr = "mlsp" ];then
+	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/scripting/modelloader.sp" -P ./$synpath/addons/sourcemod/scripting
+fi
 if [ $pluginsubstr = "gt" ];then
 	wget -nv "http://www.sourcemod.net/vbcompiler.php?file_id=58625" -P ./$synpath/addons/sourcemod/plugins
 fi
