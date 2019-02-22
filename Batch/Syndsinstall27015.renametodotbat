@@ -323,7 +323,10 @@ if NOT EXIST "%synpath%\synergy\cfg\workshop_srv.cfg" (
 	echo 931794062>>"%synpath%\synergy\cfg\workshop_srv.cfg"
 	echo 1230906124>>"%synpath%\synergy\cfg\workshop_srv.cfg"
 	echo 1286998604>>"%synpath%\synergy\cfg\workshop_srv.cfg"
-	echo 1427833667>>"%synpath%\synergy\cfg\workshop_srv.cfg")
+	echo 1427833667>>"%synpath%\synergy\cfg\workshop_srv.cfg"
+	echo 1650998121>>"%synpath%\synergy\cfg\workshop_srv.cfg"
+	echo 1654962168>>"%synpath%\synergy\cfg\workshop_srv.cfg"
+	echo 1657567270>>"%synpath%\synergy\cfg\workshop_srv.cfg")
 if NOT EXIST "%synpath%\synergy\content" mkdir "%synpath%\synergy\content"
 echo Should be all configured for server running.
 echo Would you like to edit your server config? (Y/N)
@@ -892,6 +895,11 @@ if EXIST "%contentpath%\ptsd.dat" (
 	if NOT EXIST "steamapps\sourcemods\ptsd" echo ^PTSD SourceMod not installed!
 	if NOT EXIST "steamapps\sourcemods\ptsd" echo ^Download with ^(PTSD^)
 )
+if EXIST "%contentpath%\ptcs.dat" (
+	set supportsinst=^%supportsinst%, PTCS
+	if NOT EXIST "steamapps\sourcemods\ptsd_festive" echo ^PTCS SourceMod not installed!
+	if NOT EXIST "steamapps\sourcemods\ptsd_festive" echo ^Download with ^(PTCS^)
+)
 if EXIST "%contentpath%\precursor.dat" (
 	set supportsinst=^%supportsinst%, Precursor
 	if NOT EXIST "steamapps\sourcemods\Precursor" echo ^Precursor SourceMod not installed!
@@ -902,9 +910,24 @@ if EXIST "%contentpath%\researchanddevelopment.dat" (
 	if NOT EXIST "steamapps\sourcemods\Research and Development" echo ^Research and Development SourceMod not installed!
 	if NOT EXIST "steamapps\sourcemods\Research and Development" echo ^Download with ^(RAND^)
 )
+if EXIST "%contentpath%\yearlongalarm.dat" (
+	set supportsinst=^%supportsinst%, Year Long Alarm
+	if NOT EXIST "steamapps\common\Half-Life 2 Year Long Alarm" echo ^Year Long Alarm Steam game not installed!
+	if NOT EXIST "steamapps\common\Half-Life 2 Year Long Alarm" echo ^Download with ^(YLA^)
+)
+if EXIST "%contentpath%\alchemilla.dat" (
+	set supportsinst=^%supportsinst%, Alchemilla
+	if NOT EXIST "steamapps\sourcemods\Alchemilla" echo ^Silent Hill Alchemilla SourceMod not installed!
+	if NOT EXIST "steamapps\sourcemods\Alchemilla" echo ^Download with ^(ALC^)
+)
+if EXIST "%contentpath%\ktm.dat" (
+	set supportsinst=^%supportsinst%, Kill The Monk
+	if NOT EXIST "steamapps\sourcemods\killthemonk" echo ^Kill The Monk SourceMod not installed!
+	if NOT EXIST "steamapps\sourcemods\killthemonk" echo ^Download with ^(KTM^)
+)
 ping localhost -n 1 >NUL
 set supportsinst=%supportsinst:~2%
-if '%supportsinst%'=='~2' set "supportsinst=default set"
+if "%supportsinst%"=="~2" set "supportsinst=default set"
 echo You currently have support files for: %supportsinst% on your server.
 echo.
 echo (B) to go back to start.
@@ -939,6 +962,10 @@ if '%dlsm%'=='pre' start http://www.runthinkshootlive.com/posts/precursor-half-l
 if '%dlsm%'=='rand' start http://www.moddb.com/mods/research-and-development/downloads
 if '%dlsm%'=='sttr' start http://www.moddb.com/mods/steam-tracks-trouble-riddles
 if '%dlsm%'=='ptsd' start http://www.moddb.com/mods/the-ptsd-mod
+if '%dlsm%'=='ptcs' start https://www.moddb.com/mods/ptcs-a-post-traumatic-christmas-special
+if '%dlsm%'=='yla' start https://store.steampowered.com/app/747250
+if '%dlsm%'=='alc' start http://www.runthinkshootlive.com/posts/alchemilla/
+if '%dlsm%'=='ktm' start https://www.moddb.com/mods/kill-the-monk
 goto instmodsup
 
 :dltowrong
