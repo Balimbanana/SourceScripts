@@ -443,6 +443,7 @@ echo "(V) to download VoteCar           (HD) to download HealthDisplay"
 echo "(HYP) to download HyperSpawn      (ST) to download Save/Teleport"
 echo "(SYN) to download SynFixes        (SSR) to download SynSaveRestore"
 echo "(ET) to download EntTools         (FPD) to download FirstPersonDeaths"
+echo "(SM) to download SynModes"
 echo "Some plugins will also require their translation files, you can get a full pack of these plugins with (FP)"
 echo "(B) to go back to start"
 read pluginsubstr
@@ -541,6 +542,8 @@ fi
 if [ $pluginsubstr = "hd" ];then
 	if [ -f ./$synpath/addons/sourcemod/plugins/healthdisplay.smx ];then rm -f ./$synpath/addons/sourcemod/plugins/healthdisplay.smx;fi
 	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/plugins/healthdisplay.smx" -P ./$synpath/addons/sourcemod/plugins
+	if [ ! -f ./$synpath/addons/sourcemod/translations/healthdisplay.phrases.txt ];then wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/translations/healthdisplay.phrases.txt" -P ./$synpath/addons/sourcemod/translations ;fi
+	if [ ! -f ./$synpath/addons/sourcemod/translations/colors.phrases.txt ];then wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/translations/colors.phrases.txt" -P ./$synpath/addons/sourcemod/translations ;fi
 fi
 if [ $pluginsubstr = "hdsp" ];then
 	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/scripting/healthdisplay.sp" -P ./$synpath/addons/sourcemod/scripting
@@ -585,6 +588,13 @@ if [ $pluginsubstr = "fpd" ];then
 	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/plugins/fpd.smx" -P ./$synpath/addons/sourcemod/plugins
 fi
 if [ $pluginsubstr = "fpdsp" ];then
+	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/scripting/fpd.sp" -P ./$synpath/addons/sourcemod/scripting
+fi
+if [ $pluginsubstr = "sm" ];then
+	if [ -f ./$synpath/addons/sourcemod/plugins/synmodes.smx ];then rm -f ./$synpath/addons/sourcemod/plugins/synmodes.smx;fi
+	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/plugins/synmodes.smx" -P ./$synpath/addons/sourcemod/plugins
+fi
+if [ $pluginsubstr = "smsp" ];then
 	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/scripting/fpd.sp" -P ./$synpath/addons/sourcemod/scripting
 fi
 if [ $pluginsubstr = "b" ];then start;fi
