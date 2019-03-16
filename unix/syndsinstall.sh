@@ -544,6 +544,8 @@ if [ $pluginsubstr = "hd" ];then
 	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/plugins/healthdisplay.smx" -P ./$synpath/addons/sourcemod/plugins
 	if [ ! -f ./$synpath/addons/sourcemod/translations/healthdisplay.phrases.txt ];then wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/translations/healthdisplay.phrases.txt" -P ./$synpath/addons/sourcemod/translations ;fi
 	if [ ! -f ./$synpath/addons/sourcemod/translations/colors.phrases.txt ];then wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/translations/colors.phrases.txt" -P ./$synpath/addons/sourcemod/translations ;fi
+	if [ ! -f ./$synpath/addons/sourcemod/translations/ru/healthdisplay.phrases.txt ];then wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/translations/ru/healthdisplay.phrases.txt" -P ./$synpath/addons/sourcemod/translations/ru ;fi
+	if [ ! -f ./$synpath/addons/sourcemod/translations/ru/colors.phrases.txt ];then wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/translations/ru/colors.phrases.txt" -P ./$synpath/addons/sourcemod/translations/ru ;fi
 fi
 if [ $pluginsubstr = "hdsp" ];then
 	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/scripting/healthdisplay.sp" -P ./$synpath/addons/sourcemod/scripting
