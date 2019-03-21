@@ -511,10 +511,10 @@ if [ $pluginsubstr = "mlsp" ];then
 	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/scripting/modelloader.sp" -P ./$synpath/addons/sourcemod/scripting
 fi
 if [ $pluginsubstr = "gt" ];then
-	wget -nv "http://www.sourcemod.net/vbcompiler.php?file_id=58625" -P ./$synpath/addons/sourcemod/plugins
+	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/plugins/sm_goto.smx" -P ./$synpath/addons/sourcemod/plugins
 fi
 if [ $pluginsubstr = "gtsp" ];then
-	wget -nv "http://www.forums.alliedmods.net/attachment.php?attachmentid=58625" -P ./$synpath/addons/sourcemod/scripting
+	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/scripting/sm_goto.sp" -P ./$synpath/addons/sourcemod/scripting
 fi
 if [ $pluginsubstr = "v" ];then
 	if [ -f ./$synpath/addons/sourcemod/plugins/votecar.smx ];then rm -f ./$synpath/addons/sourcemod/plugins/votecar.smx;fi
