@@ -200,7 +200,7 @@ goto synstart
 :setup
 set s=1
 set hl=1
-echo Setting up links and first settings in server2.cfg
+echo Setting up links and first settings
 if NOT EXIST "%cldir%\steamapps\sourcemods" set s=0
 if NOT EXIST "%cldir%\steamapps\common\Half-Life 2" set hl=0
 if '%hl%'=='0' (if EXIST "steamapps\common\Half-Life 2" set hl=2)
