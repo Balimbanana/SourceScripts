@@ -459,6 +459,7 @@ echo "(HYP) to download HyperSpawn      (ST) to download Save/Teleport"
 echo "(SYN) to download SynFixes        (SSR) to download SynSaveRestore"
 echo "(ET) to download EntTools         (FPD) to download FirstPersonDeaths"
 echo "(SM) to download SynModes         (AUTO) to download AutoChangeMap"
+echo "(CR) to download Synergy CrashMap"
 echo "Some plugins will also require their translation files, you can get a full pack of these plugins with (FP)"
 echo "(B) to go back to start"
 read pluginsubstr
@@ -622,6 +623,13 @@ fi
 if [ $pluginsubstr = "autosp" ];then
 	wget -nv "https://forums.alliedmods.net/attachment.php?attachmentid=23997&d=1203936191" -P ./$synpath/addons/sourcemod/scripting
 	if [ -f ./$synpath/addons/sourcemod/scripting/attachment.php\?attachmentid\=23997\&d\=1203936191 ];then mv ./$synpath/addons/sourcemod/scripting/attachment.php\?attachmentid\=23997\&d\=1203936191 ./$synpath/addons/sourcemod/scripting/autochangemap.sp ;fi
+fi
+if [ $pluginsubstr = "cr" ];then
+	if [ -f ./$synpath/addons/sourcemod/plugins/crashmap.smx ];then rm -f ./$synpath/addons/sourcemod/plugins/crashmap.smx;fi
+	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/plugins/crashmap.smx" -P ./$synpath/addons/sourcemod/plugins
+fi
+if [ $pluginsubstr = "crsp" ];then
+	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/scripting/crashmap.sp" -P ./$synpath/addons/sourcemod/scripting
 fi
 if [ $pluginsubstr = "b" ];then start;fi
 instsourceplugins
