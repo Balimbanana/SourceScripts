@@ -6,6 +6,7 @@ if [ ! -d $cldir ]; then
 	if [ -d $HOME/Steam/steamapps ]; then cldir=$HOME/Steam/steamapps ;fi
 	if [ -d $HOME/steam/steamapps ]; then cldir=$HOME/steam/steamapps ;fi
 	if [ -d $HOME/Library/Application\ Support/Steam/SteamApps ]; then cldir=$HOME/Library/Application\ Support/Steam/SteamApps ;fi
+	if [ $cldir == $PWD ]; then cldir=none ;fi
 	if [ ! -d $cldir ]; then cldir=none ;fi
 fi
 
@@ -275,8 +276,8 @@ s=1
 hl=1
 echo "Setting up links and first settings in server2.cfg"
 if [ ! -d $cldir/sourcemods ];then s=0;fi
-if [ ! -d $cldir/common/Half-Life\ 2 ];then hl=0;fi
-if [ hl = 0 ];then if [ -d ./steamapps/common/Half-Life\ 2 ];then hl=2;fi;fi
+if [ ! -d $cldir/common/Half-Life\ 2/hl2 ];then hl=0;fi
+if [ hl = 0 ];then if [ -d ./steamapps/common/Half-Life\ 2/hl2 ];then hl=2;fi;fi
 if [ hl = 0 ];then insthl2;fi
 if [ hl = 1 ];then ln -s $cldir/common/Half-Life\ 2 ./steamapps/common/Half-Life\ 2;fi
 if [ s = 0 ];then echo "sourcemods not found, not linking.";fi
