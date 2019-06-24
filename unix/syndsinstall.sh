@@ -458,7 +458,7 @@ echo "(V) to download VoteCar           (HD) to download HealthDisplay"
 echo "(HYP) to download HyperSpawn      (ST) to download Save/Teleport"
 echo "(SYN) to download SynFixes        (SSR) to download SynSaveRestore"
 echo "(ET) to download EntTools         (FPD) to download FirstPersonDeaths"
-echo "(SM) to download SynModes		(AUTO) to download AutoChangeMap"
+echo "(SM) to download SynModes         (AUTO) to download AutoChangeMap"
 echo "Some plugins will also require their translation files, you can get a full pack of these plugins with (FP)"
 echo "(B) to go back to start"
 read pluginsubstr
