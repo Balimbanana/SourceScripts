@@ -1,30 +1,19 @@
 #!/bin/bash
 cldir=$HOME/.Steam/steamapps
 if [ ! -d $cldir ]; then
-	if [ -d /Steam/steamapps ]; then
-		cldir=/Steam/steamapps
-	fi
-	if [ -d $HOME/.local/share/Steam/steamapps ]; then
-		cldir=$HOME/.local/share/Steam/steamapps
-	fi
-	if [ -d $HOME/Steam/steamapps ]; then
-		cldir=$HOME/Steam/steamapps
-	fi
-	if [ -d $HOME/steam/steamapps ]; then
-		cldir=$HOME/steam/steamapps
-	fi
-	if [ -d $HOME/Library/Application\ Support/Steam/SteamApps ]; then
-		cldir=$HOME/Library/Application\ Support/Steam/SteamApps
-	fi
-	if [ ! -d $cldir ]; then
-		cldir=none
-	fi
+	if [ -d /Steam/steamapps ]; then cldir=/Steam/steamapps ;fi
+	if [ -d $HOME/.local/share/Steam/steamapps ]; then cldir=$HOME/.local/share/Steam/steamapps ;fi
+	if [ -d $HOME/Steam/steamapps ]; then cldir=$HOME/Steam/steamapps ;fi
+	if [ -d $HOME/steam/steamapps ]; then cldir=$HOME/steam/steamapps ;fi
+	if [ -d $HOME/Library/Application\ Support/Steam/SteamApps ]; then cldir=$HOME/Library/Application\ Support/Steam/SteamApps ;fi
+	if [ ! -d $cldir ]; then cldir=none ;fi
 fi
 
 missingdeps() {
 echo "You are missing dependencies for Steam"
 echo "Use $packageinf"
 echo "Then restart this script."
+echo "Press enter to exit script"
 read nullptr
 exit
 }
