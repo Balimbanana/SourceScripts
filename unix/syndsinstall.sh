@@ -54,7 +54,7 @@ if [ ! -d ./steamapps/common/Synergy/synergy/addons/plr ]; then
 		echo "(PLR) to install Player Limit Remover, allows for up to 64 players (only v56.16)"
 	fi
 fi
-if [ -d ./steamapps/common/Synergy/synergy/addons/sourcemod/configs/admins_simple.ini ]; then
+if [ -f ./steamapps/common/Synergy/synergy/addons/sourcemod/configs/admins_simple.ini ]; then
 	echo "(SMADMIN) to modify your SourceMod admins file."
 fi
 read uprun
