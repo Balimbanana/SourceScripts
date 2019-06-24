@@ -54,6 +54,9 @@ if [ ! -d ./steamapps/common/Synergy/synergy/addons/plr ]; then
 		echo "(PLR) to install Player Limit Remover, allows for up to 64 players (only v56.16)"
 	fi
 fi
+if [ -d ./steamapps/common/Synergy/synergy/addons/sourcemod/configs/admins_simple.ini ]; then
+	echo "(SMADMIN) to modify your SourceMod admins file."
+fi
 read uprun
 uprun=${uprun,,}
 if [ -z $uprun ];then uprun="noneselected" ;fi
@@ -67,6 +70,7 @@ if [ $uprun = "ism" ]; then instsourcepluginstop;fi
 if [ $uprun = "linksm" ]; then linksm;fi
 if [ $uprun = "plr" ]; then instplr;fi
 if [ $uprun = "imp" ]; then instpmpck;fi
+if [ $uprun = "smadmin" ]; then modifysmadmin;fi
 echo "Choose an option."
 start
 }
@@ -135,6 +139,27 @@ if [ -f ./$synpath/addons/sourcemod/plugins/updater.smx ];then wget -nv "https:/
 # remove nextmap as it does not work in Synergy
 rm -f ./$synpath/addons/sourcemod/plugins/nextmap.smx
 echo "SourceMod installed, you can put plugins in ./$synpath/addons/sourcemod/plugins"
+if [ ! -d ./steamapps/common/Synergy/synergy/addons/plr ]; then
+	if [ -d ./steamapps/common/Synergy/synergy/addons/metamod ]; then
+		echo "Would you like to also install Player Limit Remover? Allows for up to 64 players (only v56.16)"
+		read installplr
+		if [ -z $installplr ];then installplr="n" ;fi
+		if [ $installplr = "y" ]; then
+			if [ ! -d ./steamapps/common/Synergy/synergy/addons/plr ]; then
+				if [ -d ./steamapps/common/Synergy/synergy/addons/metamod ]; then
+					mkdir ./steamapps/common/Synergy/synergy/addons/plr
+					wget -nv "https://raw.githubusercontent.com/FoG-Plugins/Player-Limit-Remover/master/addons/plr.vdf" -P ./steamapps/common/Synergy/synergy/addons
+					wget -nv "https://github.com/FoG-Plugins/Player-Limit-Remover/raw/master/addons/plr/plr.so" -P ./steamapps/common/Synergy/synergy/addons/plr
+				fi
+			fi
+			if [ -f ./steamapps/common/Synergy/synergy/addons/plr/plr.so ]; then
+				if [ -f ./steamapps/common/Synergy/synergy/addons/plr.vdf ]; then
+					echo "Successfully installed PLR"
+				fi
+			fi
+		fi
+	fi
+fi
 if [ $instsmset = "y" ];then srcds;fi
 start
 }
@@ -433,7 +458,7 @@ echo "(V) to download VoteCar           (HD) to download HealthDisplay"
 echo "(HYP) to download HyperSpawn      (ST) to download Save/Teleport"
 echo "(SYN) to download SynFixes        (SSR) to download SynSaveRestore"
 echo "(ET) to download EntTools         (FPD) to download FirstPersonDeaths"
-echo "(SM) to download SynModes"
+echo "(SM) to download SynModes		(AUTO) to download AutoChangeMap"
 echo "Some plugins will also require their translation files, you can get a full pack of these plugins with (FP)"
 echo "(B) to go back to start"
 read pluginsubstr
@@ -589,6 +614,15 @@ fi
 if [ $pluginsubstr = "smsp" ];then
 	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/scripting/fpd.sp" -P ./$synpath/addons/sourcemod/scripting
 fi
+if [ $pluginsubstr = "auto" ];then
+	if [ -f ./$synpath/addons/sourcemod/plugins/autochangemap.smx ];then rm -f ./$synpath/addons/sourcemod/plugins/autochangemap.smx;fi
+	wget -nv "http://www.sourcemod.net/vbcompiler.php?file_id=23997" -P ./$synpath/addons/sourcemod/plugins
+	if [ -f ./$synpath/addons/sourcemod/plugins/vbcompiler.php\?file_id\=23997 ];then mv ./$synpath/addons/sourcemod/plugins/vbcompiler.php\?file_id\=23997 ./$synpath/addons/sourcemod/plugins/autochangemap.smx ;fi
+fi
+if [ $pluginsubstr = "autosp" ];then
+	wget -nv "https://forums.alliedmods.net/attachment.php?attachmentid=23997&d=1203936191" -P ./$synpath/addons/sourcemod/scripting
+	if [ -f ./$synpath/addons/sourcemod/scripting/attachment.php\?attachmentid\=23997\&d\=1203936191 ];then mv ./$synpath/addons/sourcemod/scripting/attachment.php\?attachmentid\=23997\&d\=1203936191 ./$synpath/addons/sourcemod/scripting/autochangemap.sp ;fi
+fi
 if [ $pluginsubstr = "b" ];then start;fi
 instsourceplugins
 }
@@ -720,6 +754,25 @@ if [ $pmpckopt = "5" ]; then
 	cp "$cldir/workshop/content/17520/1133952585/1133952585_pak.vpk" "./steamapps/workshop/content/17520/1133952585/1133952585_pak.vpk"
 fi
 instpmpckpass
+}
+
+modifysmadmin() {
+if [ ! -d ./steamapps/common/Synergy/synergy/addons/sourcemod/configs/admins_simple.ini ]; then
+	echo "You do not have an admins file."
+	start
+fi
+if [ ! -z $EDITOR ];then
+	$EDITOR ./steamapps/common/Synergy/synergy/addons/sourcemod/configs/admins_simple.ini
+elif [ ! -z $VISUAL ];then
+	$VISUAL ./steamapps/common/Synergy/synergy/addons/sourcemod/configs/admins_simple.ini
+elif [ -f /bin/nano ];then
+	nano ./steamapps/common/Synergy/synergy/addons/sourcemod/configs/admins_simple.ini
+elif [ -f /usr/bin/gedit ];then
+	gedit ./steamapps/common/Synergy/synergy/addons/sourcemod/configs/admins_simple.ini
+else
+	vi ./steamapps/common/Synergy/synergy/addons/sourcemod/configs/admins_simple.ini
+fi
+start
 }
 
 start
