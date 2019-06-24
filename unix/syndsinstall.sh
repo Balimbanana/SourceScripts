@@ -757,7 +757,7 @@ instpmpckpass
 }
 
 modifysmadmin() {
-if [ ! -d ./steamapps/common/Synergy/synergy/addons/sourcemod/configs/admins_simple.ini ]; then
+if [ ! -f ./steamapps/common/Synergy/synergy/addons/sourcemod/configs/admins_simple.ini ]; then
 	echo "You do not have an admins file."
 	start
 fi
