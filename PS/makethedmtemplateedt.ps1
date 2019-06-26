@@ -1,4 +1,4 @@
-﻿# Written by: Balimbanana
+# Written by: Balimbanana
 # This is used to create a template .edt of all maps in the current directory.
 # This template is for DM ported maps with info_player_rebel info_player_combine and respawning weapon pickups
 $a = @()
@@ -38,6 +38,7 @@ for ($i = 0; $i -lt $a.Length; $i++){
     echo "		edit {classname `"info_player_rebel`" values {classname `"info_player_coop`"} }" >> "$path.edt"
     echo "		edit {classname `"info_player_deathmatch`" values {classname `"info_player_coop`"} }" >> "$path.edt"
     echo "		edit {classname `"ai_relationship`" values {Reciprocal `"1`"} }" >> "$path.edt"
+    echo "		create {classname `"info_global_settings`" values {IsVehicleMap `"1`"} }" >> "$path.edt"
     echo "	}" >> "$path.edt"
     echo "}" >> "$path.edt"
 }
