@@ -23,11 +23,19 @@ if EXIST "E:\SteamLibrary\steamapps\common\Synergy\synergy" set cldir=E:\SteamLi
 if EXIST "D:\SteamLibrary\steamapps\common\Synergy\synergy" set cldir=D:\SteamLibrary\steamapps
 if EXIST "F:\SteamLibrary\steamapps\common\Synergy\synergy" set cldir=F:\SteamLibrary\steamapps
 if EXIST "G:\SteamLibrary\steamapps\common\Synergy\synergy" set cldir=G:\SteamLibrary\steamapps
+if EXIST "L:\SteamLibrary\steamapps\common\Synergy\synergy" set cldir=L:\SteamLibrary\steamapps
 if EXIST "C:\Steam\steamapps\common\Synergy\synergy" set cldir=C:\Steam\steamapps
 if EXIST "E:\Steam\steamapps\common\Synergy\synergy" set cldir=E:\Steam\steamapps
 if EXIST "D:\Steam\steamapps\common\Synergy\synergy" set cldir=D:\Steam\steamapps
 if EXIST "F:\Steam\steamapps\common\Synergy\synergy" set cldir=F:\Steam\steamapps
 if EXIST "G:\Steam\steamapps\common\Synergy\synergy" set cldir=G:\Steam\steamapps
+if EXIST "L:\Steam\steamapps\common\Synergy\synergy" set cldir=L:\Steam\steamapps
+if EXIST "C:\Program Files\Steam\steamapps\common\Synergy\synergy" set "cldir=C:\Program Files\Steam\steamapps"
+if EXIST "E:\Program Files\Steam\steamapps\common\Synergy\synergy" set "cldir=E:\Program Files\Steam\steamapps"
+if EXIST "D:\Program Files\Steam\steamapps\common\Synergy\synergy" set "cldir=D:\Program Files\Steam\steamapps"
+if EXIST "F:\Program Files\Steam\steamapps\common\Synergy\synergy" set "cldir=F:\Program Files\Steam\steamapps"
+if EXIST "G:\Program Files\Steam\steamapps\common\Synergy\synergy" set "cldir=G:\Program Files\Steam\steamapps"
+if EXIST "L:\Program Files\Steam\steamapps\common\Synergy\synergy" set "cldir=L:\Program Files\Steam\steamapps"
 :start
 if EXIST synergy.exe (if EXIST "..\..\..\steamcmd.exe" cd "..\..\.." )
 set anonset=0
