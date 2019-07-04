@@ -459,7 +459,7 @@ echo "(HYP) to download HyperSpawn      (ST) to download Save/Teleport"
 echo "(SYN) to download SynFixes        (SSR) to download SynSaveRestore"
 echo "(ET) to download EntTools         (FPD) to download FirstPersonDeaths"
 echo "(SM) to download SynModes         (AUTO) to download AutoChangeMap"
-echo "(CR) to download Synergy CrashMap"
+echo "(CR) to download Synergy CrashMap (U) to download Updater with SteamWorks"
 echo "Some plugins will also require their translation files, you can get a full pack of these plugins with (FP)"
 echo "(B) to go back to start"
 read pluginsubstr
@@ -548,8 +548,12 @@ if [ $pluginsubstr = "fp" ];then
 	rm -rf ./$synpath/addons/sourcemod/SM-Synergy-master/twitchbranchgamedata
 	rm -f ./$synpath/addons/sourcemod/SM-Synergy-master/healthdisplayupdater.txt
 	rm -f ./$synpath/addons/sourcemod/SM-Synergy-master/enttoolsupdater.txt
+	rm -f ./$synpath/addons/sourcemod/SM-Synergy-master/modelloaderupdater.txt
 	rm -f ./$synpath/addons/sourcemod/SM-Synergy-master/synbhopupdater.txt
+	rm -f ./$synpath/addons/sourcemod/SM-Synergy-master/synmodesupdater.txt
 	rm -f ./$synpath/addons/sourcemod/SM-Synergy-master/synfixesupdater.txt
+	rm -f ./$synpath/addons/sourcemod/SM-Synergy-master/synsaverestoreupdater.txt
+	rm -f ./$synpath/addons/sourcemod/SM-Synergy-master/synvehiclespawnupdater.txt
 	rsync --remove-source-files -a ./$synpath/addons/sourcemod/SM-Synergy-master/* ./$synpath/addons/sourcemod
 	rm -f ./master.zip
 	rm -rf ./$synpath/addons/sourcemod/SM-Synergy-master
@@ -630,6 +634,14 @@ if [ $pluginsubstr = "cr" ];then
 fi
 if [ $pluginsubstr = "crsp" ];then
 	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/scripting/crashmap.sp" -P ./$synpath/addons/sourcemod/scripting
+fi
+if [ $pluginsubstr = "u" ];then
+	if [ -f ./$synpath/addons/sourcemod/plugins/updater.smx ];then rm -f ./$synpath/addons/sourcemod/plugins/updater.smx;fi
+	wget -nv "https://bitbucket.org/GoD_Tony/updater/downloads/updater.smx" -P ./$synpath/addons/sourcemod/plugins ;fi
+	if [ -f ./$synpath/addons/sourcemod/extensions/SteamWorks.ext.so ];then rm -f ./$synpath/addons/sourcemod/extensions/SteamWorks.ext.so;fi
+	curl -sqL "https://users.alliedmods.net/~kyles/builds/SteamWorks/SteamWorks-git131-linux.tar.gz" | tar zxvf - -C ./$synpath
+	if [ -f ./$synpath/addons/sourcemod/extensions/SteamWorks.ext.so ];then echo "Installed SteamWorks";fi
+	if [ -f ./$synpath/addons/sourcemod/plugins/updater.smx ];then echo "Installed Updater";fi
 fi
 if [ $pluginsubstr = "b" ];then start;fi
 instsourceplugins
