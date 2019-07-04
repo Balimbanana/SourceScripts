@@ -529,7 +529,7 @@ echo (ML) to download ModelLoader     (G) to download GCFScape to open .vpk file
 echo (GT) to download Goto            (V) to download VoteCar
 echo (HD) to download HealthDisplay   (HYP) to download HyperSpawn
 echo (ST) to download Save/Teleport   (SSR) to download SynSaveRestore
-echo (SM) to download SynModes
+echo (SM) to download SynModes        (U) to download Updater with SteamWorks
 echo Some plugins will also require their translation files, you can get the full pack with (FP)
 echo If you have downloaded the full pack, use (FPI) to auto-install the plugins with translations included.
 echo (B) to go back to start.
@@ -602,6 +602,15 @@ if '%pluginsubstr%'=='ssr' start /wait /min powershell -command "& {[Net.Service
 if '%pluginsubstr%'=='ssrsp' start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SM-Synergy/raw/master/scripting/synsaverestore.sp\",\"$PWD\$env:synpath\addons\sourcemod\scripting\synsaverestore.sp\") }"
 if '%pluginsubstr%'=='sm' start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SM-Synergy/raw/master/plugins/synmodes.smx\",\"$PWD\$env:synpath\addons\sourcemod\plugins\synmodes.smx\") }"
 if '%pluginsubstr%'=='smsp' start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SM-Synergy/raw/master/scripting/synmodes.sp\",\"$PWD\$env:synpath\addons\sourcemod\scripting\synmodes.sp\") }"
+if '%pluginsubstr%'=='u' (
+	if EXIST "%cd%\%synpath%\addons\sourcemod\plugins\updater.smx" echo ^Already installed.
+	if EXIST "%cd%\%synpath%\addons\sourcemod\plugins\updater.smx" goto instsourceplugins
+	start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://bitbucket.org/GoD_Tony/updater/downloads/updater.smx\", \"$PWD\$env:synpath\addons\sourcemod\plugins\updater.smx\") }"
+	if NOT EXIST SteamWorks-git121-windows.zip start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://users.alliedmods.net/~kyles/builds/SteamWorks/SteamWorks-git121-windows.zip\",\"$PWD\SteamWorks-git121-windows.zip\") }"
+	if EXIST SteamWorks-git121-windows.zip start /wait /min powershell -command "& {Add-Type -AssemblyName System.IO.Compression.FileSystem; [System.IO.Compression.ZipFile]::ExtractToDirectory(\"$PWD\SteamWorks-git121-windows.zip\", \"$PWD\$env:synpath\") }"
+	if EXIST "%cd%\%synpath%\addons\sourcemod\plugins\updater.smx" echo ^Installed updater.
+	if EXIST "%cd%\%synpath%\addons\sourcemod\extensions\SteamWorks.ext.dll" echo ^Installed SteamWorks.
+)
 if '%pluginsubstr%'=='g' start http://nemesis.thewavelength.net/files/files/gcfscape186.zip
 
 if '%pluginsubstr%'=='v' (
