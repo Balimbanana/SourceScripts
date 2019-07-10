@@ -459,14 +459,17 @@ set dlloc=0
 if EXIST "%userprofile%\downloads\sourcemod-1.9.0-git6229-windows.zip" set dlloc=1
 if EXIST "sourcemod-1.9.0-git6229-windows.zip" set dlloc=2
 if '%dlloc%'=='0' start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://sm.alliedmods.net/smdrop/1.9/sourcemod-1.9.0-git6229-windows.zip\",\"$PWD\sourcemod-1.9.0-git6229-windows.zip\") }"
-set dlloc=0
-if EXIST "%userprofile%\downloads\mmsource-1.11.0-git1105-windows.zip" set dlloc=1
-if EXIST "mmsource-1.11.0-git1105-windows.zip" set dlloc=2
-if '%dlloc%'=='0' start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://mms.alliedmods.net/mmsdrop/1.11/mmsource-1.11.0-git1105-windows.zip\",\"$PWD\mmsource-1.11.0-git1105-windows.zip\") }"
-set dlloc=0
-if EXIST "%userprofile%\downloads\SteamWorks-git121-windows.zip" set dlloc=1
-if EXIST "SteamWorks-git121-windows.zip" set dlloc=2
-if '%dlloc%'=='0' start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://users.alliedmods.net/~kyles/builds/SteamWorks/SteamWorks-git121-windows.zip\",\"$PWD\SteamWorks-git121-windows.zip\") }"
+if EXIST "sourcemod-1.9.0-git6229-windows.zip" set dlloc=2
+set mmloc=0
+if EXIST "%userprofile%\downloads\mmsource-1.11.0-git1105-windows.zip" set mmloc=1
+if EXIST "mmsource-1.11.0-git1105-windows.zip" set mmloc=2
+if '%mmloc%'=='0' start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://mms.alliedmods.net/mmsdrop/1.11/mmsource-1.11.0-git1105-windows.zip\",\"$PWD\mmsource-1.11.0-git1105-windows.zip\") }"
+if EXIST "mmsource-1.11.0-git1105-windows.zip" set mmloc=2
+set steamworksloc=0
+if EXIST "%userprofile%\downloads\SteamWorks-git121-windows.zip" set steamworksloc=1
+if EXIST "SteamWorks-git121-windows.zip" set steamworksloc=2
+if '%steamworksloc%'=='0' start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://users.alliedmods.net/~kyles/builds/SteamWorks/SteamWorks-git121-windows.zip\",\"$PWD\SteamWorks-git121-windows.zip\") }"
+if EXIST "SteamWorks-git121-windows.zip" set steamworksloc=2
 set dlloc=0
 if EXIST "%userprofile%\downloads\sourcemod-1.9.0-git6229-windows.zip" set dlloc=1
 if EXIST "sourcemod-1.9.0-git6229-windows.zip" set dlloc=2
@@ -481,12 +484,20 @@ if NOT EXIST "%synpath%\addons\sourcemod" (
 if '%use7z%'=='1' (
 	if '%dlloc%'=='1' (
 		start /min /wait "7z" "C:\Program Files\7-Zip\7z.exe" x sourcemod-1.9.0-git6229-windows.zip -o"%cd%\%synpath%"
-		start /min /wait "7z" "C:\Program Files\7-Zip\7z.exe" x mmsource-1.11.0-git1105-windows.zip -o"%cd%\%synpath%"
-		start /min /wait "7z" "C:\Program Files\7-Zip\7z.exe" x SteamWorks-git121-windows.zip -o"%cd%\%synpath%"
 	)
 	if '%dlloc%'=='2' (
 		start /min /wait "7z" "C:\Program Files\7-Zip\7z.exe" x "%userprofile%\downloads\sourcemod-1.9.0-git6229-windows.zip" -o"%cd%\%synpath%"
+	)
+	if '%mmloc%'=='1' (
+		start /min /wait "7z" "C:\Program Files\7-Zip\7z.exe" x mmsource-1.11.0-git1105-windows.zip -o"%cd%\%synpath%"
+	)
+	if '%mmloc%'=='2' (
 		start /min /wait "7z" "C:\Program Files\7-Zip\7z.exe" x "%userprofile%\downloads\mmsource-1.11.0-git1105-windows.zip" -o"%cd%\%synpath%"
+	)
+	if '%steamworksloc%'=='1' (
+		start /min /wait "7z" "C:\Program Files\7-Zip\7z.exe" x SteamWorks-git121-windows.zip -o"%cd%\%synpath%"
+	)
+	if '%steamworksloc%'=='2' (
 		start /min /wait "7z" "C:\Program Files\7-Zip\7z.exe" x "%userprofile%\downloads\SteamWorks-git121-windows.zip" -o"%cd%\%synpath%"
 	)
 )
