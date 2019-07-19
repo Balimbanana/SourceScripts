@@ -112,7 +112,7 @@ if [ -d ./$synpath/addons/sourcemod ];then
 fi
 curl -sqL "https://sm.alliedmods.net/smdrop/1.10/sourcemod-1.10.0-git6329-linux.tar.gz" | tar zxvf - -C ./$synpath
 curl -sqL "https://mms.alliedmods.net/mmsdrop/1.10/mmsource-1.10.7-git959-linux.tar.gz" | tar zxvf - -C ./$synpath
-curl -sqL "https://users.alliedmods.net/~kyles/builds/SteamWorks/SteamWorks-git131-linux.tar.gz" | tar zxvf - -C ./$synpath
+curl -sqL "https://users.alliedmods.net/~kyles/builds/SteamWorks/SteamWorks-git121-linux.tar.gz" | tar zxvf - -C ./$synpath
 if [ ! -d ./$synpath/addons/sourcemod ];then
 	echo "Failed to auto-install SourceMod, you may have to manually install it."
 	read nullptr
@@ -638,7 +638,7 @@ if [ $pluginsubstr = "u" ];then
 	if [ -f ./$synpath/addons/sourcemod/plugins/updater.smx ];then rm -f ./$synpath/addons/sourcemod/plugins/updater.smx;fi
 	wget -nv "https://bitbucket.org/GoD_Tony/updater/downloads/updater.smx" -P ./$synpath/addons/sourcemod/plugins ;fi
 	if [ -f ./$synpath/addons/sourcemod/extensions/SteamWorks.ext.so ];then rm -f ./$synpath/addons/sourcemod/extensions/SteamWorks.ext.so;fi
-	curl -sqL "https://users.alliedmods.net/~kyles/builds/SteamWorks/SteamWorks-git131-linux.tar.gz" | tar zxvf - -C ./$synpath
+	curl -sqL "https://users.alliedmods.net/~kyles/builds/SteamWorks/SteamWorks-git121-linux.tar.gz" | tar zxvf - -C ./$synpath
 	if [ -f ./$synpath/addons/sourcemod/extensions/SteamWorks.ext.so ];then echo "Installed SteamWorks";fi
 	if [ -f ./$synpath/addons/sourcemod/plugins/updater.smx ];then echo "Installed Updater";fi
 fi
