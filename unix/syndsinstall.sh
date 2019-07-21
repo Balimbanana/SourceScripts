@@ -636,7 +636,7 @@ if [ $pluginsubstr = "crsp" ];then
 fi
 if [ $pluginsubstr = "u" ];then
 	if [ -f ./$synpath/addons/sourcemod/plugins/updater.smx ];then rm -f ./$synpath/addons/sourcemod/plugins/updater.smx;fi
-	wget -nv "https://bitbucket.org/GoD_Tony/updater/downloads/updater.smx" -P ./$synpath/addons/sourcemod/plugins ;fi
+	wget -nv "https://bitbucket.org/GoD_Tony/updater/downloads/updater.smx" -P ./$synpath/addons/sourcemod/plugins
 	if [ -f ./$synpath/addons/sourcemod/extensions/SteamWorks.ext.so ];then rm -f ./$synpath/addons/sourcemod/extensions/SteamWorks.ext.so;fi
 	curl -sqL "https://users.alliedmods.net/~kyles/builds/SteamWorks/SteamWorks-git121-linux.tar.gz" | tar zxvf - -C ./$synpath
 	if [ -f ./$synpath/addons/sourcemod/extensions/SteamWorks.ext.so ];then echo "Installed SteamWorks";fi
