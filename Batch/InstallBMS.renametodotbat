@@ -1,0 +1,59 @@
+@echo off
+rem This script was written by Balimbanana.
+title Install BMS
+:start
+if EXIST "drivers\etc\hosts" cd %~dp0
+if '%CD%'=='%USERPROFILE%\Downloads' (
+	mkdir tmpinstall
+	cd tmpinstall
+)
+if EXIST "%programfiles(x86)%\Steam\steamapps\sourcemods\BMS\maps\bm_c3a2h.bsp" (
+	echo ^BMS is already installed.
+	pause
+	exit
+)
+echo Press Enter to begin download. This will take a long time, archive file size is 3.34 GB
+pause
+:startdl
+if NOT EXIST "%cd%\7-Zip" echo Downloading temp pre-requisite 7zip to auto-extract when done...
+if NOT EXIST "%cd%\7-Zip" powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SourceScripts/raw/master/synotherfilefixes/7-Zip.zip\",\"$PWD\7zip.zip\") }"
+if EXIST "%cd%\7zip.zip" start /wait /min powershell -command "& {Add-Type -AssemblyName System.IO.Compression.FileSystem; [System.IO.Compression.ZipFile]::ExtractToDirectory(\"$PWD\7zip.zip\", \"$PWD\") }"
+if EXIST "%cd%\7zip.zip" del /Q "%cd%\7zip.zip"
+if EXIST "%cd%\bms.rar" goto alreadydownloaded
+echo Downloading BMS...
+powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://download1506.mediafire.com/zsfr0t9acb6g/r7dspd2m22isc8b/Black+Mesa+Synergy.rar\",\"$PWD\bms.rar\") }"
+if EXIST "%cd%\bms.rar" .\7-Zip\7z.exe -aoa x .\bms.rar -o"%programfiles(x86)%\Steam\steamapps\sourcemods"
+if EXIST "%programfiles(x86)%\Steam\steamapps\sourcemods\BMS\maps\bm_c3a2h.bsp" echo BMS installed successfully.
+if EXIST "%cd%\bms.rar" del /Q "%cd%\bms.rar"
+if NOT EXIST "%programfiles(x86)%\Steam\steamapps\sourcemods\BMS\maps\bm_c3a2h.bsp" (
+	echo ^Something went wrong with the download, possibly an interrupted connection while downloading.
+	echo ^Press any key to restart download...
+	pause
+	goto startdl
+)
+goto applyscriptfix
+
+:alreadydownloaded
+if EXIST "%cd%\bms.rar" .\7-Zip\7z.exe x .\bms.rar -o"%programfiles(x86)%\Steam\steamapps\sourcemods"
+if EXIST "%programfiles(x86)%\Steam\steamapps\sourcemods\BMS\maps\bm_c3a2h.bsp" echo BMS installed successfully.
+if NOT EXIST "%programfiles(x86)%\Steam\steamapps\sourcemods\BMS\maps\bm_c3a2h.bsp" (
+	echo ^Something went wrong with the download, possibly an interrupted connection while downloading.
+	echo ^Press any key to restart download...
+	pause
+	goto startdl
+)
+if EXIST "%cd%\bms.rar" del /Q "%cd%\bms.rar"
+goto applyscriptfix
+
+:applyscriptfix
+powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SourceScripts/raw/master/synotherfilefixes/bmscripts.zip\",\"$PWD\bmscripts.zip\") }"
+if EXIST "%programfiles(x86)%\Steam\steamapps\sourcemods\BMS\scripts" rmdir /S /Q "%programfiles(x86)%\Steam\steamapps\sourcemods\BMS\scripts"
+if EXIST "%cd%\bmscripts.zip" .\7-Zip\7z.exe -aoa x .\bmscripts.zip -o"%programfiles(x86)%\Steam\steamapps\sourcemods\BMS"
+if EXIST "%cd%\7-Zip\7z.exe" rmdir /S /Q "%cd%\7-Zip"
+if EXIST "%cd%\bmscripts.zip" del /Q "%cd%\bmscripts.zip"
+echo.
+echo Check for any errors above, if there are any, you may need to re-run this script.
+echo Finished installing/patching BMS for use in Synergy.
+echo.
+pause
+exit
