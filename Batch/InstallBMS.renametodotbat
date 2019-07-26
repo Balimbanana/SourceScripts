@@ -13,7 +13,7 @@ for /f "skip=2 tokens=1,3* delims== " %%i in ('reg QUERY HKEY_CURRENT_USER\Softw
 for /f "delims=" %%V in ('powershell -command "$env:cldir.Replace(\"/\",\"\\\")"') do set "cldir=%%V"
 for /f "delims=" %%V in ('powershell -command "$env:cldir.Replace(\"programfiles \",\"program files \")"') do set "cldir=%%V"
 set cldir=%cldir%\steamapps\sourcemods
-echo CL %cldir%
+if EXIST "%cldir%" echo Found sourcemods directory here: %cldir%
 if EXIST "%cldir%\BMS\maps\bm_c3a2h.bsp" (
 	echo ^BMS is already installed.
 	echo ^Press enter to apply script fix if you need to.
