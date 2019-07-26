@@ -14,6 +14,7 @@ for /f "delims=" %%V in ('powershell -command "$env:cldir.Replace(\"/\",\"\\\")"
 for /f "delims=" %%V in ('powershell -command "$env:cldir.Replace(\"programfiles \",\"program files \")"') do set "cldir=%%V"
 set cldir=%cldir%\steamapps\sourcemods
 if EXIST "%cldir%" echo Found sourcemods directory here: %cldir%
+if NOT EXIST "%cldir%" if EXIST "%programfiles(x86)%\Steam\steamapps" set cldir=%programfiles(x86)%\Steam\steamapps
 if NOT EXIST "%cldir%" (
 	echo ^Could not determine sourcemods directory, checked\:
 	echo "%programfiles(x86)%\Steam\steamapps and %cldir%"
