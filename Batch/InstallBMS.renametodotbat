@@ -3,7 +3,7 @@ rem This script was written by Balimbanana.
 title Install BMS
 :start
 if EXIST "drivers\etc\hosts" cd %~dp0
-if '%CD%'=='%USERPROFILE%\Downloads' (
+if "%CD%"=="%USERPROFILE%\Downloads" (
 	mkdir tmpinstall
 	cd tmpinstall
 )
@@ -12,37 +12,86 @@ if EXIST "%programfiles(x86)%\Steam\steamapps\sourcemods\BMS\maps\bm_c3a2h.bsp" 
 	pause
 	exit
 )
-echo Press Enter to begin download. This will take a long time, archive file size is 3.34 GB
+if EXIST "%cd%\bms.rar" goto startdl
+if EXIST "%cd%\BMS.7z" goto startdl
+if EXIST "%cd%\blackmesa.zip.001" goto startdl
+if EXIST "%cd%\Black Mesa Synergy.rar" goto startdl
+if EXIST "%userprofile%\Downloads\bms.rar" goto startdl
+if EXIST "%userprofile%\Downloads\BMS.7z" goto startdl
+if EXIST "%userprofile%\Downloads\blackmesa.zip.001" goto startdl
+if EXIST "%userprofile%\Downloads\Black Mesa Synergy.rar" goto startdl
+echo MegaNZ archive file size is 2.99 GB
+echo MediaFire archive file size is 3.34 GB
+echo ModDB archive is split, part 1 is 2.64 GB, part 2 is 1.62 GB
+echo Warning: ModDB version has a 50/50 chance of downloading corrupted, forcing you to re-download the whole thing again.
+echo It is much more reliable and a smaller download from Mega or MediaFire.
+echo Be sure to download the archive to either your Downloads directory, or the same directory this script is being run from.
+echo Enter the word in the () below and press enter. The option you choose will open in your default web browser.
+echo (Mega)  (MediaFire)  (ModDB)
+set /p installfrom=
+for /f "delims=" %%V in ('powershell -command "$env:installfrom.ToLower()"') do set "installfrom=%%V"
+if "%installfrom%"=="mega" (
+	start /b https://mega.nz/#!ewtiwYwQ!OOYuvLiBrDnCQpIKZmHSvNd8ajTcX2gBB-CYUqTBpfU
+	goto downloadingpause
+)
+if "%installfrom%"=="mediafire" (
+	start /b http://mediafire.com/file/r7dspd2m22isc8b/Black_Mesa_Synergy.rar/file
+	goto downloadingpause
+)
+if "%installfrom%"=="moddb" (
+	start /b https://www.moddb.com/mods/black-mesa/downloads/black-mesa-part-1zip
+	start /b https://www.moddb.com/mods/black-mesa/downloads/black-mesa-part-2zip
+	goto downloadingpause
+)
+echo Enter one of the words in the () to continue...
+echo.
+goto start
+:downloadingpause
+echo Once it has finished downloading, continue this script.
 pause
+goto startdl
 :startdl
 if NOT EXIST "%cd%\7-Zip" echo Downloading temp pre-requisite 7zip to auto-extract when done...
 if NOT EXIST "%cd%\7-Zip" powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SourceScripts/raw/master/synotherfilefixes/7-Zip.zip\",\"$PWD\7zip.zip\") }"
 if EXIST "%cd%\7zip.zip" start /wait /min powershell -command "& {Add-Type -AssemblyName System.IO.Compression.FileSystem; [System.IO.Compression.ZipFile]::ExtractToDirectory(\"$PWD\7zip.zip\", \"$PWD\") }"
 if EXIST "%cd%\7zip.zip" del /Q "%cd%\7zip.zip"
 if EXIST "%cd%\bms.rar" goto alreadydownloaded
-echo Downloading BMS...
-powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://download1506.mediafire.com/zsfr0t9acb6g/r7dspd2m22isc8b/Black+Mesa+Synergy.rar\",\"$PWD\bms.rar\") }"
-if EXIST "%cd%\bms.rar" .\7-Zip\7z.exe -aoa x .\bms.rar -o"%programfiles(x86)%\Steam\steamapps\sourcemods"
-if EXIST "%programfiles(x86)%\Steam\steamapps\sourcemods\BMS\maps\bm_c3a2h.bsp" echo BMS installed successfully.
-if EXIST "%cd%\bms.rar" del /Q "%cd%\bms.rar"
+if EXIST "%cd%\BMS.7z" goto alreadydownloaded
+if EXIST "%cd%\blackmesa.zip.001" goto alreadydownloaded
+if EXIST "%cd%\Black Mesa Synergy.rar" goto alreadydownloaded
+if EXIST "%userprofile%\Downloads\bms.rar" goto alreadydownloaded
+if EXIST "%userprofile%\Downloads\BMS.7z" goto alreadydownloaded
+if EXIST "%userprofile%\Downloads\blackmesa.zip.001" goto alreadydownloaded
+if EXIST "%userprofile%\Downloads\Black Mesa Synergy.rar" goto alreadydownloaded
+rem if EXIST "%cd%\bms.rar" del /Q "%cd%\bms.rar"
 if NOT EXIST "%programfiles(x86)%\Steam\steamapps\sourcemods\BMS\maps\bm_c3a2h.bsp" (
 	echo ^Something went wrong with the download, possibly an interrupted connection while downloading.
-	echo ^Press any key to restart download...
+	echo ^Or the file was downloaded with a different name or in a different directory.
+	echo ^Press any key to restart script...
 	pause
-	goto startdl
+	goto start
 )
 goto applyscriptfix
 
 :alreadydownloaded
+echo Found Black Mesa archive.
 if EXIST "%cd%\bms.rar" .\7-Zip\7z.exe x .\bms.rar -o"%programfiles(x86)%\Steam\steamapps\sourcemods"
+if EXIST "%cd%\BMS.7z" .\7-Zip\7z.exe x .\BMS.7z -o"%programfiles(x86)%\Steam\steamapps\sourcemods"
+if EXIST "%cd%\blackmesa.zip.001" .\7-Zip\7z.exe x .\blackmesa.zip.001 -o"%programfiles(x86)%\Steam\steamapps\sourcemods"
+if EXIST "%cd%\Black Mesa Synergy.rar" .\7-Zip\7z.exe x ".\Black Mesa Synergy.rar" -o"%programfiles(x86)%\Steam\steamapps\sourcemods"
+if EXIST "%userprofile%\downloads\bms.rar" .\7-Zip\7z.exe x "%userprofile%\downloads\bms.rar" -o"%programfiles(x86)%\Steam\steamapps\sourcemods"
+if EXIST "%userprofile%\downloads\BMS.7z" .\7-Zip\7z.exe x "%userprofile%\downloads\BMS.7z" -o"%programfiles(x86)%\Steam\steamapps\sourcemods"
+if EXIST "%userprofile%\downloads\blackmesa.zip.001" .\7-Zip\7z.exe x "%userprofile%\downloads\blackmesa.zip.001" -o"%programfiles(x86)%\Steam\steamapps\sourcemods"
+if EXIST "%userprofile%\downloads\Black Mesa Synergy.rar" .\7-Zip\7z.exe x "%userprofile%\downloads\Black Mesa Synergy.rar" -o"%programfiles(x86)%\Steam\steamapps\sourcemods"
+if EXIST "%programfiles(x86)%\Steam\steamapps\sourcemods\blackmesa\maps\bm_c3a2h.bsp" ren "%programfiles(x86)%\Steam\steamapps\sourcemods\blackmesa" BMS
 if EXIST "%programfiles(x86)%\Steam\steamapps\sourcemods\BMS\maps\bm_c3a2h.bsp" echo BMS installed successfully.
 if NOT EXIST "%programfiles(x86)%\Steam\steamapps\sourcemods\BMS\maps\bm_c3a2h.bsp" (
 	echo ^Something went wrong with the download, possibly an interrupted connection while downloading.
-	echo ^Press any key to restart download...
+	echo ^Or your archive became corrupted somehow.
+	echo ^Press any key to restart script...
 	pause
-	goto startdl
+	goto start
 )
-if EXIST "%cd%\bms.rar" del /Q "%cd%\bms.rar"
 goto applyscriptfix
 
 :applyscriptfix
