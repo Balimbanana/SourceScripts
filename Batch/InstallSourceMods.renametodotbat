@@ -123,8 +123,9 @@ echo ModDB archive is split, part 1 is 2.64 GB, part 2 is 1.62 GB
 echo Warning: ModDB version has a 50/50 chance of downloading corrupted, forcing you to re-download the whole thing again.
 echo It is much more reliable and a smaller download from Mega or MediaFire.
 echo Be sure to download the archive to either your Downloads directory, or the same directory this script is being run from.
+echo BMSXEN is for the Black Mesa: Improved Xen page.
 echo Enter the word in the () below and press enter. The option you choose will open in your default web browser.
-echo (Mega)  (MediaFire)  (ModDB)
+echo (Mega)  (MediaFire)  (ModDB)  (BMSXEN)
 set /p installfrom=
 for /f "delims=" %%V in ('powershell -command "$env:installfrom.ToLower()"') do set "installfrom=%%V"
 if "%installfrom%"=="mega" (
@@ -139,6 +140,20 @@ if "%installfrom%"=="moddb" (
 	start /b https://www.moddb.com/mods/black-mesa/downloads/black-mesa-part-1zip
 	start /b https://www.moddb.com/mods/black-mesa/downloads/black-mesa-part-2zip
 	goto downloadingpause
+)
+if "%installfrom%"=="bmsxen" (
+	if EXIST "%cldir%\xen\maps\xen_c4a1.bsp" (
+		echo ^Already installed...
+		pause
+		goto start
+	)
+	start /b https://www.moddb.com/mods/black-mesa-xen-improved-maps-from-half-life/downloads/black-mesa-2012-improved-xen-v0511
+	echo ^Once it has finished download, continue this script.
+	pause
+	if EXIST "%cd%\BMS2012_IMPROVED_XEN_Source2007.1.rar" goto extractbmsxen
+	if EXIST "%userprofile%\Downloads\BMS2012_IMPROVED_XEN_Source2007.1.rar" goto extractbmsxen
+	echo ^Could not find archive in current directory or downloads directory...
+	goto blackmesa
 )
 echo Enter one of the words in the () to continue...
 echo.
@@ -201,6 +216,12 @@ echo.
 echo Check for any errors above, if there are any, you may need to re-run this script.
 echo Finished installing/patching BMS for use in Synergy.
 echo.
+pause
+goto start
+
+:extractbmsxen
+if EXIST "%cd%\BMS2012_IMPROVED_XEN_Source2007.1.rar" .\7-Zip\7z.exe x .\BMS.7z -o"%cldir%" xen
+if EXIST "%userprofile%\Downloads\BMS2012_IMPROVED_XEN_Source2007.1.rar" .\7-Zip\7z.exe x .\BMS.7z -o"%cldir%" xen
 pause
 goto start
 
