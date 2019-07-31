@@ -28,24 +28,31 @@ if EXIST "%cd%\7zip.zip" start /wait /min powershell -command "& {Add-Type -Asse
 if EXIST "%cd%\7zip.zip" del /Q "%cd%\7zip.zip"
 echo Enter the word or letter in the () below and press enter to download/install that mod.
 echo This is the list of currently supported mods to play co-op in Synergy
-echo (BMS) for Black Mesa Source     (UP) for Uncertainty Principle
+echo.
+echo List of full auto install:
 echo (Offshore) for Offshore         (CTOA) for Coastline To Atmosphere
 echo (CD) for Combine Destiny        (LeonEp3) for Episode 3: The Closure
 echo (MI) for Mission Improbable     (OP) for Omega Prison
-echo (PRE) for Precursor             (RH) for Ravenholm
+echo (PRE) for Precursor             (UP) for Uncertainty Principle
 echo (S2E) for Slums 2: Extended     (SN) for Spherical Nightmares
 echo (STRI) for Strider Mountain     (CIT2) for The Citizen Returns
-echo (MOP) for Mistake of Pythagoras (TH) for They Hunger Again part 1
-echo (CE) for Causality Effect       (LUTS) for Lost Under The Snow
+echo (LUTS) for Lost Under The Snow  (MOP) for Mistake of Pythagoras
 echo (EYE) for Eye of The Storm      (MPR) for The Masked Prisoner
-echo (DD) for DeepDown and Aftermath (DF) for DownFall
 echo (BTI) for Below The Ice         (LLP) for Liberation aka LifeLostPrison
 echo (DH) for DayHard                (R24) for Rock 24
 echo (PTSD) for PTSD and PTCS        (ALC) for Alchemilla
-echo (YLA) for Year Long Alarm       (KTM) for Kill The Monk
 echo (CAL) for Calamity              (STTR) for SteamTracksTrouble and Riddles
 echo (CITY7) for City7               (DW) for Dangerous World
-echo (META) for Minerva: Metastasis  (RIOT) for Riot Act
+echo (RIOT) for Riot Act             (DD) for DeepDown and Aftermath 
+echo.
+echo Semi-Auto (download through web browser, then script will install from there).
+echo (BMS) for Black Mesa Source and Improved Xen
+echo.
+echo Manual, download through web browser, then open sourcemods with sourcemods option below and extract to there.
+echo (DF) for DownFall               (RH) for Ravenholm
+echo (YLA) for Year Long Alarm       (KTM) for Kill The Monk
+echo (CE) for Causality Effect       (TH) for They Hunger Again part 1
+echo.
 echo (SourceMods) to open your sourcemods directory
 echo (ModSupports) to open the Mod Support's page.
 echo You will need to subscribe to the mod support you are installing to play it in Synergy.
