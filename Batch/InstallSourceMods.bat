@@ -52,6 +52,7 @@ echo Manual, download through web browser, then open sourcemods with sourcemods 
 echo (DF) for DownFall               (RH) for Ravenholm
 echo (YLA) for Year Long Alarm       (KTM) for Kill The Monk
 echo (CE) for Causality Effect       (TH) for They Hunger Again part 1
+echo (PEN) for HL2 Penetration
 echo.
 echo (SourceMods) to open your sourcemods directory
 echo (ModSupports) to open the Mod Support's page.
@@ -104,6 +105,7 @@ if "%uprun%"=="dw" goto dw
 if "%uprun%"=="meta" goto meta
 if "%uprun%"=="riot" goto riot
 if "%uprun%"=="r24" goto rock24
+if "%uprun%"=="pen" goto pene
 echo.
 echo Choose an option...
 echo.
@@ -560,4 +562,8 @@ if EXIST "%cldir%\Rock 24\maps\d1_overboard_01.bsp" (
 echo Downloading Rock24...
 powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://www.runthinkshootlive.com/download.php?id=2878^&f=/sdk-2013/sdk2013-sp-rock-24.7z\",\"$PWD\rock24.7z\") }"
 if EXIST "%cd%\rock24.7z" .\7-Zip\7z.exe x .\rock24.7z -o"%cldir%"
+goto start
+:pene
+echo Opening Half-Life 2 Penetration ModDB page...
+start /b https://www.moddb.com/mods/penetration/downloads
 goto start
