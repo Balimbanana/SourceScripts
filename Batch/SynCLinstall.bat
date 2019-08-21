@@ -21,6 +21,7 @@ set twitchdir=%programfiles(x86)%\Steam\steamapps
 for /f "skip=2 tokens=1,3* delims== " %%i in ('reg QUERY HKEY_CURRENT_USER\Software\Valve\Steam /f SteamPath /t REG_SZ /v') do set "cldir=%%j%%k" & goto start
 :start
 for /f "delims=" %%V in ('powershell -command "$env:cldir.Replace(\"/\",\"\\\")"') do set "cldir=%%V"
+for /f "delims=" %%V in ('powershell -command "$env:cldir.Replace(\"programfiles\",\"\Program Files\")"') do set "cldir=%%V"
 if EXIST "C:\SteamLibrary\steamapps\common\Synergy\synergy" set cldir=C:\SteamLibrary
 if EXIST "E:\SteamLibrary\steamapps\common\Synergy\synergy" set cldir=E:\SteamLibrary
 if EXIST "D:\SteamLibrary\steamapps\common\Synergy\synergy" set cldir=D:\SteamLibrary
