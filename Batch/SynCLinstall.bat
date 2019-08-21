@@ -129,8 +129,6 @@ if NOT EXIST "%synpath%\synergy\maps" (
 	if EXIST "%cldir%\steamapps\common\Synergy\synergy\maps" mklink /j "%cldir%\steamapps\common\Synergy\synergy\maps" "%synpath%\synergy\maps">NUL
 )
 if EXIST "%synpath%\synergy\content\aoc.dat" del "%synpath%\synergy\content\aoc.dat"
-if EXIST "%synpath%\synergy\content\bm.dat" del "%synpath%\synergy\content\bm.dat"
-if EXIST "%synpath%\synergy\content\bms.dat" del "%synpath%\synergy\content\bms.dat"
 if EXIST "%synpath%\synergy\content\css.dat" del "%synpath%\synergy\content\css.dat"
 if EXIST "%synpath%\synergy\content\dod.dat" del "%synpath%\synergy\content\dod.dat"
 if EXIST "%synpath%\synergy\content\eternal.dat" del "%synpath%\synergy\content\eternal.dat"
