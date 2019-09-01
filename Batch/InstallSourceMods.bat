@@ -180,10 +180,12 @@ if EXIST "%cd%\bms.rar" goto alreadydownloaded
 if EXIST "%cd%\BMS.7z" goto alreadydownloaded
 if EXIST "%cd%\blackmesa.zip.001" goto alreadydownloaded
 if EXIST "%cd%\Black Mesa Synergy.rar" goto alreadydownloaded
+if EXIST "%cd%\Black Mesa Synergy Mod (Still work).rar" goto alreadydownloaded
 if EXIST "%userprofile%\Downloads\bms.rar" goto alreadydownloaded
 if EXIST "%userprofile%\Downloads\BMS.7z" goto alreadydownloaded
 if EXIST "%userprofile%\Downloads\blackmesa.zip.001" goto alreadydownloaded
 if EXIST "%userprofile%\Downloads\Black Mesa Synergy.rar" goto alreadydownloaded
+if EXIST "%userprofile%\Downloads\Black Mesa Synergy Mod (Still work).rar" goto alreadydownloaded
 rem if EXIST "%cd%\bms.rar" del /Q "%cd%\bms.rar"
 if NOT EXIST "%cldir%\BMS\maps\bm_c3a2h.bsp" (
 	echo ^Something went wrong with the download, possibly an interrupted connection while downloading.
@@ -200,10 +202,12 @@ if EXIST "%cd%\bms.rar" .\7-Zip\7z.exe x .\bms.rar -o"%cldir%"
 if EXIST "%cd%\BMS.7z" .\7-Zip\7z.exe x .\BMS.7z -o"%cldir%"
 if EXIST "%cd%\blackmesa.zip.001" .\7-Zip\7z.exe x .\blackmesa.zip.001 -o"%cldir%"
 if EXIST "%cd%\Black Mesa Synergy.rar" .\7-Zip\7z.exe x ".\Black Mesa Synergy.rar" -o"%cldir%"
+if EXIST "%cd%\Black Mesa Synergy Mod (Still work).rar" .\7-Zip\7z.exe x ".\Black Mesa Synergy Mod (Still work).rar" -o"%cldir%"
 if EXIST "%userprofile%\downloads\bms.rar" .\7-Zip\7z.exe x "%userprofile%\downloads\bms.rar" -o"%cldir%"
 if EXIST "%userprofile%\downloads\BMS.7z" .\7-Zip\7z.exe x "%userprofile%\downloads\BMS.7z" -o"%cldir%"
 if EXIST "%userprofile%\downloads\blackmesa.zip.001" .\7-Zip\7z.exe x "%userprofile%\downloads\blackmesa.zip.001" -o"%cldir%"
 if EXIST "%userprofile%\downloads\Black Mesa Synergy.rar" .\7-Zip\7z.exe x "%userprofile%\downloads\Black Mesa Synergy.rar" -o"%cldir%"
+if EXIST "%userprofile%\downloads\Black Mesa Synergy Mod (Still work).rar" .\7-Zip\7z.exe x "%userprofile%\downloads\Black Mesa Synergy Mod (Still work).rar" -o"%cldir%"
 if EXIST "%cldir%\blackmesa\maps\bm_c3a2h.bsp" ren "%cldir%\blackmesa" BMS
 if EXIST "%cldir%\BMS\maps\bm_c3a2h.bsp" echo BMS installed successfully.
 if NOT EXIST "%cldir%\BMS\maps\bm_c3a2h.bsp" (
