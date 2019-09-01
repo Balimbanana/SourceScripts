@@ -1,5 +1,7 @@
 @echo off
 rem This script was written by Balimbanana.
+rem ///////////////////////////////////If you are viewing this on GitHub, right click Raw above and click:
+rem ///////////////////////////////////Save Target As, or Save Linked Content As to download this script.
 title SynergyDS 15
 if EXIST "drivers\etc\hosts" cd %~dp0
 set pmpck1=0
