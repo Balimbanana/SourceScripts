@@ -1,5 +1,6 @@
 @echo off
-rem If you are viewing this on GitHub and want to download this script, right click on "Raw" above and click "Save Linked Content As" or "Save Target As"
+rem If you are viewing this on GitHub and want to download this script, right click on "Raw" above
+rem and click "Save Linked Content As" or "Save Target As".
 rem This script was written by Balimbanana.
 title Install SourceMods
 :start
