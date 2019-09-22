@@ -545,6 +545,8 @@ echo (GT) to download Goto            (V) to download VoteCar
 echo (HD) to download HealthDisplay   (HYP) to download HyperSpawn
 echo (ST) to download Save/Teleport   (SSR) to download SynSaveRestore
 echo (SM) to download SynModes        (U) to download Updater with SteamWorks
+echo (SynSweps) to download Synergy Scripted Weapons, most of the time this will also require SynDev
+echo (SynDev) to download SynFixesDev for custom entity support.
 echo Some plugins will also require their translation files, you can get the full pack with (FP)
 echo If you have downloaded the full pack, use (FPI) to auto-install the plugins with translations included.
 echo (B) to go back to start.
@@ -617,6 +619,11 @@ if '%pluginsubstr%'=='ssr' start /wait /min powershell -command "& {[Net.Service
 if '%pluginsubstr%'=='ssrsp' start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SM-Synergy/raw/master/scripting/synsaverestore.sp\",\"$PWD\$env:synpath\addons\sourcemod\scripting\synsaverestore.sp\") }"
 if '%pluginsubstr%'=='sm' start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SM-Synergy/raw/master/plugins/synmodes.smx\",\"$PWD\$env:synpath\addons\sourcemod\plugins\synmodes.smx\") }"
 if '%pluginsubstr%'=='smsp' start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SM-Synergy/raw/master/scripting/synmodes.sp\",\"$PWD\$env:synpath\addons\sourcemod\scripting\synmodes.sp\") }"
+if '%pluginsubstr%'=='sm' start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SM-Synergy/raw/master/plugins/synmodes.smx\",\"$PWD\$env:synpath\addons\sourcemod\plugins\synmodes.smx\") }"
+if '%pluginsubstr%'=='synswepssp' start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SM-Synergy/raw/master/scripting/synsweps.sp\",\"$PWD\$env:synpath\addons\sourcemod\scripting\synsweps.sp\") }"
+if '%pluginsubstr%'=='synsweps' start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SM-Synergy/raw/master/plugins/synsweps.smx\",\"$PWD\$env:synpath\addons\sourcemod\plugins\synsweps.smx\") }"
+if '%pluginsubstr%'=='syndev' start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SM-Synergy/raw/master/plugins/synfixesdev.smx\",\"$PWD\$env:synpath\addons\sourcemod\plugins\synfixesdev.smx\") }"
+if '%pluginsubstr%'=='syndevsp' start https://github.com/Balimbanana/SM-Synergy/tree/master/scripting
 if '%pluginsubstr%'=='u' (
 	if EXIST "%cd%\%synpath%\addons\sourcemod\plugins\updater.smx" echo ^Already installed.
 	if EXIST "%cd%\%synpath%\addons\sourcemod\plugins\updater.smx" goto instsourceplugins
@@ -652,6 +659,7 @@ if EXIST "%cd%\SM-Synergy-master.zip" start /wait /min powershell -command "& {A
 if EXIST "%userprofile%\downloads\SM-Synergy-master.zip" start /wait /min powershell -command "& {Add-Type -AssemblyName System.IO.Compression.FileSystem; [System.IO.Compression.ZipFile]::ExtractToDirectory(\"$HOME\downloads\SM-Synergy-master.zip\", \"$PWD\$env:synpath\addons\") }"
 if EXIST "%cd%\%synpath%\addons\SM-Synergy-master" start /wait /min robocopy /S /NP /NJS /NJH /NS "%cd%\%synpath%\addons\SM-Synergy-master" "%cd%\%synpath%\addons\sourcemod"
 if EXIST "%cd%\%synpath%\addons\SM-Synergy-master" rd /Q /S "%cd%\%synpath%\addons\SM-Synergy-master"
+if EXIST "%cd%\%synpath%\addons\sourcemod\plugins\synfixes.smx" del /Q "%cd%\%synpath%\addons\sourcemod\plugins\synfixes.smx"
 if NOT EXIST "%cd%\%synpath%\addons\sourcemod\translations\fpd.phrases.txt" (
 	echo ^Failed to install.
 	if NOT EXIST \"%userprofile%\downloads\SM-Synergy-master.zip\" echo ^Could not find in downloads.
