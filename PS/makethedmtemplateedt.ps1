@@ -6,6 +6,9 @@ $il = ls "*.bsp" | % { [IO.Path]::GetFileNameWithoutExtension($_) }
 $a = $il
 for ($i = 0; $i -lt $a.Length; $i++){
     $path = $a[$i]
+    if ($a -isnot [array]) {
+        $path = $a
+    }
     if (!(Test-Path "$path.edt")) {
         echo "`"$path`"" > "$path.edt"
         echo "{" >> "$path.edt"
