@@ -818,6 +818,14 @@ set contentpath=steamapps\common\Synergy\synergy\content
 if '%betaset%'=='b' set contentpath=steamapps\common\synbeta\synergy\content
 if '%betaset%'=='t' set contentpath=steamapps\common\syntwitch\synergy\content
 if NOT EXIST %contentpath% goto notinstalled
+if NOT EXIST "%CD%\steamapps\common\Synergy\synergy\content\1817140991" (
+	if NOT EXIST "steamapps\sourcemods\BMS" echo ^Black Mesa sourcemod not installed!
+	if NOT EXIST "steamapps\sourcemods\xen" echo ^Improved HL1 Xen sourcemod not installed!
+	echo ^Use bms to download the workshop support files.
+)
+if EXIST "%CD%\steamapps\common\Synergy\synergy\content\1817140991" (
+	set supportsinst=^%supportsinst%, Black Mesa and Improved Xen
+)
 if EXIST "%contentpath%\bti.dat" (
 	set supportsinst=^%supportsinst%, Below The Ice
 	if NOT EXIST "steamapps\sourcemods\belowice" echo ^Below The Ice SourceMod not installed!
@@ -1014,7 +1022,25 @@ if '%dlsm%'=='ptcs' start https://www.moddb.com/mods/ptcs-a-post-traumatic-chris
 if '%dlsm%'=='yla' start https://store.steampowered.com/app/747250
 if '%dlsm%'=='alc' start http://www.runthinkshootlive.com/posts/alchemilla/
 if '%dlsm%'=='ktm' start https://www.moddb.com/mods/kill-the-monk
+if '%dlsm%'=='bms' goto installbmssupport
 goto instmodsup
+
+:installbmssupport
+echo You will not need to move the directories over, this is all automatic.
+set linkset=0
+if NOT EXIST "steamapps\workshop" mkdir "steamapps\workshop"
+if NOT EXIST "steamapps\workshop\content" mkdir "steamapps\workshop\content"
+if NOT EXIST "steamapps\workshop\content\17520" mkdir "steamapps\workshop\content\17520"
+ping localhost -n 1 >NUL
+fsutil reparsepoint query "steamapps\workshop\content\17520" | find "Mount Point" >nul && set "linkset=1" || set "linkset=0"
+if '%linkset%'=='0' (
+	start /wait /min robocopy /S /NP /NJS /NJH /NS "steamapps\workshop\content\17520" "steamapps\common\Synergy\synergy\custom"
+	rd /Q /S "steamapps\workshop\content\17520"
+	mklink /j "steamapps\workshop\content\17520" "steamapps\common\Synergy\synergy\custom">NUL
+)
+steamcmd.exe +login anonymous +workshop_download_item 17520 1817140991 +quit
+echo.
+goto start
 
 :dltowrong
 echo SourceMod zip not in your users Download folder, or the SteamCMD folder, auto-install halted.
