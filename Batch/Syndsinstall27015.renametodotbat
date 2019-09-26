@@ -524,7 +524,6 @@ if NOT EXIST "%synpath%\addons\sourcemod\plugins\updater.smx" start /wait /min p
 echo Now you should be able to install any plugins you want.
 explorer "%cd%\%synpath%\addons\sourcemod\plugins"
 pause
-if '%instsmset%'=='y' goto srcds
 cls
 goto start
 
