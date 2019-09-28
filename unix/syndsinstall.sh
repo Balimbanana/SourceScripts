@@ -459,6 +459,8 @@ echo "(SYN) to download SynFixes        (SSR) to download SynSaveRestore"
 echo "(ET) to download EntTools         (FPD) to download FirstPersonDeaths"
 echo "(SM) to download SynModes         (AUTO) to download AutoChangeMap"
 echo "(CR) to download Synergy CrashMap (U) to download Updater with SteamWorks"
+echo "(SynDev) to download SynFixes Dev needed for Black Mesa entities"
+echo "(SynSweps) to download Synergy Scripted Weapons also needed for BMS"
 echo "Some plugins will also require their translation files, you can get a full pack of these plugins with (FP)"
 echo "(B) to go back to start"
 read pluginsubstr
@@ -633,6 +635,20 @@ if [ $pluginsubstr = "cr" ];then
 fi
 if [ $pluginsubstr = "crsp" ];then
 	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/scripting/crashmap.sp" -P ./$synpath/addons/sourcemod/scripting
+fi
+if [ $pluginsubstr = "synsweps" ];then
+	if [ -f ./$synpath/addons/sourcemod/plugins/synsweps.smx ];then rm -f ./$synpath/addons/sourcemod/plugins/synsweps.smx;fi
+	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/plugins/synsweps.smx" -P ./$synpath/addons/sourcemod/plugins
+fi
+if [ $pluginsubstr = "synswepssp" ];then
+	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/scripting/synsweps.sp" -P ./$synpath/addons/sourcemod/scripting
+fi
+if [ $pluginsubstr = "syndev" ];then
+	if [ -f ./$synpath/addons/sourcemod/plugins/synfixesdev.smx ];then rm -f ./$synpath/addons/sourcemod/plugins/synfixesdev.smx;fi
+	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/plugins/synfixesdev.smx" -P ./$synpath/addons/sourcemod/plugins
+fi
+if [ $pluginsubstr = "syndevsp" ];then
+	echo "Too many includes to list here, check on GitHub"
 fi
 if [ $pluginsubstr = "u" ];then
 	if [ -f ./$synpath/addons/sourcemod/plugins/updater.smx ];then rm -f ./$synpath/addons/sourcemod/plugins/updater.smx;fi
