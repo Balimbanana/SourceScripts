@@ -59,7 +59,7 @@ echo Manual, download through web browser, then open sourcemods with sourcemods 
 echo (DF) for DownFall               (RH) for Ravenholm
 echo (YLA) for Year Long Alarm       (KTM) for Kill The Monk
 echo (CE) for Causality Effect       (TH) for They Hunger Again part 1
-echo (PEN) for HL2 Penetration
+echo (PEN) for HL2 Penetration       (EZ) for Entropy Zero
 echo.
 echo (SourceMods) to open your sourcemods directory
 echo (ModSupports) to open the Mod Support's page.
@@ -114,6 +114,7 @@ if "%uprun%"=="meta" goto meta
 if "%uprun%"=="riot" goto riot
 if "%uprun%"=="r24" goto rock24
 if "%uprun%"=="pen" goto pene
+if "%uprun%"=="ez" goto ezero
 if "%uprun%"=="update" goto updater
 echo.
 echo Choose an option...
@@ -507,6 +508,10 @@ goto start
 :yla
 echo Opening Year Long Alarm Steam page...
 start /b https://store.steampowered.com/app/747250
+goto start
+:ezero
+echo Opening Entropy Zero Steam page...
+start /b https://store.steampowered.com/app/714070
 goto start
 :ktm
 echo Opening Kill The Monk ModDB page...
