@@ -3,6 +3,12 @@ rem If you are viewing this on GitHub and want to download this script, right cl
 rem and click "Save Linked Content As" or "Save Target As".
 rem This script was written by Balimbanana.
 title Install SourceMods
+goto start
+:updater
+powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SourceScripts/raw/master/Batch/InstallSourceMods.bat\",\"$PWD\InstallSourceMods.bat\") }"
+echo Updated...
+start /b %~dp0InstallSourceMods.bat
+exit
 :start
 if EXIST "drivers\etc\hosts" cd %~dp0
 if "%CD%"=="%USERPROFILE%\Downloads" (
@@ -57,6 +63,7 @@ echo (PEN) for HL2 Penetration
 echo.
 echo (SourceMods) to open your sourcemods directory
 echo (ModSupports) to open the Mod Support's page.
+echo (update) to update this script.
 echo You will need to subscribe to the mod support you are installing to play it in Synergy.
 rem (RANDD) for Research and Development SUPPORT NOT COMPLETED
 set /p uprun=
@@ -107,6 +114,7 @@ if "%uprun%"=="meta" goto meta
 if "%uprun%"=="riot" goto riot
 if "%uprun%"=="r24" goto rock24
 if "%uprun%"=="pen" goto pene
+if "%uprun%"=="update" goto updater
 echo.
 echo Choose an option...
 echo.
