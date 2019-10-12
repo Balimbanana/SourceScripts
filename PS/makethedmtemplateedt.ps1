@@ -42,7 +42,7 @@ for ($i = 0; $i -lt $a.Length; $i++){
         echo "				weapon_frag `"1`"" >> "$path.edt"
         echo "			}" >> "$path.edt"
         echo "		}" >> "$path.edt"
-        echo "		edit {classname `"game_text`" values {spawnflags `"1`"} }" >> "$path.edt"
+#        echo "		edit {classname `"game_text`" values {spawnflags `"1`"} }" >> "$path.edt"
         echo "		create {classname `"logic_auto`"" >> "$path.edt"
         echo "			values" >> "$path.edt"
         echo "			{" >> "$path.edt"
