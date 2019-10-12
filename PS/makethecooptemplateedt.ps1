@@ -24,7 +24,7 @@ for ($i = 0; $i -lt $a.Length; $i++){
         echo "		}" >> "$path.edt"
         echo "		edit {classname `"game_text`" values {spawnflags `"1`"} }" >> "$path.edt"
         echo "		edit {classname `"func_areaportal`" values {targetname `"disabledPortal`" StartOpen `"1`"} }" >> "$path.edt"
-        echo "		edit {classname `"point_viewcontrol`" values {spawnflags `"140`"} }" >> "$path.edt"
+        echo "		edit {classname `"point_viewcontrol`" values {edt_addedspawnflags `"128`"} }" >> "$path.edt"
         echo "		create {classname `"logic_auto`"" >> "$path.edt"
         echo "			values" >> "$path.edt"
         echo "			{" >> "$path.edt"
