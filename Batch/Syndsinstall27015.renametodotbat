@@ -3,6 +3,13 @@ rem This script was written by Balimbanana.
 rem ///////////////////////////////////If you are viewing this on GitHub, right click Raw above and click:
 rem ///////////////////////////////////Save Target As, or Save Linked Content As to download this script.
 title SynergyDS 15
+goto initvars
+:updater
+powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SourceScripts/raw/master/Batch/Syndsinstall27015.renametodotbat\",\"$PWD\Syndsinstall27015.bat\") }"
+echo Updated...
+start /b %~dp0Syndsinstall27015.bat
+exit
+:initvars
 if EXIST "drivers\etc\hosts" cd %~dp0
 set pmpck1=0
 set pmpck2=0
@@ -52,6 +59,7 @@ if EXIST "steamapps\common\Synergy\synergy\addons\sourcemod\plugins" (
 	echo ^(IMP^) to list/install Player Model Packs.
 )
 if EXIST "steamapps\common\Synergy\synergy" echo (IMSP) to list/install additional Mod Support's
+echo (Update) to update this script.
 set /p uprun=
 for /f "delims=" %%V in ('powershell -command "$env:uprun.ToLower()"') do set "uprun=%%V"
 if '%uprun%'=='u' goto firstinstall
@@ -65,6 +73,7 @@ if '%uprun%'=='ism' goto instsourcepluginstop
 if '%uprun%'=='imp' goto instpmpck
 if '%uprun%'=='imsp' goto instmodsup
 if '%uprun%'=='linksm' goto linksm
+if '%uprun%'=='update' goto updater
 echo Choose an option.
 goto start
 
