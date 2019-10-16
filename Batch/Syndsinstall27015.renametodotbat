@@ -557,6 +557,7 @@ echo (ST) to download Save/Teleport   (SSR) to download SynSaveRestore
 echo (SM) to download SynModes        (U) to download Updater with SteamWorks
 echo (SynSweps) to download Synergy Scripted Weapons, most of the time this will also require SynDev
 echo (SynDev) to download SynFixesDev for custom entity support.
+echo (BCache) to download BuildEntityCache plugin to easily generate content loaders and EDTs.
 echo Some plugins will also require their translation files, you can get the full pack with (FP)
 echo If you have downloaded the full pack, use (FPI) to auto-install the plugins with translations included.
 echo (B) to go back to start.
@@ -632,6 +633,8 @@ if '%pluginsubstr%'=='smsp' start /wait /min powershell -command "& {[Net.Servic
 if '%pluginsubstr%'=='sm' start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SM-Synergy/raw/master/plugins/synmodes.smx\",\"$PWD\$env:synpath\addons\sourcemod\plugins\synmodes.smx\") }"
 if '%pluginsubstr%'=='synswepssp' start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SM-Synergy/raw/master/scripting/synsweps.sp\",\"$PWD\$env:synpath\addons\sourcemod\scripting\synsweps.sp\") }"
 if '%pluginsubstr%'=='synsweps' start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SM-Synergy/raw/master/plugins/synsweps.smx\",\"$PWD\$env:synpath\addons\sourcemod\plugins\synsweps.smx\") }"
+if '%pluginsubstr%'=='bcache' start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SM-Synergy/raw/master/scripting/BuildEntityCache.sp\",\"$PWD\$env:synpath\addons\sourcemod\scripting\BuildEntityCache.sp\") }"
+if '%pluginsubstr%'=='bcache' start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SM-Synergy/raw/master/plugins/BuildEntityCache.smx\",\"$PWD\$env:synpath\addons\sourcemod\plugins\BuildEntityCache.smx\") }"
 if '%pluginsubstr%'=='syndev' start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SM-Synergy/raw/master/plugins/synfixesdev.smx\",\"$PWD\$env:synpath\addons\sourcemod\plugins\synfixesdev.smx\") }"
 if '%pluginsubstr%'=='syndevsp' start https://github.com/Balimbanana/SM-Synergy/tree/master/scripting
 if '%pluginsubstr%'=='u' (
