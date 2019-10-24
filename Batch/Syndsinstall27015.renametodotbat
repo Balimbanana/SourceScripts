@@ -358,11 +358,11 @@ echo Should be all configured for server running.
 echo Would you like to edit your server config? (Y/N)
 set /p edtconf=
 for /f "delims=" %%V in ('powershell -command "$env:edtconf.ToLower()"') do set "edtconf=%%V"
-if '%edtconf%'=='y' start notepad %synpath%\synergy\cfg\server2.cfg
+if "%edtconf%"=="y" start notepad %synpath%\synergy\cfg\server2.cfg
 echo Would you like to install SourceMod as well? (Y/N)
 set /p instsmset=
 for /f "delims=" %%V in ('powershell -command "$env:instsmset.ToLower()"') do set "instsmset=%%V"
-if '%instsmset%'=='y' goto instsourcem
+if "%instsmset%"=="y" goto instsourcem
 cls
 goto srcds
 
@@ -492,28 +492,29 @@ if '%dlloc%'=='0' goto dltowrong
 echo This may take a minute or two, just wait for the next message after PowerShell finishes extracting SourceMod...
 if '%dlloc%'=='1' start /wait /min powershell -command "& {Add-Type -AssemblyName System.IO.Compression.FileSystem; [System.IO.Compression.ZipFile]::ExtractToDirectory(\"$HOME\downloads\sourcemod-1.9.0-git6229-windows.zip\", \"$PWD\$env:synpath\"); [System.IO.Compression.ZipFile]::ExtractToDirectory(\"$HOME\downloads\mmsource-1.10.7-git959-windows.zip\", \"$PWD\$env:synpath\"); [System.IO.Compression.ZipFile]::ExtractToDirectory(\"$HOME\downloads\SteamWorks-git121-windows.zip\", \"$PWD\$env:synpath\") }"
 if '%dlloc%'=='2' start /wait /min powershell -command "& {Add-Type -AssemblyName System.IO.Compression.FileSystem; [System.IO.Compression.ZipFile]::ExtractToDirectory(\"$PWD\sourcemod-1.9.0-git6229-windows.zip\", \"$PWD\$env:synpath\"); [System.IO.Compression.ZipFile]::ExtractToDirectory(\"$PWD\mmsource-1.10.7-git959-windows.zip\", \"$PWD\$env:synpath\"); [System.IO.Compression.ZipFile]::ExtractToDirectory(\"$PWD\SteamWorks-git121-windows.zip\", \"$PWD\$env:synpath\") }"
+if NOT EXIST "%cd%\7-Zip\7z.exe" powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SourceScripts/raw/master/synotherfilefixes/7-Zip.zip\",\"$PWD\7zip.zip\") }"
+if EXIST "%cd%\7zip.zip" start /wait /min powershell -command "& {Add-Type -AssemblyName System.IO.Compression.FileSystem; [System.IO.Compression.ZipFile]::ExtractToDirectory(\"$PWD\7zip.zip\", \"$PWD\") }"
+if EXIST "%cd%\7zip.zip" del /Q "%cd%\7zip.zip"
 set use7z=0
-if NOT EXIST "%synpath%\addons\sourcemod" (
-	if EXIST "C:\Program Files\7-Zip\7z.exe" set use7z=1
-)
+if NOT EXIST "%synpath%\addons\sourcemod" set use7z=1
 if '%use7z%'=='1' (
 	if '%dlloc%'=='1' (
-		start /min /wait "7z" "C:\Program Files\7-Zip\7z.exe" x sourcemod-1.9.0-git6229-windows.zip -o"%cd%\%synpath%"
+		start /min /wait "7z" "7-Zip\7z.exe" x sourcemod-1.9.0-git6229-windows.zip -o"%cd%\%synpath%"
 	)
 	if '%dlloc%'=='2' (
-		start /min /wait "7z" "C:\Program Files\7-Zip\7z.exe" x "%userprofile%\downloads\sourcemod-1.9.0-git6229-windows.zip" -o"%cd%\%synpath%"
+		start /min /wait "7z" "7-Zip\7z.exe" x "%userprofile%\downloads\sourcemod-1.9.0-git6229-windows.zip" -o"%cd%\%synpath%"
 	)
 	if '%mmloc%'=='1' (
-		start /min /wait "7z" "C:\Program Files\7-Zip\7z.exe" x mmsource-1.10.7-git959-windows.zip -o"%cd%\%synpath%"
+		start /min /wait "7z" "7-Zip\7z.exe" x mmsource-1.10.7-git959-windows.zip -o"%cd%\%synpath%"
 	)
 	if '%mmloc%'=='2' (
-		start /min /wait "7z" "C:\Program Files\7-Zip\7z.exe" x "%userprofile%\downloads\mmsource-1.10.7-git959-windows.zip" -o"%cd%\%synpath%"
+		start /min /wait "7z" "7-Zip\7z.exe" x "%userprofile%\downloads\mmsource-1.10.7-git959-windows.zip" -o"%cd%\%synpath%"
 	)
 	if '%steamworksloc%'=='1' (
-		start /min /wait "7z" "C:\Program Files\7-Zip\7z.exe" x SteamWorks-git121-windows.zip -o"%cd%\%synpath%"
+		start /min /wait "7z" "7-Zip\7z.exe" x SteamWorks-git121-windows.zip -o"%cd%\%synpath%"
 	)
 	if '%steamworksloc%'=='2' (
-		start /min /wait "7z" "C:\Program Files\7-Zip\7z.exe" x "%userprofile%\downloads\SteamWorks-git121-windows.zip" -o"%cd%\%synpath%"
+		start /min /wait "7z" "7-Zip\7z.exe" x "%userprofile%\downloads\SteamWorks-git121-windows.zip" -o"%cd%\%synpath%"
 	)
 )
 if NOT EXIST "%synpath%\addons\sourcemod\gamedata\sdkhooks.games\custom" mkdir "%synpath%\addons\sourcemod\gamedata\sdkhooks.games\custom"
