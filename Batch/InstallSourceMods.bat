@@ -236,7 +236,11 @@ if EXIST "%userprofile%\downloads\blackmesa.zip.001" .\7-Zip\7z.exe x "%userprof
 if EXIST "%userprofile%\downloads\Black Mesa Synergy.rar" .\7-Zip\7z.exe x "%userprofile%\downloads\Black Mesa Synergy.rar" -o"%cldir%"
 if EXIST "%userprofile%\downloads\Black Mesa Synergy Mod (Still work).rar" .\7-Zip\7z.exe x "%userprofile%\downloads\Black Mesa Synergy Mod (Still work).rar" -o"%cldir%"
 if EXIST "%cldir%\blackmesa\maps\bm_c3a2h.bsp" ren "%cldir%\blackmesa" BMS
+if EXIST "%cd%\xen.7z" .\7-Zip\7z.exe x .\xen.7z -o"%cldir%"
+if EXIST "%cd%\BMS2012_IMPROVED_XEN_Source2007.1.rar" .\7-Zip\7z.exe x .\BMS2012_IMPROVED_XEN_Source2007.1.rar -o"%cldir%" xen
+if EXIST "%userprofile%\Downloads\BMS2012_IMPROVED_XEN_Source2007.1.rar" .\7-Zip\7z.exe x "%userprofile%\Downloads\BMS2012_IMPROVED_XEN_Source2007.1.rar" -o"%cldir%" xen
 if EXIST "%cldir%\BMS\maps\bm_c3a2h.bsp" echo BMS installed successfully.
+if EXIST "%cldir%\xen\maps\xen_c5a1.bsp" echo Xen installed successfully.
 if NOT EXIST "%cldir%\BMS\maps\bm_c3a2h.bsp" (
 	echo ^Something went wrong with the download, possibly an interrupted connection while downloading.
 	echo ^Or your archive became corrupted somehow.
@@ -264,8 +268,8 @@ pause
 goto start
 
 :extractbmsxen
-if EXIST "%cd%\BMS2012_IMPROVED_XEN_Source2007.1.rar" .\7-Zip\7z.exe x .\BMS.7z -o"%cldir%" xen
-if EXIST "%userprofile%\Downloads\BMS2012_IMPROVED_XEN_Source2007.1.rar" .\7-Zip\7z.exe x .\BMS.7z -o"%cldir%" xen
+if EXIST "%cd%\BMS2012_IMPROVED_XEN_Source2007.1.rar" .\7-Zip\7z.exe x .\BMS2012_IMPROVED_XEN_Source2007.1.rar -o"%cldir%" xen
+if EXIST "%userprofile%\Downloads\BMS2012_IMPROVED_XEN_Source2007.1.rar" .\7-Zip\7z.exe x "%userprofile%\Downloads\BMS2012_IMPROVED_XEN_Source2007.1.rar" -o"%cldir%" xen
 pause
 goto start
 
