@@ -12,7 +12,11 @@ exit
 :startinit
 if EXIST "drivers\etc\hosts" cd %~dp0
 set cldir=%programfiles(x86)%\Steam\steamapps
-for /f "skip=2 tokens=1,3* delims== " %%i in ('reg QUERY HKEY_CURRENT_USER\Software\Valve\Steam /f SteamPath /t REG_SZ /v') do set "cldir=%%j%%k"
+for /f "skip=2 tokens=1,3* delims== " %%i in ('reg QUERY HKEY_CURRENT_USER\Software\Valve\Steam /f SteamPath /t REG_SZ /v') do (
+	set "cldir=%%j%%k"
+	goto skiploop
+)
+:skiploop
 for /f "delims=" %%V in ('powershell -command "$env:cldir.Replace(\"/\",\"\\\")"') do set "cldir=%%V"
 for /f "delims=" %%V in ('powershell -command "$env:cldir.Replace(\"programfiles \",\"program files \")"') do set "cldir=%%V"
 set syncust=%cldir%
@@ -36,7 +40,7 @@ if NOT EXIST "%cd%\steamapps\workshop\content\17520" (
 	if EXIST "%syncust%" mklink /j "%cd%\steamapps\workshop\content\17520" "%syncust%">NUL
 )
 if EXIST "%cldir%" echo Found sourcemods directory here: %cldir%
-if NOT EXIST "%cldir%" if EXIST "%programfiles(x86)%\Steam\steamapps" set cldir=%programfiles(x86)%\Steam\steamapps
+if NOT EXIST "%cldir%" if EXIST "%programfiles(x86)%\Steam\steamapps" set cldir=%programfiles(x86)%\Steam\steamapps\sourcemods
 if NOT EXIST "%cldir%" (
 	echo ^Could not determine sourcemods directory, checked\:
 	echo "%programfiles(x86)%\Steam\steamapps and %cldir%"
@@ -156,12 +160,13 @@ if EXIST "%userprofile%\Downloads\Black Mesa Synergy.rar" goto startdl
 echo MegaNZ archive file size is 2.99 GB
 echo MediaFire archive file size is 3.34 GB
 echo ModDB archive is split, part 1 is 2.64 GB, part 2 is 1.62 GB
+echo Auto is fully automatic, BMS at 2.83 GB and Xen at 449 MB
 echo Warning: ModDB version has a 50/50 chance of downloading corrupted, forcing you to re-download the whole thing again.
 echo It is much more reliable and a smaller download from Mega or MediaFire.
 echo Be sure to download the archive to either your Downloads directory, or the same directory this script is being run from.
 echo BMSXEN is for the Black Mesa: Improved Xen page.
 echo Enter the word in the () below and press enter. The option you choose will open in your default web browser.
-echo (Mega)  (MediaFire)  (ModDB)  (BMSXEN)
+echo (Mega)  (MediaFire)  (ModDB)  (BMSXEN)  (Auto)
 set /p installfrom=
 for /f "delims=" %%V in ('powershell -command "$env:installfrom.ToLower()"') do set "installfrom=%%V"
 if "%installfrom%"=="mega" (
@@ -190,6 +195,30 @@ if "%installfrom%"=="bmsxen" (
 	if EXIST "%userprofile%\Downloads\BMS2012_IMPROVED_XEN_Source2007.1.rar" goto extractbmsxen
 	echo ^Could not find archive in current directory or downloads directory...
 	goto blackmesa
+)
+if "%installfrom%"=="auto" (
+	echo ^Beginning with Xen at 449MB
+	echo ^This will take a while...
+	if EXIST xen.7z echo ^Xen appears to be already downloaded...
+	if NOT EXIST xen.7z powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"http://bdf.x10host.com/xen.7z\",\"$PWD\xen.7z\") }"
+	echo ^Downloading BMS Part 1 of 8...
+	if NOT EXIST BMS.7z.001 powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"http://thebdf.org/bm/BMS.7z.001\",\"$PWD\BMS.7z.001\") }"
+	echo ^Downloading BMS Part 2 of 8...
+	if NOT EXIST BMS.7z.002 powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"http://thebdf.org/bm/BMS.7z.002\",\"$PWD\BMS.7z.002\") }"
+	echo ^Downloading BMS Part 3 of 8...
+	if NOT EXIST BMS.7z.003 powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"http://thebdf.org/bm/BMS.7z.003\",\"$PWD\BMS.7z.003\") }"
+	echo ^Downloading BMS Part 4 of 8...
+	if NOT EXIST BMS.7z.004 powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"http://thebdf.org/bm/BMS.7z.004\",\"$PWD\BMS.7z.004\") }"
+	echo ^Downloading BMS Part 5 of 8...
+	if NOT EXIST BMS.7z.005 powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"http://thebdf.org/bm/BMS.7z.005\",\"$PWD\BMS.7z.005\") }"
+	echo ^Downloading BMS Part 6 of 8...
+	if NOT EXIST BMS.7z.006 powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"http://thebdf.org/bm/BMS.7z.006\",\"$PWD\BMS.7z.006\") }"
+	echo ^Downloading BMS Part 7 of 8...
+	if NOT EXIST BMS.7z.007 powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"http://thebdf.org/bm/BMS.7z.007\",\"$PWD\BMS.7z.007\") }"
+	echo ^Downloading BMS Part 8 of 8...
+	if NOT EXIST BMS.7z.008 powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"http://thebdf.org/bm/BMS.7z.008\",\"$PWD\BMS.7z.008\") }"
+	echo ^Finished downloading Black Mesa and Improved Xen, extracting...
+	goto alreadydownloaded
 )
 echo Enter one of the words in the () to continue...
 echo.
@@ -227,6 +256,7 @@ goto applyscriptfix
 echo Found Black Mesa archive.
 if EXIST "%cd%\bms.rar" .\7-Zip\7z.exe x .\bms.rar -o"%cldir%"
 if EXIST "%cd%\BMS.7z" .\7-Zip\7z.exe x .\BMS.7z -o"%cldir%"
+if EXIST "%cd%\BMS.7z.001" .\7-Zip\7z.exe x .\BMS.7z.001 -o"%cldir%"
 if EXIST "%cd%\blackmesa.zip.001" .\7-Zip\7z.exe x .\blackmesa.zip.001 -o"%cldir%"
 if EXIST "%cd%\Black Mesa Synergy.rar" .\7-Zip\7z.exe x ".\Black Mesa Synergy.rar" -o"%cldir%"
 if EXIST "%cd%\Black Mesa Synergy Mod (Still work).rar" .\7-Zip\7z.exe x ".\Black Mesa Synergy Mod (Still work).rar" -o"%cldir%"
@@ -254,7 +284,6 @@ goto applyscriptfix
 powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SourceScripts/raw/master/synotherfilefixes/bmscripts.zip\",\"$PWD\bmscripts.zip\") }"
 if EXIST "%cldir%\BMS\scripts" rmdir /S /Q "%cldir%\BMS\scripts"
 if EXIST "%cd%\bmscripts.zip" .\7-Zip\7z.exe -aoa x .\bmscripts.zip -o"%cldir%\BMS"
-if EXIST "%cd%\7-Zip\7z.exe" rmdir /S /Q "%cd%\7-Zip"
 if EXIST "%cd%\bmscripts.zip" del /Q "%cd%\bmscripts.zip"
 if NOT EXIST "%cd%\steamapps\workshop\content\17520\1817140991" (
 	echo ^Downloading Synergy Support files through SteamCMD
