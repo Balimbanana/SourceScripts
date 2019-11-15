@@ -839,7 +839,7 @@ if NOT EXIST %contentpath% goto notinstalled
 if NOT EXIST "%CD%\steamapps\common\Synergy\synergy\content\1817140991" (
 	if NOT EXIST "steamapps\sourcemods\BMS" echo ^Black Mesa sourcemod not installed!
 	if NOT EXIST "steamapps\sourcemods\xen" echo ^Improved HL1 Xen sourcemod not installed!
-	echo ^Use bms to download the workshop support files.
+	echo ^Use bms to download the workshop support files for Black Mesa and Improved Xen.
 )
 if EXIST "%CD%\steamapps\common\Synergy\synergy\content\1817140991" (
 	set supportsinst=^%supportsinst%, Black Mesa and Improved Xen
@@ -989,10 +989,19 @@ if EXIST "%contentpath%\yearlongalarm.dat" (
 	if NOT EXIST "steamapps\common\Half-Life 2 Year Long Alarm" echo ^Year Long Alarm Steam game not installed!
 	if NOT EXIST "steamapps\common\Half-Life 2 Year Long Alarm" echo ^Download with ^(YLA^)
 )
+set alcmanual=0
 if EXIST "%contentpath%\alchemilla.dat" (
 	set supportsinst=^%supportsinst%, Alchemilla
 	if NOT EXIST "steamapps\sourcemods\Alchemilla" echo ^Silent Hill Alchemilla SourceMod not installed!
-	if NOT EXIST "steamapps\sourcemods\Alchemilla" echo ^Download with ^(ALC^)
+	if NOT EXIST "steamapps\sourcemods\Alchemilla" echo ^Download with InstallSourceMods.bat script.
+	set alcmanual=1
+)
+if %alcmanual%==0 (
+	if NOT EXIST "%CD%\steamapps\common\Synergy\synergy\content\1650998121" (
+		if NOT EXIST "steamapps\sourcemods\Alchemilla" echo ^Silent Hill Alchemilla SourceMod not installed!
+		if NOT EXIST "steamapps\sourcemods\Alchemilla" echo ^Download with InstallSourceMods.bat script.
+		echo ^Use alc to download the workshop support files for Alchemilla.
+	)
 )
 if EXIST "%contentpath%\ktm.dat" (
 	set supportsinst=^%supportsinst%, Kill The Monk
