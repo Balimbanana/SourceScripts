@@ -199,8 +199,10 @@ if "%installfrom%"=="bmsxen" (
 if "%installfrom%"=="auto" (
 	echo ^Beginning with Xen at 449MB
 	echo ^This will take a while...
-	if EXIST xen.7z echo ^Xen appears to be already downloaded...
-	if NOT EXIST xen.7z powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"http://bdf.x10host.com/xen.7z\",\"$PWD\xen.7z\") }"
+	echo ^Downloading Xen Part 1 of 2...
+	if NOT EXIST xen.7z powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"http://thebdf.org/bm/xen.7z.001\",\"$PWD\xen.7z.001\") }"
+	echo ^Downloading Xen Part 2 of 2...
+	if NOT EXIST xen.7z powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"http://thebdf.org/bm/xen.7z.002\",\"$PWD\xen.7z.002\") }"
 	echo ^Downloading BMS Part 1 of 8...
 	if NOT EXIST BMS.7z.001 powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"http://thebdf.org/bm/BMS.7z.001\",\"$PWD\BMS.7z.001\") }"
 	echo ^Downloading BMS Part 2 of 8...
@@ -267,6 +269,7 @@ if EXIST "%userprofile%\downloads\Black Mesa Synergy.rar" .\7-Zip\7z.exe x "%use
 if EXIST "%userprofile%\downloads\Black Mesa Synergy Mod (Still work).rar" .\7-Zip\7z.exe x "%userprofile%\downloads\Black Mesa Synergy Mod (Still work).rar" -o"%cldir%"
 if EXIST "%cldir%\blackmesa\maps\bm_c3a2h.bsp" ren "%cldir%\blackmesa" BMS
 if EXIST "%cd%\xen.7z" .\7-Zip\7z.exe x .\xen.7z -o"%cldir%"
+if EXIST "%cd%\xen.7z.001" .\7-Zip\7z.exe x .\xen.7z.001 -o"%cldir%"
 if EXIST "%cd%\BMS2012_IMPROVED_XEN_Source2007.1.rar" .\7-Zip\7z.exe x .\BMS2012_IMPROVED_XEN_Source2007.1.rar -o"%cldir%" xen
 if EXIST "%userprofile%\Downloads\BMS2012_IMPROVED_XEN_Source2007.1.rar" .\7-Zip\7z.exe x "%userprofile%\Downloads\BMS2012_IMPROVED_XEN_Source2007.1.rar" -o"%cldir%" xen
 if EXIST "%cldir%\BMS\maps\bm_c3a2h.bsp" echo BMS installed successfully.
