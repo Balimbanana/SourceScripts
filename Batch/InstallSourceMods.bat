@@ -5,8 +5,8 @@ rem This script was written by Balimbanana.
 title Install SourceMods
 goto startinit
 :updater
-powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SourceScripts/raw/master/Batch/InstallSourceMods.bat\",\"$PWD\InstallSourceMods.bat\") }"
 cd "%~dp0"
+powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SourceScripts/raw/master/Batch/InstallSourceMods.bat\",\"$PWD\InstallSourceMods.bat\") }"
 echo Updated...
 start /b "Install SourceMods" "%~dp0InstallSourceMods.bat"
 exit
