@@ -6,11 +6,12 @@ title Install SourceMods
 goto startinit
 :updater
 powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SourceScripts/raw/master/Batch/InstallSourceMods.bat\",\"$PWD\InstallSourceMods.bat\") }"
+cd "%~dp0"
 echo Updated...
-start /b %~dp0InstallSourceMods.bat
+start /b "Install SourceMods" "%~dp0InstallSourceMods.bat"
 exit
 :startinit
-if EXIST "drivers\etc\hosts" cd %~dp0
+if EXIST "drivers\etc\hosts" cd "%~dp0"
 set cldir=%programfiles(x86)%\Steam\steamapps
 for /f "skip=2 tokens=1,3* delims== " %%i in ('reg QUERY HKEY_CURRENT_USER\Software\Valve\Steam /f SteamPath /t REG_SZ /v') do (
 	set "cldir=%%j%%k"
