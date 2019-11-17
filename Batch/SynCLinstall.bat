@@ -7,6 +7,14 @@ if '%cd%'=='%userprofile%\Downloads' (
 	cd SynergyCL
 	if NOT EXIST SynCLinstall.bat copy ..\SynCLinstall.bat SynCLinstall.bat>NUL
 )
+goto setupinit
+:updater
+cd "%~dp0"
+powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SourceScripts/raw/master/Batch/SynCLinstall.bat\",\"$PWD\SynCLinstall.bat\") }"
+echo Updated...
+start /b "Install SourceMods" "%~dp0SynCLinstall.bat"
+exit
+:setupinit
 set pmpck1=0
 set pmpck2=0
 set pmpck3=0
@@ -18,6 +26,7 @@ set synpath=steamapps\common\Synergy
 set cldir=%programfiles(x86)%\Steam\steamapps
 set betadir=%programfiles(x86)%\Steam\steamapps
 set twitchdir=%programfiles(x86)%\Steam\steamapps
+set devpdir=%programfiles(x86)%\Steam\steamapps
 for /f "skip=2 tokens=1,3* delims== " %%i in ('reg QUERY HKEY_CURRENT_USER\Software\Valve\Steam /f SteamPath /t REG_SZ /v') do set "cldir=%%j%%k" & goto start
 :start
 for /f "delims=" %%V in ('powershell -command "$env:cldir.Replace(\"/\",\"\\\")"') do set "cldir=%%V"
@@ -52,6 +61,16 @@ if EXIST "E:\Steam\steamapps\common\syntwitch\synergy" set twitchdir=E:\Steam
 if EXIST "D:\Steam\steamapps\common\syntwitch\synergy" set twitchdir=D:\Steam
 if EXIST "F:\Steam\steamapps\common\syntwitch\synergy" set twitchdir=F:\Steam
 if EXIST "G:\Steam\steamapps\common\syntwitch\synergy" set twitchdir=G:\Steam
+if EXIST "C:\SteamLibrary\steamapps\common\syndevp\synergy" set devpdir=C:\SteamLibrary
+if EXIST "E:\SteamLibrary\steamapps\common\syndevp\synergy" set devpdir=E:\SteamLibrary
+if EXIST "D:\SteamLibrary\steamapps\common\syndevp\synergy" set devpdir=D:\SteamLibrary
+if EXIST "F:\SteamLibrary\steamapps\common\syndevp\synergy" set devpdir=F:\SteamLibrary
+if EXIST "G:\SteamLibrary\steamapps\common\syndevp\synergy" set devpdir=G:\SteamLibrary
+if EXIST "C:\Steam\steamapps\common\syndevp\synergy" set devpdir=C:\Steam
+if EXIST "E:\Steam\steamapps\common\syndevp\synergy" set devpdir=E:\Steam
+if EXIST "D:\Steam\steamapps\common\syndevp\synergy" set devpdir=D:\Steam
+if EXIST "F:\Steam\steamapps\common\syndevp\synergy" set devpdir=F:\Steam
+if EXIST "G:\Steam\steamapps\common\syndevp\synergy" set devpdir=G:\Steam
 if NOT EXIST %cldir%\steamapps\common\Synergy\synergy (
 	echo ^CL Directory not found...
 	set cldir=%cd%
@@ -71,6 +90,9 @@ if NOT EXIST steamapps\common\synbeta (
 )
 if NOT EXIST steamapps\common\syntwitch (
 	if EXIST "%twitchdir%\steamapps\common\syntwitch" mklink /j "steamapps\common\syntwitch" "%twitchdir%\steamapps\common\syntwitch">NUL
+)
+if NOT EXIST steamapps\common\syndevp (
+	if EXIST "%devpdir%\steamapps\common\syndevp" mklink /j "steamapps\common\syndevp" "%devpdir%\steamapps\common\syndevp">NUL
 )
 if NOT EXIST "steamapps\common\Half-Life 2" (
 	if EXIST "%betadir%\steamapps\common\Half-Life 2" set linkhl=2
@@ -92,19 +114,22 @@ if '%linkhl%'=='3' mklink /j "steamapps\sourcemods" "%twitchdir%\steamapps\sourc
 set linkhl=0
 echo Information: enter the letter inside the () and press enter to continue at the prompts.
 echo (U)pdate or (R)un 56.16 (RB) To run Synergy 18.x beta (RT) To run Synergy Twich branch.
+echo (RP) to run Synergy Portal beta. (update) to update this script.
 echo (IMP) to install the Player Model Packs
 set /p uprun=
 for /f "delims=" %%V in ('powershell -command "$env:uprun.ToLower()"') do set "uprun=%%V"
-if '%uprun%'=='u' goto firstinstall
-if '%uprun%'=='rb' goto synstart
-if '%uprun%'=='rt' goto synstart
-if '%uprun%'=='r' goto synstart
-if '%uprun%'=='imp' goto instpmpck
+if "%uprun%"=="u" goto firstinstall
+if "%uprun%"=="rb" goto synstart
+if "%uprun%"=="rt" goto synstart
+if "%uprun%"=="rp" goto synstart
+if "%uprun%"=="r" goto synstart
+if "%uprun%"=="imp" goto instpmpck
+if "%uprun%"=="update" goto updater
 echo Choose an option.
 goto start
 
 :firstinstall
-if '%anonset%'=='0' (echo Regular, ^(B^)eta, or ^(T^)witch? ^(anything except b or t will do regular^)
+if '%anonset%'=='0' (echo Regular, ^(B^)eta, ^(T^)witch, or ^(P^)ortal beta? ^(anything except b, t, or p will do regular^)
 	set /p betaset=
 )
 for /f "delims=" %%V in ('powershell -command "$env:betaset.ToLower()"') do set "betaset=%%V"
@@ -118,8 +143,10 @@ if "%anonblck%"=="anonymous" goto noanon
 set synpath=steamapps\common\Synergy
 if '%uprun%'=='rb' set synpath=steamapps\common\synbeta
 if '%uprun%'=='rt' set synpath=steamapps\common\syntwitch
+if '%uprun%'=='rp' set synpath=steamapps\common\syndevp
 if '%betaset%'=='b' set synpath=steamapps\common\synbeta
 if '%betaset%'=='t' set synpath=steamapps\common\syntwitch
+if '%betaset%'=='p' set synpath=steamapps\common\syndevp
 if NOT EXIST "%synpath%\synergy\synergy_pak.vpk" (
 	if EXIST "%cldir%\steamapps\common\Synergy\synergy\synergy_pak.vpk" start /min /wait robocopy /NP /NJS /NJH /NS "%cldir%\steamapps\common\Synergy\synergy" "%synpath%\synergy" "synergy_pak.vpk"
 )
@@ -127,7 +154,7 @@ if NOT EXIST "%synpath%\synergy\zhl2dm_materials_pak.vpk" (
 	if EXIST "%cldir%\steamapps\common\Synergy\synergy\zhl2dm_materials_pak.vpk" start /min /wait robocopy /NP /NJS /NJH /NS "%cldir%\steamapps\common\Synergy\synergy" "%synpath%\synergy" "zhl2dm_materials_pak.vpk.vpk"
 )
 if NOT EXIST "%synpath%\synergy\maps" (
-	if EXIST "%cldir%\steamapps\common\Synergy\synergy\maps" mklink /j "%cldir%\steamapps\common\Synergy\synergy\maps" "%synpath%\synergy\maps">NUL
+	if EXIST "%cldir%\steamapps\common\Synergy\synergy\maps" mklink /j "%synpath%\synergy\maps" "%cldir%\steamapps\common\Synergy\synergy\maps">NUL
 )
 if EXIST "%synpath%\synergy\content\aoc.dat" del "%synpath%\synergy\content\aoc.dat"
 if EXIST "%synpath%\synergy\content\css.dat" del "%synpath%\synergy\content\css.dat"
@@ -140,8 +167,9 @@ if EXIST "%synpath%\synergy\content\tf2.dat" del "%synpath%\synergy\content\tf2.
 if EXIST "%synpath%\synergy\content\zps.dat" del "%synpath%\synergy\content\zps.dat"
 if '%betaset%'=='b' goto betainst
 if '%betaset%'=='t' goto twitchinst
+if '%betaset%'=='p' goto devpinst
 if NOT EXIST steamcmd.exe goto notindir
-echo Updating/installing Synergy DS
+echo Updating/installing Synergy 56.16
 steamcmd.exe +login %usrname% +app_update 17520 validate +quit
 if NOT EXIST steamapps\common\Synergy\synergy.exe (
 	echo ^There was an error while attempting to download Synergy...
@@ -157,8 +185,10 @@ cls
 set synpath=steamapps\common\Synergy
 if '%uprun%'=='rb' set synpath=steamapps\common\synbeta
 if '%uprun%'=='rt' set synpath=steamapps\common\syntwitch
+if '%uprun%'=='rp' set synpath=steamapps\common\syndevp
 if '%betaset%'=='b' set synpath=steamapps\common\synbeta
 if '%betaset%'=='t' set synpath=steamapps\common\syntwitch
+if '%betaset%'=='p' set synpath=steamapps\common\syndevp
 if NOT EXIST %synpath%\synergy.exe goto notinstalled
 if NOT EXIST %synpath%\synergy\scripts\vgui_screens.txt start /min /wait powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://raw.githubusercontent.com/Balimbanana/SM-Synergy/master/scripts/vgui_screens.txt\",\"$PWD\$env:synpath\synergy\scripts\vgui_screens.txt\") }"
 if NOT EXIST "steamapps\common\Half-Life 2\hl2\hl2_pak_dir.vpk" goto insthl2
@@ -167,7 +197,7 @@ start /wait %synpath%\synergy.exe -game synergy -steam -novid -windowed -noborde
 goto start
 
 :betainst
-echo Updating/installing Synergy Beta DS
+echo Updating/installing Synergy Beta
 steamcmd.exe +login %usrname% +force_install_dir steamapps\Common\synbeta +app_update 17520 -beta development -validate +quit
 if NOT EXIST steamapps\common\synbeta\synergy.exe (
 	echo ^There was an error while attempting to download Synergy...
@@ -182,9 +212,24 @@ cls
 goto synstart
 
 :twitchinst
-echo Updating/installing Synergy Twitch Branch DS
+echo Updating/installing Synergy Twitch Branch
 steamcmd.exe +login %usrname% +force_install_dir steamapps\Common\syntwitch +app_update 17520 -beta twitch -betapassword jonnyhawtsauce -validate +quit
 if NOT EXIST steamapps\common\syntwitch\synergy.exe (
+	echo ^There was an error while attempting to download Synergy...
+	set anonset=15
+	goto firstinstall
+)
+echo Update/installation Complete
+echo If there were errors above, close the script and log into SteamCMD.exe separately, then restart the script.
+timeout -T 10
+if '%uprun%'=='i' goto setup
+cls
+goto synstart
+
+:devpinst
+echo Updating/installing Synergy Portal beta Branch
+steamcmd.exe +login %usrname% +force_install_dir steamapps\Common\syndevp +app_update 17520 -beta development_portaltest -validate +quit
+if NOT EXIST steamapps\common\syndevp\synergy.exe (
 	echo ^There was an error while attempting to download Synergy...
 	set anonset=15
 	goto firstinstall
@@ -218,6 +263,10 @@ if '%betaset%'=='b' (
 if '%betaset%'=='t' (
 	set synpath=steamapps\common\syntwitch
 	set syntype=Twitch
+)
+if '%betaset%'=='p' (
+	set synpath=steamapps\common\syndevp
+	set syntype=Portal
 )
 powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SM-Synergy/raw/master/scripts/weapon_betagun.txt\",\"$PWD\$env:synpath\synergy\scripts\weapon_betagun.txt\") }"
 if NOT EXIST "%synpath%\synergy\models" mkdir "%synpath%\synergy\models"
@@ -257,6 +306,8 @@ if '%uprun%'=='rb' set syntype=Beta
 if '%betaset%'=='b' set syntype=Beta
 if '%uprun%'=='rt' set syntype=Twitch
 if '%betaset%'=='t' set syntype=Twitch
+if '%uprun%'=='rp' set syntype=Portal
+if '%betaset%'=='p' set syntype=Portal
 echo Synergy %syntype% not installed.
 pause
 goto start
@@ -295,12 +346,13 @@ if EXIST "C:\Program Files\7-Zip\7z.exe" (
 goto start
 
 :instpmpck
-echo Install Player Model Packs for Regular, (B)eta, or (T)witch? (anything except b or t will do regular)
+echo Install Player Model Packs for Regular, (B)eta, (T)witch, or (P)ortal beta? (anything except b, t, or p will do regular)
 set synpath=steamapps\common\Synergy
 set /p betaset=
 for /f "delims=" %%V in ('powershell -command "$env:betaset.ToLower()"') do set "betaset=%%V"
 if '%betaset%'=='b' set synpath=steamapps\common\synbeta
 if '%betaset%'=='t' set synpath=steamapps\common\syntwitch
+if '%betaset%'=='p' set synpath=steamapps\common\syndevp
 goto instpmpckpass
 
 :instpmpckpass
