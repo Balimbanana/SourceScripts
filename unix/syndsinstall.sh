@@ -43,6 +43,13 @@ fi
 start() {
 anonset=0
 instsmset=0
+if [ $PWD == $HOME/Steam ]; then
+	cd ..
+	if [ ! -d ./SteamCMD ]; then
+		mkdir ./SteamCMD
+	fi
+	cd ./SteamCMD
+fi
 if [ ! -f ./steamcmd.sh ];then notindir; fi
 echo "Information: enter the letter inside the () and press enter to continue at the prompts."
 echo "First (I)nstall, (U)pdate, (R)un with auto-restart"
