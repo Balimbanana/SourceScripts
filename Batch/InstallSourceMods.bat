@@ -473,9 +473,9 @@ if EXIST "%cldir%\The Citizen Returns\maps\sp_intro.bsp" (
 echo Downloading The Citizen Returns...
 powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://www.runthinkshootlive.com/download.php?id=10757^&f=/hl2-ep2/hl2-ep2-sp-the-citizen-returns.7z\",\"$PWD\cit2.7z\") }"
 if EXIST "%cd%\cit2.7z" .\7-Zip\7z.exe x .\cit2.7z -o"%cldir%"
-if NOT EXIST "%cd%\steamapps\workshop\content\17520\671789112" (
+if NOT EXIST "%cd%\steamapps\workshop\content\17520\1917233439" (
 	echo ^Downloading Synergy Support files through SteamCMD
-	steamcmd.exe +login anonymous +workshop_download_item 17520 671789112 +quit
+	steamcmd.exe +login anonymous +workshop_download_item 17520 1917233439 +quit
 )
 goto start
 :mop
