@@ -57,23 +57,25 @@ echo (RF) to run custom or forked servers.
 if EXIST "steamapps\common\Synergy\synergy\addons\sourcemod\plugins" (
 	echo ^(ISM^) to install additional SourceMod plugins.
 	echo ^(IMP^) to list/install Player Model Packs.
+	if NOT EXIST steamapps\common\Synergy\synergy\addons\plr.vdf echo ^(PLR^) for player limit remover ^(only works on 56.16^)
 )
 if EXIST "steamapps\common\Synergy\synergy" echo (IMSP) to list/install additional Mod Support's
 echo (Update) to update this script.
 set /p uprun=
 for /f "delims=" %%V in ('powershell -command "$env:uprun.ToLower()"') do set "uprun=%%V"
-if '%uprun%'=='u' goto firstinstall
-if '%uprun%'=='i' goto firstinstall
-if '%uprun%'=='rb' goto srcds
-if '%uprun%'=='rt' goto srcds
-if '%uprun%'=='r' goto srcds
-if '%uprun%'=='rf' goto srcdscustom
-if '%uprun%'=='is' goto instsourcem
-if '%uprun%'=='ism' goto instsourcepluginstop
-if '%uprun%'=='imp' goto instpmpck
-if '%uprun%'=='imsp' goto instmodsup
-if '%uprun%'=='linksm' goto linksm
-if '%uprun%'=='update' goto updater
+if "%uprun%"=="u" goto firstinstall
+if "%uprun%"=="i" goto firstinstall
+if "%uprun%"=="rb" goto srcds
+if "%uprun%"=="rt" goto srcds
+if "%uprun%"=="r" goto srcds
+if "%uprun%"=="rf" goto srcdscustom
+if "%uprun%"=="is" goto instsourcem
+if "%uprun%"=="ism" goto instsourcepluginstop
+if "%uprun%"=="imp" goto instpmpck
+if "%uprun%"=="imsp" goto instmodsup
+if "%uprun%"=="linksm" goto linksm
+if "%uprun%"=="plr" goto plr
+if "%uprun%"=="update" goto updater
 echo Choose an option.
 goto start
 
@@ -89,8 +91,8 @@ set anonblck=""
 for /f "delims=" %%V in ('powershell -command "$env:username.ToLower()"') do set anonblck=%%V
 if "%anonblck%"=="anonymous" goto noanon
 set synpath=steamapps\common\Synergy
-if '%uprun%'=='rb' set synpath=steamapps\common\synbeta
-if '%uprun%'=='rt' set synpath=steamapps\common\syntwitch
+if "%uprun%"=="rb" set synpath=steamapps\common\synbeta
+if "%uprun%"=="rt" set synpath=steamapps\common\syntwitch
 if '%betaset%'=='b' set synpath=steamapps\common\synbeta
 if '%betaset%'=='t' set synpath=steamapps\common\syntwitch
 if NOT EXIST "%synpath%\synergy\synergy_pak.vpk" (
@@ -116,12 +118,12 @@ if NOT EXIST steamapps\common\Synergy\srcds.exe (
 echo Update/installation Complete
 echo If there were errors states above, close the script and log into SteamCMD.exe separately, then restart the script.
 timeout -T 10
-if '%uprun%'=='i' goto setup
+if "%uprun%"=="i" goto setup
 cls
 :srcds
 set synpath=steamapps\common\Synergy
-if '%uprun%'=='rb' set synpath=steamapps\common\synbeta
-if '%uprun%'=='rt' set synpath=steamapps\common\syntwitch
+if "%uprun%"=="rb" set synpath=steamapps\common\synbeta
+if "%uprun%"=="rt" set synpath=steamapps\common\syntwitch
 if '%betaset%'=='b' set synpath=steamapps\common\synbeta
 if '%betaset%'=='t' set synpath=steamapps\common\syntwitch
 if NOT EXIST %synpath%\srcds.exe goto notinstalled
@@ -140,7 +142,7 @@ for /f "delims=" %%V in ('powershell -command "$ab = get-date; $ab.Minute"') do 
 :reds
 echo (%date%)(%time%) SynDS started.
 if %smset%==1 start /wait %synpath%\srcds.exe -console -game synergy +maxplayers 16 +sv_lan 0 +map d1_trainstation_06 +exec %configdir% -ip 0.0.0.0 -port %pnum% -nocrashdialog -insecure -nohltv +sm_basepath %sm_basepath%
-if %smset%==0 start /wait %synpath%\srcds.exe -console -game synergy +maxplayers 10 +sv_lan 0 +map d1_trainstation_06 +exec %configdir% -ip 0.0.0.0 -port %pnum% -nocrashdialog -insecure -nohltv
+if %smset%==0 start /wait %synpath%\srcds.exe -console -game synergy +maxplayers 16 +sv_lan 0 +map d1_trainstation_06 +exec %configdir% -ip 0.0.0.0 -port %pnum% -nocrashdialog -insecure -nohltv
 echo (%date%)(%time%) WARNING: SynDS closed or crashed, restarting.
 for /f "delims=" %%V in ('powershell -command "$ab = get-date; $ab.Minute"') do set "ctime=%%V"
 set /a cttime=ctime-starttime
@@ -245,6 +247,30 @@ set sm_basepath=addons/sourcemod%pnum%
 set skipstep=3
 goto srcds
 
+:plr
+if EXIST steamapps\common\Synergy\synergy\addons\plr\plr.dll goto start
+if NOT EXIST steamapps\common\Synergy\synergy goto start
+if NOT EXIST steamapps\common\Synergy\synergy\addons mkdir steamapps\common\Synergy\synergy\addons
+if NOT EXIST steamapps\common\Synergy\synergy\addons\plr mkdir steamapps\common\Synergy\synergy\addons\plr
+powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"http://www.sourceop.com/modules.php?name=Downloads^&d_op=getit^&lid=42\",\"$PWD\plr.rar\") }"
+if NOT EXIST "%cd%\7-Zip\7z.exe" powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SourceScripts/raw/master/synotherfilefixes/7-Zip.zip\",\"$PWD\7zip.zip\") }"
+if EXIST "%cd%\7zip.zip" start /wait /min powershell -command "& {Add-Type -AssemblyName System.IO.Compression.FileSystem; [System.IO.Compression.ZipFile]::ExtractToDirectory(\"$PWD\7zip.zip\", \"$PWD\") }"
+if EXIST "%cd%\7zip.zip" del /Q "%cd%\7zip.zip"
+start /min /wait "7z" "7-Zip\7z.exe" x plr.rar -o"%cd%\steamapps\common\Synergy\synergy\addons\plr"
+if EXIST "%cd%\plr.rar" del /Q "%cd%\plr.rar"
+if NOT EXIST steamapps\common\Synergy\synergy\addons\plr.vdf (
+	echo "Plugin">steamapps\common\Synergy\synergy\addons\plr.vdf
+	echo {>>steamapps\common\Synergy\synergy\addons\plr.vdf
+	echo ^	"file"	"addons/plr/plr">>steamapps\common\Synergy\synergy\addons\plr.vdf
+	echo }>>steamapps\common\Synergy\synergy\addons\plr.vdf
+)
+set inst=0
+if EXIST steamapps\common\Synergy\synergy\addons\plr.vdf set inst=1
+if EXIST steamapps\common\Synergy\synergy\addons\plr\plr.dll (
+	if '%inst%'=='1' echo ^Installed successfully...
+)
+goto start
+
 :betainst
 echo Updating/installing Synergy Beta DS
 steamcmd.exe +login %username% +force_install_dir steamapps\Common\synbeta +app_update 17520 -beta development -validate +quit
@@ -256,7 +282,7 @@ if NOT EXIST steamapps\common\synbeta\srcds.exe (
 echo Update/installation Complete
 echo If there were errors above, close the script and log into SteamCMD.exe separately, then restart the script.
 timeout -T 10
-if '%uprun%'=='i' goto setup
+if "%uprun%"=="i" goto setup
 cls
 goto srcds
 
@@ -271,7 +297,7 @@ if NOT EXIST steamapps\common\syntwitch\srcds.exe (
 echo Update/installation Complete
 echo If there were errors above, close the script and log into SteamCMD.exe separately, then restart the script.
 timeout -T 10
-if '%uprun%'=='i' goto setup
+if "%uprun%"=="i" goto setup
 cls
 goto srcds
 
@@ -391,9 +417,9 @@ pause
 exit
 :notinstalled
 set syntype=56.16
-if '%uprun%'=='rb' set syntype=Beta
+if "%uprun%"=="rb" set syntype=Beta
 if '%betaset%'=='b' set syntype=Beta
-if '%uprun%'=='rt' set syntype=Twitch
+if "%uprun%"=="rt" set syntype=Twitch
 if '%betaset%'=='t' set syntype=Twitch
 echo Synergy %syntype% not installed.
 pause
