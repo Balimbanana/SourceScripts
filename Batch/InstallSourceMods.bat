@@ -69,9 +69,9 @@ echo (EYE) for Eye of The Storm      (MPR) for The Masked Prisoner
 echo (BTI) for Below The Ice         (LLP) for Liberation aka LifeLostPrison
 echo (DH) for DayHard                (R24) for Rock 24
 echo (PTSD) for PTSD and PTCS        (ALC) for Alchemilla
-echo (CAL) for Calamity              (STTR) for SteamTracksTrouble and Riddles
 echo (CITY7) for City7               (DW) for Dangerous World
 echo (RIOT) for Riot Act             (DD) for DeepDown and Aftermath 
+echo (CAL) for Calamity              
 echo.
 echo Semi-Auto (download through web browser, then script will install from there).
 echo (BMS) for Black Mesa Source and Improved Xen
@@ -81,6 +81,7 @@ echo (DF) for DownFall               (RH) for Ravenholm
 echo (YLA) for Year Long Alarm       (KTM) for Kill The Monk
 echo (CE) for Causality Effect       (TH) for They Hunger Again part 1
 echo (PEN) for HL2 Penetration       (EZ) for Entropy Zero
+echo (STTR) for SteamTracksTrouble and Riddles
 echo.
 echo (SourceMods) to open your sourcemods directory
 echo (ModSupports) to open the Mod Support's page.
@@ -673,9 +674,12 @@ if EXIST "%cldir%\STTR_CH01_V2_01\maps\STTR_Ch1A_Set69.bsp" (
 	pause
 	goto start
 )
-echo Downloading Steam Tracks Troubles and Riddles...
-powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://www.runthinkshootlive.com/download.php?id=10914^&f=/hl2-ep2/hl2-ep2-sp-sttr.7z\",\"$PWD\sttr.7z\") }"
-if EXIST "%cd%\sttr.7z" .\7-Zip\7z.exe x .\sttr.7z -o"%cldir%"
+echo Opening Steam Tracks Troubles and Riddles ModDB page...
+start /b https://www.moddb.com/mods/steam-tracks-trouble-riddles/downloads/stt-r-chapter-one-v2
+rem old version
+rem echo Downloading Steam Tracks Troubles and Riddles...
+rem powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://www.runthinkshootlive.com/download.php?id=10914^&f=/hl2-ep2/hl2-ep2-sp-sttr.7z\",\"$PWD\sttr.7z\") }"
+rem if EXIST "%cd%\sttr.7z" .\7-Zip\7z.exe x .\sttr.7z -o"%cldir%"
 if NOT EXIST "%cd%\steamapps\workshop\content\17520\1286998604" (
 	echo ^Downloading Synergy Support files through SteamCMD
 	steamcmd.exe +login anonymous +workshop_download_item 17520 1286998604 +quit
