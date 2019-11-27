@@ -703,6 +703,8 @@ if EXIST "%userprofile%\downloads\SM-Synergy-master.zip" start /wait /min powers
 if EXIST "%cd%\%synpath%\addons\SM-Synergy-master" start /wait /min robocopy /S /NP /NJS /NJH /NS "%cd%\%synpath%\addons\SM-Synergy-master" "%cd%\%synpath%\addons\sourcemod"
 if EXIST "%cd%\%synpath%\addons\SM-Synergy-master" rd /Q /S "%cd%\%synpath%\addons\SM-Synergy-master"
 if EXIST "%cd%\%synpath%\addons\sourcemod\plugins\synfixes.smx" del /Q "%cd%\%synpath%\addons\sourcemod\plugins\synfixes.smx"
+if EXIST "%cd%\%synpath%\addons\sourcemod\56.16lin" rd /Q /S "%cd%\%synpath%\addons\sourcemod\56.16lin"
+if EXIST "%cd%\%synpath%\addons\sourcemod\buildentitycache.txt" del /Q "%cd%\%synpath%\addons\sourcemod\buildentitycache.txt"
 if NOT EXIST "%cd%\%synpath%\addons\sourcemod\translations\fpd.phrases.txt" (
 	echo ^Failed to install.
 	if NOT EXIST \"%userprofile%\downloads\SM-Synergy-master.zip\" echo ^Could not find in downloads.
