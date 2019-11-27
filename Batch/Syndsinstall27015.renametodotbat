@@ -704,7 +704,23 @@ if EXIST "%cd%\%synpath%\addons\SM-Synergy-master" start /wait /min robocopy /S 
 if EXIST "%cd%\%synpath%\addons\SM-Synergy-master" rd /Q /S "%cd%\%synpath%\addons\SM-Synergy-master"
 if EXIST "%cd%\%synpath%\addons\sourcemod\plugins\synfixes.smx" del /Q "%cd%\%synpath%\addons\sourcemod\plugins\synfixes.smx"
 if EXIST "%cd%\%synpath%\addons\sourcemod\56.16lin" rd /Q /S "%cd%\%synpath%\addons\sourcemod\56.16lin"
+if EXIST "%cd%\%synpath%\addons\sourcemod\devtwitchgamedata" rd /Q /S "%cd%\%synpath%\addons\sourcemod\devtwitchgamedata"
+if EXIST "%cd%\%synpath%\addons\sourcemod\twitchbranchgamedata" rd /Q /S "%cd%\%synpath%\addons\sourcemod\twitchbranchgamedata"
 if EXIST "%cd%\%synpath%\addons\sourcemod\buildentitycache.txt" del /Q "%cd%\%synpath%\addons\sourcemod\buildentitycache.txt"
+if EXIST "%cd%\%synpath%\addons\sourcemod\enttoolsupdater.txt" del /Q "%cd%\%synpath%\addons\sourcemod\enttoolsupdater.txt"
+if EXIST "%cd%\%synpath%\addons\sourcemod\edtrebuildupdater.txt" del /Q "%cd%\%synpath%\addons\sourcemod\edtrebuildupdater.txt"
+if EXIST "%cd%\%synpath%\addons\sourcemod\healthdisplayupdater.txt" del /Q "%cd%\%synpath%\addons\sourcemod\healthdisplayupdater.txt"
+if EXIST "%cd%\%synpath%\addons\sourcemod\modelloaderupdater.txt" del /Q "%cd%\%synpath%\addons\sourcemod\modelloaderupdater.txt"
+if EXIST "%cd%\%synpath%\addons\sourcemod\synbhopupdater.txt" del /Q "%cd%\%synpath%\addons\sourcemod\synbhopupdater.txt"
+if EXIST "%cd%\%synpath%\addons\sourcemod\synbuildnpcinfoupdater.txt" del /Q "%cd%\%synpath%\addons\sourcemod\synbuildnpcinfoupdater.txt"
+if EXIST "%cd%\%synpath%\addons\sourcemod\synfixesdevupdater.txt" del /Q "%cd%\%synpath%\addons\sourcemod\synfixesdevupdater.txt"
+if EXIST "%cd%\%synpath%\addons\sourcemod\synfixesupdater.txt" del /Q "%cd%\%synpath%\addons\sourcemod\synfixesupdater.txt"
+if EXIST "%cd%\%synpath%\addons\sourcemod\synmodesupdater.txt" del /Q "%cd%\%synpath%\addons\sourcemod\synmodesupdater.txt"
+if EXIST "%cd%\%synpath%\addons\sourcemod\synsaverestoreupdater.txt" del /Q "%cd%\%synpath%\addons\sourcemod\synsaverestoreupdater.txt"
+if EXIST "%cd%\%synpath%\addons\sourcemod\synswepsupdater.txt" del /Q "%cd%\%synpath%\addons\sourcemod\synswepsupdater.txt"
+if EXIST "%cd%\%synpath%\addons\sourcemod\synvehiclespawnupdater.txt" del /Q "%cd%\%synpath%\addons\sourcemod\synvehiclespawnupdater.txt"
+if EXIST "%cd%\%synpath%\addons\sourcemod\votecarupdater.txt" del /Q "%cd%\%synpath%\addons\sourcemod\votecarupdater.txt"
+if EXIST "%cd%\%synpath%\addons\sourcemod\README.md" del /Q "%cd%\%synpath%\addons\sourcemod\README.md"
 if NOT EXIST "%cd%\%synpath%\addons\sourcemod\translations\fpd.phrases.txt" (
 	echo ^Failed to install.
 	if NOT EXIST \"%userprofile%\downloads\SM-Synergy-master.zip\" echo ^Could not find in downloads.
