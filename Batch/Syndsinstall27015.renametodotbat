@@ -1,7 +1,8 @@
 @echo off
 rem This script was written by Balimbanana.
-rem ///////////////////////////////////If you are viewing this on GitHub, right click Raw above and click:
-rem ///////////////////////////////////Save Target As, or Save Linked Content As to download this script.
+rem //////////////////////////////If you are viewing this on GitHub, right click Raw above and click:
+rem //////////////////////////////Save Target As, or Save Linked Content As to download this script.
+rem //////////////////////////////Save the script as ending in .bat and run it.
 title SynergyDS 15
 goto initvars
 :updater
