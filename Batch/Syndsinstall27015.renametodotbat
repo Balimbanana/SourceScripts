@@ -622,12 +622,12 @@ echo (GT) to download Goto            (V) to download VoteCar
 echo (HD) to download HealthDisplay   (HYP) to download HyperSpawn
 echo (ST) to download Save/Teleport   (SSR) to download SynSaveRestore
 echo (SM) to download SynModes        (U) to download Updater with SteamWorks
-echo (Syn) to download SynFixes standard
+echo (Syn) to download SynFixes standard  (ET) to download EntTools
 echo (SynSweps) to download Synergy Scripted Weapons, most of the time this will also require SynDev
 echo (SynDev) to download SynFixesDev for custom entity support.
 echo (BCache) to download BuildEntityCache plugin to easily generate content loaders and EDTs.
-echo Some plugins will also require their translation files, you can get the full pack with (FP)
-echo If you have downloaded the full pack, use (FPI) to auto-install the plugins with translations included.
+echo You can get the full pack with (FP)
+echo If you have downloaded the full pack, use (FPI) to auto-install pack of plugins with translations included.
 echo (B) to go back to start.
 set /p pluginsubstr=
 for /f "delims=" %%V in ('powershell -command "$env:pluginsubstr.ToLower()"') do set "pluginsubstr=%%V"
@@ -707,6 +707,8 @@ if '%pluginsubstr%'=='synsp' start /wait /min powershell -command "& {[Net.Servi
 if '%pluginsubstr%'=='syn' start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SM-Synergy/raw/master/plugins/synfixes.smx\",\"$PWD\$env:synpath\addons\sourcemod\plugins\synfixes.smx\") }"
 if '%pluginsubstr%'=='syndev' start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SM-Synergy/raw/master/plugins/synfixesdev.smx\",\"$PWD\$env:synpath\addons\sourcemod\plugins\synfixesdev.smx\") }"
 if '%pluginsubstr%'=='syndevsp' start https://github.com/Balimbanana/SM-Synergy/tree/master/scripting
+if '%pluginsubstr%'=='etsp' start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SM-Synergy/raw/master/scripting/enttools.sp\",\"$PWD\$env:synpath\addons\sourcemod\scripting\enttools.sp\") }"
+if '%pluginsubstr%'=='et' start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SM-Synergy/raw/master/plugins/enttools.smx\",\"$PWD\$env:synpath\addons\sourcemod\plugins\enttools.smx\") }"
 if '%pluginsubstr%'=='u' (
 	if EXIST "%cd%\%synpath%\addons\sourcemod\plugins\updater.smx" echo ^Already installed.
 	if EXIST "%cd%\%synpath%\addons\sourcemod\plugins\updater.smx" goto instsourceplugins
