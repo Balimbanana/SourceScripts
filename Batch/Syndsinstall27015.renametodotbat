@@ -128,8 +128,10 @@ cls
 set synpath=steamapps\common\Synergy
 if "%uprun%"=="rb" set synpath=steamapps\common\synbeta
 if "%uprun%"=="rt" set synpath=steamapps\common\syntwitch
+if "%uprun%"=="rp" set synpath=steamapps\common\synportal
 if '%betaset%'=='b' set synpath=steamapps\common\synbeta
 if '%betaset%'=='t' set synpath=steamapps\common\syntwitch
+if '%betaset%'=='p' set synpath=steamapps\common\synportal
 if NOT EXIST %synpath%\srcds.exe goto notinstalled
 if NOT EXIST "steamapps\common\Half-Life 2\hl2\hl2_pak_dir.vpk" goto insthl2
 set linkset=0
