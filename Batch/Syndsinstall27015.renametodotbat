@@ -7,7 +7,7 @@ goto initvars
 :updater
 powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SourceScripts/raw/master/Batch/Syndsinstall27015.renametodotbat\",\"$PWD\Syndsinstall27015.bat\") }"
 echo Updated...
-start /b "%~dp0Syndsinstall27015.bat"
+start /b "SynergyDS 15" "%~dp0Syndsinstall27015.bat"
 exit
 :initvars
 if EXIST "drivers\etc\hosts" cd "%~dp0"
