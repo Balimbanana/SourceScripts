@@ -52,7 +52,7 @@ if NOT EXIST steamcmd.exe goto notindir
 echo Information: enter the letter inside the () and press enter to continue at the prompts.
 echo First (I)nstall, (U)pdate or (R)un with auto-restart
 echo (RB) To run Synergy 18.x beta or (IS) to install SourceMod.
-echo (RT) To run Synergy Twich branch.
+echo (RT) To run Synergy Twich branch. (RP) To run Synergy Portal branch.
 echo (RF) to run custom or forked servers.
 if EXIST "steamapps\common\Synergy\synergy\addons\sourcemod\plugins" (
 	echo ^(ISM^) to install additional SourceMod plugins.
@@ -67,6 +67,7 @@ if "%uprun%"=="u" goto firstinstall
 if "%uprun%"=="i" goto firstinstall
 if "%uprun%"=="rb" goto srcds
 if "%uprun%"=="rt" goto srcds
+if "%uprun%"=="rp" goto srcds
 if "%uprun%"=="r" goto srcds
 if "%uprun%"=="rf" goto srcdscustom
 if "%uprun%"=="is" goto instsourcem
@@ -80,7 +81,7 @@ echo Choose an option.
 goto start
 
 :firstinstall
-if '%anonset%'=='0' (echo Regular, ^(B^)eta, or ^(T^)witch? ^(anything except b or t will do regular^)
+if '%anonset%'=='0' (echo Regular, ^(B^)eta, ^(T^)witch, or ^(P^)ortal? ^(anything except b, t, or p will do regular^)
 	set /p betaset=
 )
 for /f "delims=" %%V in ('powershell -command "$env:betaset.ToLower()"') do set "betaset=%%V"
@@ -93,8 +94,10 @@ if "%anonblck%"=="anonymous" goto noanon
 set synpath=steamapps\common\Synergy
 if "%uprun%"=="rb" set synpath=steamapps\common\synbeta
 if "%uprun%"=="rt" set synpath=steamapps\common\syntwitch
+if "%uprun%"=="rp" set synpath=steamapps\common\synportal
 if '%betaset%'=='b' set synpath=steamapps\common\synbeta
 if '%betaset%'=='t' set synpath=steamapps\common\syntwitch
+if '%betaset%'=='p' set synpath=steamapps\common\synportal
 if NOT EXIST "%synpath%\synergy\synergy_pak.vpk" (
 	if EXIST "%cldir%\common\Synergy\synergy\synergy_pak.vpk" start /min /wait robocopy /NP /NJS /NJH /NS "%cldir%\common\Synergy\synergy" "%synpath%\synergy" "synergy_pak.vpk"
 )
@@ -107,6 +110,7 @@ if NOT EXIST "%synpath%\synergy\maps" (
 )
 if '%betaset%'=='b' goto betainst
 if '%betaset%'=='t' goto twitchinst
+if '%betaset%'=='p' goto portalinst
 if NOT EXIST steamcmd.exe goto notindir
 echo Updating/installing Synergy DS
 steamcmd.exe +login %username% +app_update 17520 validate +quit
@@ -154,7 +158,7 @@ for /f "delims=" %%V in ('powershell -command "$ab = get-date; $ab.Minute"') do 
 goto reds
 
 :srcdscustom
-if %skipstep% LEQ 0 (echo Regular, ^(B^)eta, or ^(T^)witch? ^(anything except b or t will do regular^)
+if %skipstep% LEQ 0 (echo Regular, ^(B^)eta, ^(T^)witch, or ^(P^)ortal? ^(anything except b, t, or p will do regular^)
 	set /p betaset=
 	set skipstep=1
 )
@@ -168,6 +172,10 @@ if '%betaset%'=='b' (
 if '%betaset%'=='t' (
 	set synpath=steamapps\common\syntwitch
 	set syntype=Twitch
+)
+if '%betaset%'=='p' (
+	set synpath=steamapps\common\synportal
+	set syntype=Portal
 )
 if NOT EXIST %synpath%\srcds.exe goto notinstalled
 if NOT EXIST "steamapps\common\Half-Life 2\hl2\hl2_pak_dir.vpk" goto insthl2
@@ -301,6 +309,21 @@ if "%uprun%"=="i" goto setup
 cls
 goto srcds
 
+:portalinst
+echo Updating/installing Synergy Portal Branch DS
+steamcmd.exe +login %username% +force_install_dir steamapps\Common\synportal +app_update 17520 -beta development_portaltest -validate +quit
+if NOT EXIST steamapps\common\synportal\srcds.exe (
+	echo ^There was an error while attempting to download Synergy...
+	set anonset=15
+	goto firstinstall
+)
+echo Update/installation Complete
+echo If there were errors above, close the script and log into SteamCMD.exe separately, then restart the script.
+timeout -T 10
+if "%uprun%"=="i" goto setup
+cls
+goto srcds
+
 :setup
 set s=1
 set hl=1
@@ -323,6 +346,10 @@ if '%betaset%'=='b' (
 if '%betaset%'=='t' (
 	set synpath=steamapps\common\syntwitch
 	set syntype=Twitch
+)
+if '%betaset%'=='p' (
+	set synpath=steamapps\common\synportal
+	set syntype=Portal
 )
 powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SM-Synergy/raw/master/scripts/weapon_betagun.txt\",\"$PWD\$env:synpath\synergy\scripts\weapon_betagun.txt\") }"
 if NOT EXIST "%synpath%\synergy\models" mkdir "%synpath%\synergy\models"
@@ -421,6 +448,8 @@ if "%uprun%"=="rb" set syntype=Beta
 if '%betaset%'=='b' set syntype=Beta
 if "%uprun%"=="rt" set syntype=Twitch
 if '%betaset%'=='t' set syntype=Twitch
+if '%betaset%'=='rp' set syntype=Portal
+if '%betaset%'=='p' set syntype=Portal
 echo Synergy %syntype% not installed.
 pause
 goto start
@@ -475,7 +504,7 @@ goto start
 :instsourcem
 if '%instsmset%'=='0' (
 	echo This function is designed for the current version of Synergy, the development branch may be unstable.
-	echo Regular, ^(B^)eta, or ^(T^)witch? ^(anything except b or t will do regular^)
+	echo Regular, ^(B^)eta, ^(T^)witch, or ^(P^)ortal? ^(anything except b, t, or p will do regular^)
 	set /p betaset=
 	for /f "delims=" %%V in ('powershell -command "$env:betaset.ToLower()"') do set "betaset=%%V"
 )
@@ -488,6 +517,10 @@ if '%betaset%'=='b' (
 if '%betaset%'=='t' (
 	set synpath=steamapps\common\syntwitch\synergy
 	set syntype=twitch
+)
+if '%betaset%'=='p' (
+	set synpath=steamapps\common\synportal\synergy
+	set syntype=portal
 )
 if NOT EXIST %synpath% goto notinstalled
 echo This will direct download the required SourceMod files and then extract them.
@@ -549,6 +582,10 @@ if '%syntype%'=='dev' (
 	start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SM-Synergy/raw/master/devtwitchgamedata/sdkhooks.games/custom/game.synergy.txt\", \"$PWD\$env:synpath\addons\sourcemod\gamedata\sdkhooks.games\custom\game.synergy.txt\") }"
 	start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SM-Synergy/raw/master/devtwitchgamedata/sdktools.games/custom/game.synergy.txt\", \"$PWD\$env:synpath\addons\sourcemod\gamedata\sdktools.games\custom\game.synergy.txt\") }"
 )
+if '%syntype%'=='portal' (
+	start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SM-Synergy/raw/master/devtwitchgamedata/sdkhooks.games/custom/game.synergy.txt\", \"$PWD\$env:synpath\addons\sourcemod\gamedata\sdkhooks.games\custom\game.synergy.txt\") }"
+	start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SM-Synergy/raw/master/devtwitchgamedata/sdktools.games/custom/game.synergy.txt\", \"$PWD\$env:synpath\addons\sourcemod\gamedata\sdktools.games\custom\game.synergy.txt\") }"
+)
 if '%syntype%'=='twitch' (
 	start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SM-Synergy/raw/master/twitchbranchgamedata/sdkhooks.games/custom/game.synergy.txt\", \"$PWD\$env:synpath\addons\sourcemod\gamedata\sdkhooks.games\custom\game.synergy.txt\") }"
 	start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SM-Synergy/raw/master/twitchbranchgamedata/sdktools.games/custom/game.synergy.txt\", \"$PWD\$env:synpath\addons\sourcemod\gamedata\sdktools.games\custom\game.synergy.txt\") }"
@@ -566,12 +603,13 @@ cls
 goto start
 
 :instsourcepluginstop
-echo Install plugins for Regular, (B)eta, or (T)witch? (anything except b or t will do regular)
+echo Install plugins for Regular, (B)eta, (T)witch, or (P)ortal? (anything except b, t, or p will do regular)
 set /p betaset=
 for /f "delims=" %%V in ('powershell -command "$env:betaset.ToLower()"') do set "betaset=%%V"
 set synpath=steamapps\common\Synergy\synergy
 if '%betaset%'=='b' set synpath=steamapps\common\synbeta\synergy
 if '%betaset%'=='t' set synpath=steamapps\common\syntwitch\synergy
+if '%betaset%'=='p' set synpath=steamapps\common\synportal\synergy
 if NOT EXIST %synpath% goto notinstalled
 goto instsourceplugins
 :instsourceplugins
@@ -730,12 +768,13 @@ if NOT EXIST "%cd%\%synpath%\addons\sourcemod\translations\fpd.phrases.txt" (
 goto instsourceplugins
 
 :instpmpck
-echo Install Player Model Packs for Regular, (B)eta, or (T)witch? (anything except b or t will do regular)
+echo Install Player Model Packs for Regular, (B)eta, (T)witch, or (P)ortal? (anything except b, t, or p will do regular)
 set synpath=steamapps\common\Synergy
 set /p betaset=
 for /f "delims=" %%V in ('powershell -command "$env:betaset.ToLower()"') do set "betaset=%%V"
 if '%betaset%'=='b' set synpath=steamapps\common\synbeta
 if '%betaset%'=='t' set synpath=steamapps\common\syntwitch
+if '%betaset%'=='p' set synpath=steamapps\common\synportal
 goto instpmpckpass
 
 :instpmpckpass
@@ -859,6 +898,12 @@ if EXIST "D:\SteamLibrary\steamapps\sourcemods" mklink /j "steamapps\sourcemods"
 if EXIST "D:\SteamLibrary\steamapps\sourcemods" goto start
 if EXIST "F:\SteamLibrary\steamapps\sourcemods" mklink /j "steamapps\sourcemods" "F:\SteamLibrary\steamapps\sourcemods"
 if EXIST "F:\SteamLibrary\steamapps\sourcemods" goto start
+if EXIST "E:\Steam\steamapps\sourcemods" mklink /j "steamapps\sourcemods" "E:\Steam\steamapps\sourcemods"
+if EXIST "E:\Steam\steamapps\sourcemods" goto start
+if EXIST "D:\Steam\steamapps\sourcemods" mklink /j "steamapps\sourcemods" "D:\Steam\steamapps\sourcemods"
+if EXIST "D:\Steam\steamapps\sourcemods" goto start
+if EXIST "F:\Steam\steamapps\sourcemods" mklink /j "steamapps\sourcemods" "F:\Steam\steamapps\sourcemods"
+if EXIST "F:\Steam\steamapps\sourcemods" goto start
 if NOT EXIST "steamapps\sourcemods" echo Could not find Sourcemods in CL directory.
 goto start
 
@@ -873,19 +918,20 @@ if NOT EXIST "steamapps\sourcemods" (
 	pause
 	exit
 )
-echo Install Mod Support's for Regular, (B)eta, or (T)witch? (anything except b or t will do regular)
+echo Install Mod Support's for Regular, (B)eta, (T)witch, or (P)ortal? (anything except b, t or p will do regular)
 set /p betaset=
 for /f "delims=" %%V in ('powershell -command "$env:betaset.ToLower()"') do set "betaset=%%V"
 set contentpath=steamapps\common\Synergy\synergy\content
 if '%betaset%'=='b' set contentpath=steamapps\common\synbeta\synergy\content
 if '%betaset%'=='t' set contentpath=steamapps\common\syntwitch\synergy\content
+if '%betaset%'=='p' set contentpath=steamapps\common\synportal\synergy\content
 if NOT EXIST %contentpath% goto notinstalled
-if NOT EXIST "%CD%\steamapps\common\Synergy\synergy\content\1817140991" (
+if NOT EXIST "%CD%\steamapps\common\Synergy\synergy\custom\1817140991" (
 	if NOT EXIST "steamapps\sourcemods\BMS" echo ^Black Mesa sourcemod not installed!
 	if NOT EXIST "steamapps\sourcemods\xen" echo ^Improved HL1 Xen sourcemod not installed!
 	echo ^Use bms to download the workshop support files for Black Mesa and Improved Xen.
 )
-if EXIST "%CD%\steamapps\common\Synergy\synergy\content\1817140991" (
+if EXIST "%CD%\steamapps\common\Synergy\synergy\custom\1817140991" (
 	set supportsinst=^%supportsinst%, Black Mesa and Improved Xen
 )
 if EXIST "%contentpath%\bti.dat" (
