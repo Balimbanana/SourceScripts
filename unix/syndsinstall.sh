@@ -117,9 +117,9 @@ if [ -d ./$synpath/addons/sourcemod ];then
 	read nullptr
 	start
 fi
-curl -sqL "https://sm.alliedmods.net/smdrop/1.10/sourcemod-1.10.0-git6329-linux.tar.gz" | tar zxvf - -C ./$synpath
-curl -sqL "https://mms.alliedmods.net/mmsdrop/1.10/mmsource-1.10.7-git959-linux.tar.gz" | tar zxvf - -C ./$synpath
-curl -sqL "https://users.alliedmods.net/~kyles/builds/SteamWorks/SteamWorks-git121-linux.tar.gz" | tar zxvf - -C ./$synpath
+curl -sqL "https://sm.alliedmods.net/smdrop/1.11/sourcemod-1.11.0-git6473-linux.tar.gz" | tar zxvf - -C ./$synpath
+curl -sqL "https://mms.alliedmods.net/mmsdrop/1.11/mmsource-1.11.0-git1128-linux.tar.gz" | tar zxvf - -C ./$synpath
+curl -sqL "https://users.alliedmods.net/~kyles/builds/SteamWorks/SteamWorks-git131-linux.tar.gz" | tar zxvf - -C ./$synpath
 if [ ! -d ./$synpath/addons/sourcemod ];then
 	echo "Failed to auto-install SourceMod, you may have to manually install it."
 	read nullptr
