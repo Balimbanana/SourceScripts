@@ -69,7 +69,7 @@ if [ ! -d ./drive_c ];then mkdir ./drive_c ;fi
 if [ ! -d ./drive_c/steamcmd ];then mkdir ./drive_c/steamcmd ;fi
 if [ ! -d ./drive_c/steamcmd/steamapps ];then mkdir ./drive_c/steamcmd/steamapps ;fi
 if [ ! -d ./drive_c/steamcmd/steamapps/common ];then mkdir ./drive_c/steamcmd/steamapps/common ;fi
-if [ ! -d ./drive_c/steamcmd/steamapps/common/Synergy ];then
+if [ ! -f ./drive_c/steamcmd/steamapps/common/Synergy/srcds.exe ];then
 	./steamcmd.sh +@sSteamCmdForcePlatformType windows +login $stusername +force_install_dir ./drive_c/steamcmd/steamapps/common/Synergy +app_update 17520 -beta development validate +quit
 fi
 if [ ! -d ./drive_c/steamcmd/steamapps/common/Half-Life\ 2/hl2 ];then
@@ -80,6 +80,7 @@ winestart
 
 winestart() {
 DISPLAY=:0 WINEPREFIX=$PWD WINEDEBUG=-all ./steamapps/common/Proton\ 4.11/dist/bin/wine start ./drive_c/steamcmd/steamapps/common/Synergy/srcds.exe -console -game synergy +map d1_trainstation_06 +maxplayers 16 +sv_lan 0 -ip 0.0.0.0 -port 27015 -nocrashdialog -insecure -nohltv
+echo "If there was an error binding to an interface, you will need to start a virtual screen with: Xvfb :0&"
 exit
 }
 
