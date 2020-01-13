@@ -89,7 +89,7 @@ winestart
 
 winestart() {
 if [[ ! $(pgrep -a srcds.exe | grep port\ 27015) ]];then
-	DISPLAY=:0 WINEPREFIX=$PWD WINEDEBUG=-all wine start ./drive_c/steamcmd/steamapps/common/Synergy/srcds.exe -console -game synergy +map d1_trainstation_06 +maxplayers 16 +sv_lan 0 -ip 0.0.0.0 -port 27015 -nocrashdialog -insecure -nohltv
+	DISPLAY=:0 WINEPREFIX=$PWD WINEDEBUG=-all wine start ./drive_c/steamcmd/steamapps/common/Synergy/srcds.exe -console -game synergy +map d1_trainstation_06 +exec server2.cfg +maxplayers 16 +sv_lan 0 -ip 0.0.0.0 -port 27015 -nocrashdialog -insecure -nohltv
 fi
 echo "If there was an error binding to an interface, you will need to start a virtual screen with: Xvfb :0&"
 sleep 1s
