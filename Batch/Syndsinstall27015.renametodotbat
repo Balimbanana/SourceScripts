@@ -58,7 +58,6 @@ echo (RF) to run custom or forked servers.
 if EXIST "steamapps\common\Synergy\synergy\addons\sourcemod\plugins" (
 	echo ^(ISM^) to install additional SourceMod plugins.
 	echo ^(IMP^) to list/install Player Model Packs.
-	if NOT EXIST steamapps\common\Synergy\synergy\addons\plr.vdf echo ^(PLR^) for player limit remover ^(only works on 56.16^)
 )
 if EXIST "steamapps\common\Synergy\synergy" echo (IMSP) to list/install additional Mod Support's
 echo (Update) to update this script.
@@ -76,7 +75,6 @@ if "%uprun%"=="ism" goto instsourcepluginstop
 if "%uprun%"=="imp" goto instpmpck
 if "%uprun%"=="imsp" goto instmodsup
 if "%uprun%"=="linksm" goto linksm
-if "%uprun%"=="plr" goto plr
 if "%uprun%"=="update" goto updater
 echo Choose an option.
 goto start
@@ -257,30 +255,6 @@ set smset=1
 set sm_basepath=addons/sourcemod%pnum%
 set skipstep=3
 goto srcds
-
-:plr
-if EXIST steamapps\common\Synergy\synergy\addons\plr\plr.dll goto start
-if NOT EXIST steamapps\common\Synergy\synergy goto start
-if NOT EXIST steamapps\common\Synergy\synergy\addons mkdir steamapps\common\Synergy\synergy\addons
-if NOT EXIST steamapps\common\Synergy\synergy\addons\plr mkdir steamapps\common\Synergy\synergy\addons\plr
-powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"http://www.sourceop.com/modules.php?name=Downloads^&d_op=getit^&lid=42\",\"$PWD\plr.rar\") }"
-if NOT EXIST "%cd%\7-Zip\7z.exe" powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SourceScripts/raw/master/synotherfilefixes/7-Zip.zip\",\"$PWD\7zip.zip\") }"
-if EXIST "%cd%\7zip.zip" start /wait /min powershell -command "& {Add-Type -AssemblyName System.IO.Compression.FileSystem; [System.IO.Compression.ZipFile]::ExtractToDirectory(\"$PWD\7zip.zip\", \"$PWD\") }"
-if EXIST "%cd%\7zip.zip" del /Q "%cd%\7zip.zip"
-start /min /wait "7z" "7-Zip\7z.exe" x plr.rar -o"%cd%\steamapps\common\Synergy\synergy\addons\plr"
-if EXIST "%cd%\plr.rar" del /Q "%cd%\plr.rar"
-if NOT EXIST steamapps\common\Synergy\synergy\addons\plr.vdf (
-	echo "Plugin">steamapps\common\Synergy\synergy\addons\plr.vdf
-	echo {>>steamapps\common\Synergy\synergy\addons\plr.vdf
-	echo ^	"file"	"addons/plr/plr">>steamapps\common\Synergy\synergy\addons\plr.vdf
-	echo }>>steamapps\common\Synergy\synergy\addons\plr.vdf
-)
-set inst=0
-if EXIST steamapps\common\Synergy\synergy\addons\plr.vdf set inst=1
-if EXIST steamapps\common\Synergy\synergy\addons\plr\plr.dll (
-	if '%inst%'=='1' echo ^Installed successfully...
-)
-goto start
 
 :betainst
 echo Updating/installing Synergy Beta DS
