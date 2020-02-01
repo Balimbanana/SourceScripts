@@ -906,8 +906,8 @@ if '%betaset%'=='t' set contentpath=steamapps\common\syntwitch\synergy\content
 if '%betaset%'=='p' set contentpath=steamapps\common\synportal\synergy\content
 if NOT EXIST %contentpath% goto notinstalled
 if NOT EXIST "%CD%\steamapps\common\Synergy\synergy\custom\1817140991" (
-	if NOT EXIST "steamapps\sourcemods\BMS" echo ^Black Mesa sourcemod not installed!
-	if NOT EXIST "steamapps\sourcemods\xen" echo ^Improved HL1 Xen sourcemod not installed!
+	if NOT EXIST "steamapps\sourcemods\BMS\maps\bm_c0a0a.bsp" echo ^Black Mesa sourcemod not installed!
+	if NOT EXIST "steamapps\sourcemods\xen\maps\xen_c4a1.bsp" echo ^Improved HL1 Xen sourcemod not installed!
 	echo ^Use bms to download the workshop support files for Black Mesa and Improved Xen.
 )
 if EXIST "%CD%\steamapps\common\Synergy\synergy\custom\1817140991" (
