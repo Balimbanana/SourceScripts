@@ -107,6 +107,8 @@ if NOT EXIST "%synpath%\synergy\maps" (
 	if EXIST "%cldir%\common\Synergy\synergy\maps" start /min /wait robocopy /NP /NJS /NJH /NS "%cldir%\common\Synergy\synergy\maps" "%synpath%\synergy\maps" "syn_*"
 	if EXIST "%cldir%\common\Synergy\synergy\maps\graphs" start /min /wait robocopy /NP /NJS /NJH /NS "%cldir%\common\Synergy\synergy\maps\graphs" "%synpath%\synergy\maps\graphs" "*"
 )
+echo The next prompt is inside SteamCMD, if it asks for the password, it is entered as a secure string.
+echo What this means is that it will not show you the characters you enter, but it is entering them.
 if '%betaset%'=='b' goto betainst
 if '%betaset%'=='t' goto twitchinst
 if '%betaset%'=='p' goto portalinst
