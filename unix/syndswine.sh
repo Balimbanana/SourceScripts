@@ -73,12 +73,24 @@ if [ ! -f /usr/bin/wine ];then
 		sudo apt-add-repository 'deb https://dl.winehq.org/wine-builds/ubuntu/ eoan main'
 	fi
 	if [[ $(cat /etc/os-release | grep VERSION_CODENAME=stretch) ]];then
+		wget "https://download.opensuse.org/repositories/Emulators:/Wine:/Debian/Debian_10/i386/libfaudio0_20.01-0~buster_i386.deb"
+		wget "https://download.opensuse.org/repositories/Emulators:/Wine:/Debian/Debian_10/amd64/libfaudio0_20.01-0~buster_amd64.deb"
+		sudo dpkg -i libfaudio0_20.01-0~buster_i386.deb libfaudio0_20.01-0~buster_amd64.deb
+		sudo apt --fix-broken install
 		sudo apt-add-repository 'deb https://dl.winehq.org/wine-builds/debian/ stretch main'
 	fi
 	if [[ $(cat /etc/os-release | grep VERSION_CODENAME=buster) ]];then
+		wget "https://download.opensuse.org/repositories/Emulators:/Wine:/Debian/Debian_10/i386/libfaudio0_20.01-0~buster_i386.deb"
+		wget "https://download.opensuse.org/repositories/Emulators:/Wine:/Debian/Debian_10/amd64/libfaudio0_20.01-0~buster_amd64.deb"
+		sudo dpkg -i libfaudio0_20.01-0~buster_i386.deb libfaudio0_20.01-0~buster_amd64.deb
+		sudo apt --fix-broken install
 		sudo apt-add-repository 'deb https://dl.winehq.org/wine-builds/debian/ buster main'
 	fi
 	if [[ $(cat /etc/os-release | grep VERSION_CODENAME=bullseye) ]];then
+		wget "https://download.opensuse.org/repositories/Emulators:/Wine:/Debian/Debian_10/i386/libfaudio0_20.01-0~buster_i386.deb"
+		wget "https://download.opensuse.org/repositories/Emulators:/Wine:/Debian/Debian_10/amd64/libfaudio0_20.01-0~buster_amd64.deb"
+		sudo dpkg -i libfaudio0_20.01-0~buster_i386.deb libfaudio0_20.01-0~buster_amd64.deb
+		sudo apt --fix-broken install
 		sudo apt-add-repository 'deb https://dl.winehq.org/wine-builds/debian/ bullseye main'
 	fi
 	sudo apt-get update
