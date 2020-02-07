@@ -71,7 +71,7 @@ if [ ! -f /usr/bin/wine ];then
 		sudo apt-add-repository 'deb https://dl.winehq.org/wine-builds/ubuntu/ eoan main'
 	fi
 	sudo apt-get update
-	sudo apt install --install-recommends winehq-devel
+	sudo apt-get install --install-recommends winehq-devel
 fi
 echo "Enter your Steam username here it will be passed to SteamCMD"
 echo "It will be used for installing Synergy, HL2, Episode 1, and Episode 2:"
