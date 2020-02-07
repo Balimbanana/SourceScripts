@@ -1,6 +1,6 @@
 #!/bin/bash
 missingdeps() {
-echo "You are missing dependencies for Steam"
+echo "You are missing dependencies for Steam or other operations"
 echo "Use $packageinf"
 echo "Then restart this script."
 echo "Press enter to exit script"
@@ -11,10 +11,10 @@ exit
 if [ -f /usr/bin/dpkg-query ];then
 	if [[ ! $(dpkg-query -l lib32gcc1) ]];then
 		if [[ $(cat /etc/os-release | grep ID=ubuntu) ]];then
-			packageinf="Use sudo apt-get install lib32gcc1"
+			packageinf="sudo apt-get install lib32gcc1"
 			missingdeps
 		else
-			packageinf="Use your package manager to install lib32gcc1"
+			packageinf="your package manager to install lib32gcc1"
 			missingdeps
 		fi
 	fi
@@ -38,6 +38,10 @@ if [ $PWD == $HOME/Steam ]; then
 	cd ./SteamCMD
 fi
 if [ ! -f ./steamcmd.sh ];then inststeam; fi
+if [ ! -f /usr/bin/Xvfb ];then
+	packageinf="sudo apt-get install xvfb"
+	missingdeps
+fi
 inststate=0
 if [ ! -f /tmp/.X0-lock ];then Xvfb :0& ;fi
 if [ -f /usr/bin/wine ];then inststate=$(($inststate+1)) ;fi
