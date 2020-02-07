@@ -73,19 +73,13 @@ if [ ! -f /usr/bin/wine ];then
 		sudo apt-add-repository 'deb https://dl.winehq.org/wine-builds/ubuntu/ eoan main'
 	fi
 	if [[ $(cat /etc/os-release | grep VERSION_CODENAME=stretch) ]];then
-		if [[ ! $(cat /etc/apt/sources.list | grep winehq) ]];then
-			sudo echo "deb https://dl.winehq.org/wine-builds/debian/ stretch main">>/etc/apt/sources.list
-		fi
+		sudo apt-add-repository 'deb https://dl.winehq.org/wine-builds/debian/ stretch main'
 	fi
 	if [[ $(cat /etc/os-release | grep VERSION_CODENAME=buster) ]];then
-		if [[ ! $(cat /etc/apt/sources.list | grep winehq) ]];then
-			sudo echo "deb https://dl.winehq.org/wine-builds/debian/ buster main">>/etc/apt/sources.list
-		fi
+		sudo apt-add-repository 'deb https://dl.winehq.org/wine-builds/debian/ buster main'
 	fi
 	if [[ $(cat /etc/os-release | grep VERSION_CODENAME=bullseye) ]];then
-		if [[ ! $(cat /etc/apt/sources.list | grep winehq) ]];then
-			sudo echo "deb https://dl.winehq.org/wine-builds/debian/ bullseye main">>/etc/apt/sources.list
-		fi
+		sudo apt-add-repository 'deb https://dl.winehq.org/wine-builds/debian/ bullseye main'
 	fi
 	sudo apt-get update
 	sudo apt-get install --install-recommends winehq-devel
