@@ -43,7 +43,9 @@ if [ ! -f /usr/bin/Xvfb ];then
 	missingdeps
 fi
 inststate=0
-if [ ! -f /tmp/.X0-lock ];then Xvfb :0& ;fi
+if [ ! -f /tmp/.X0-lock ];then
+	Xvfb :0&
+fi
 if [ -f /usr/bin/wine ];then inststate=$(($inststate+1)) ;fi
 if [ -f ./drive_c/steamcmd/steamapps/common/Synergy/srcds.exe ];then inststate=$(($inststate+1)) ;fi
 if [ -f ./drive_c/steamcmd/steamapps/common/Half-Life\ 2/hl2/hl2_pak_dir.vpk ];then inststate=$(($inststate+1)) ;fi
