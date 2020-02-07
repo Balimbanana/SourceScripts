@@ -72,14 +72,20 @@ if [ ! -f /usr/bin/wine ];then
 	if [[ $(cat /etc/os-release | grep VERSION_ID=\"19.10) ]];then 
 		sudo apt-add-repository 'deb https://dl.winehq.org/wine-builds/ubuntu/ eoan main'
 	fi
-	if [[ $(cat /etc/os-release | grep VERSION_CODENAME=stretch) ]];then 
-		sudo echo "deb https://dl.winehq.org/wine-builds/debian/ stretch main">>/etc/apt/sources.list.d/wine.list
+	if [[ $(cat /etc/os-release | grep VERSION_CODENAME=stretch) ]];then
+		if [[ ! $(cat /etc/apt/sources.list | grep winehq) ]];then
+			sudo echo "deb https://dl.winehq.org/wine-builds/debian/ stretch main">>/etc/apt/sources.list
+		fi
 	fi
-	if [[ $(cat /etc/os-release | grep VERSION_CODENAME=buster) ]];then 
-		sudo echo "deb https://dl.winehq.org/wine-builds/debian/ buster main">>/etc/apt/sources.list.d/wine.list
+	if [[ $(cat /etc/os-release | grep VERSION_CODENAME=buster) ]];then
+		if [[ ! $(cat /etc/apt/sources.list | grep winehq) ]];then
+			sudo echo "deb https://dl.winehq.org/wine-builds/debian/ buster main">>/etc/apt/sources.list
+		fi
 	fi
-	if [[ $(cat /etc/os-release | grep VERSION_CODENAME=bullseye) ]];then 
-		sudo echo "deb https://dl.winehq.org/wine-builds/debian/ bullseye main">>/etc/apt/sources.list.d/wine.list
+	if [[ $(cat /etc/os-release | grep VERSION_CODENAME=bullseye) ]];then
+		if [[ ! $(cat /etc/apt/sources.list | grep winehq) ]];then
+			sudo echo "deb https://dl.winehq.org/wine-builds/debian/ bullseye main">>/etc/apt/sources.list
+		fi
 	fi
 	sudo apt-get update
 	sudo apt-get install --install-recommends winehq-devel
