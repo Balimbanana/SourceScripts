@@ -39,6 +39,7 @@ if [ $PWD == $HOME/Steam ]; then
 fi
 if [ ! -f ./steamcmd.sh ];then inststeam; fi
 inststate=0
+if [ ! -f /tmp/.X0-lock ];then Xvfb :0& ;fi
 if [ -f /usr/bin/wine ];then inststate=$(($inststate+1)) ;fi
 if [ -f ./drive_c/steamcmd/steamapps/common/Synergy/srcds.exe ];then inststate=$(($inststate+1)) ;fi
 if [ -f ./drive_c/steamcmd/steamapps/common/Half-Life\ 2/hl2/hl2_pak_dir.vpk ];then inststate=$(($inststate+1)) ;fi
@@ -83,6 +84,26 @@ if [ ! -f ./drive_c/steamcmd/steamapps/common/Synergy/srcds.exe ];then
 fi
 if [ ! -d ./drive_c/steamcmd/steamapps/common/Half-Life\ 2/hl2 ];then
 	./steamcmd.sh +@sSteamCmdForcePlatformType windows +login $stusername +force_install_dir ./drive_c/steamcmd/steamapps/common/Half-Life\ 2 +app_update 220 +app_update 380 +app_update 420 +validate +quit
+fi
+if [ ! -f ./drive_c/steamcmd/Steam.exe ];then
+	wget -nv "https://steamcdn-a.akamaihd.net/client/installer/SteamSetup.exe" -P ./drive_c/steamcmd
+	if [ -f ./drive_c/steamcmd/SteamSetup.exe ];then
+		echo "Installing Steam client for Steam server connection..."
+		DISPLAY=:0 WINEPREFIX=$PWD WINEDEBUG=-all wine start ./drive_c/steamcmd/SteamSetup.exe /S /D=C:\\steamcmd
+		rechecksetup
+	fi
+fi
+if [[ ! $(pgrep -a Steam.exe) ]];then
+	DISPLAY=:0 WINEPREFIX=$PWD WINEDEBUG=-all wine start ./drive_c/steamcmd/Steam.exe
+fi
+winestart
+}
+
+rechecksetup() {
+sleep 5s
+if [ -f ./drive_c/steamcmd/Steam.exe ];then
+	kill $(pgrep SteamSetup.exe)
+	DISPLAY=:0 WINEPREFIX=$PWD WINEDEBUG=-all wine start ./drive_c/steamcmd/Steam.exe
 fi
 winestart
 }
