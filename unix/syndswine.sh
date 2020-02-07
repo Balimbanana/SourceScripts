@@ -129,8 +129,12 @@ winestart
 rechecksetup() {
 sleep 5s
 if [ -f ./drive_c/steamcmd/Steam.exe ];then
-	kill $(pgrep SteamSetup.exe)
-	DISPLAY=:0 WINEPREFIX=$PWD WINEDEBUG=-all wine start ./drive_c/steamcmd/Steam.exe
+	if [[ $(pgrep -a SteamSetup.exe) ]];then
+		kill $(pgrep SteamSetup.exe)
+	fi
+	if [[ $(pgrep -a Steam.exe) ]];then
+		DISPLAY=:0 WINEPREFIX=$PWD WINEDEBUG=-all wine start ./drive_c/steamcmd/Steam.exe
+	fi
 fi
 winestart
 }
