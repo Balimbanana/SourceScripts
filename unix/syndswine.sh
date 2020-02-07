@@ -44,7 +44,7 @@ if [ ! -f /usr/bin/Xvfb ];then
 fi
 inststate=0
 if [ ! -f /tmp/.X0-lock ];then
-	Xvfb :0&
+	Xvfb :0 &
 fi
 if [ -f /usr/bin/wine ];then inststate=$(($inststate+1)) ;fi
 if [ -f ./drive_c/steamcmd/steamapps/common/Synergy/srcds.exe ];then inststate=$(($inststate+1)) ;fi
