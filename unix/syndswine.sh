@@ -49,27 +49,16 @@ fi
 if [ -f /usr/bin/wine ];then inststate=$(($inststate+1)) ;fi
 if [ -f ./drive_c/steamcmd/steamapps/common/Synergy/srcds.exe ];then inststate=$(($inststate+1)) ;fi
 if [ -f ./drive_c/steamcmd/steamapps/common/Half-Life\ 2/hl2/hl2_pak_dir.vpk ];then inststate=$(($inststate+1)) ;fi
-if [ ! -z $1 ];then
-	if [ "$1" = "sm" ];then
-		if [ ! -f ./drive_c/steamcmd/steamapps/common/Synergy/synergy/addons/sourcemod.vdf ];then
-			wget "https://sm.alliedmods.net/smdrop/1.11/sourcemod-latest-windows"
-			fullurlcat=https://sm.alliedmods.net/smdrop/1.11/$(cat ./sourcemod-latest-windows)
-			wget "$fullurlcat" -P ./drive_c/steamcmd/steamapps/common/Synergy/synergy
-			if [ -f ./drive_c/steamcmd/steamapps/common/Synergy/synergy/$(cat ./sourcemod-latest-windows) ];then
-				gzip -d ./drive_c/steamcmd/steamapps/common/Synergy/synergy/$(cat ./sourcemod-latest-windows)
-			fi
-			wget "https://mms.alliedmods.net/mmsdrop/1.11/mmsource-latest-windows"
-			fullurlcat=https://sm.alliedmods.net/smdrop/1.11/$(cat ./mmsource-latest-windows)
-			wget "$fullurlcat" -P ./drive_c/steamcmd/steamapps/common/Synergy/synergy
-			if [ -f ./drive_c/steamcmd/steamapps/common/Synergy/synergy/$(cat ./mmsource-latest-windows) ];then
-				gzip -d ./drive_c/steamcmd/steamapps/common/Synergy/synergy/$(cat ./mmsource-latest-windows)
-			fi
-		fi
-	fi
-fi
 if [ $inststate == 3 ];then
 	if [[ ! $(pgrep -a Steam.exe) ]];then
 		DISPLAY=:0 WINEPREFIX=$PWD WINEDEBUG=-all wine start ./drive_c/steamcmd/Steam.exe
+	fi
+	if [ -f ./drive_c/steamcmd/steamapps/common/Synergy/synergy/addons/sourcemod.vdf ];then
+		echo "Would you like to install SourceMod? Y/n"
+		read instsm
+		if [ -z $instsm ];then instsm="y" ;fi
+		instsm=${instsm,,}
+		if [ $instsm = "y" ];then installsm ;fi
 	fi
 	winestart
 fi
@@ -207,6 +196,23 @@ if [ ! -f ./steamcmd.sh ]; then
 	exit
 fi
 start
+}
+
+installsm() {
+wget "https://sm.alliedmods.net/smdrop/1.11/sourcemod-latest-windows"
+fullurlcat=https://sm.alliedmods.net/smdrop/1.11/$(cat ./sourcemod-latest-windows)
+wget "$fullurlcat" -P ./drive_c/steamcmd/steamapps/common/Synergy/synergy
+if [ -f ./drive_c/steamcmd/steamapps/common/Synergy/synergy/$(cat ./sourcemod-latest-windows) ];then
+	gzip -d ./drive_c/steamcmd/steamapps/common/Synergy/synergy/$(cat ./sourcemod-latest-windows)
+fi
+wget "https://mms.alliedmods.net/mmsdrop/1.11/mmsource-latest-windows"
+fullurlcat=https://sm.alliedmods.net/smdrop/1.11/$(cat ./mmsource-latest-windows)
+wget "$fullurlcat" -P ./drive_c/steamcmd/steamapps/common/Synergy/synergy
+if [ -f ./drive_c/steamcmd/steamapps/common/Synergy/synergy/$(cat ./mmsource-latest-windows) ];then
+	gzip -d ./drive_c/steamcmd/steamapps/common/Synergy/synergy/$(cat ./mmsource-latest-windows)
+fi
+if [ -f ./drive_c/steamcmd/steamapps/common/Synergy/synergy/addons/metamod.vdf ];then echo "MetaMod installed!" ;fi
+if [ -f ./drive_c/steamcmd/steamapps/common/Synergy/synergy/addons/sourcemod.vdf ];then echo "SourceMod installed!" ;fi
 }
 
 noanon() {
