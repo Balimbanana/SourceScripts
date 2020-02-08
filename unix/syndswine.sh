@@ -49,7 +49,7 @@ fi
 if [ -f /usr/bin/wine ];then inststate=$(($inststate+1)) ;fi
 if [ -f ./drive_c/steamcmd/steamapps/common/Synergy/srcds.exe ];then inststate=$(($inststate+1)) ;fi
 if [ -f ./drive_c/steamcmd/steamapps/common/Half-Life\ 2/hl2/hl2_pak_dir.vpk ];then inststate=$(($inststate+1)) ;fi
-if [ ! -z $1 ];then
+if [ -z $1 ];then
 	if [ $1 == "sm" ];then
 		if [ ! -f ./drive_c/steamcmd/steamapps/common/Synergy/synergy/addons/sourcemod.vdf ];then
 			wget "https://sm.alliedmods.net/smdrop/1.11/sourcemod-latest-windows"
