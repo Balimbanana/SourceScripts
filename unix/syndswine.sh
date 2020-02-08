@@ -50,7 +50,7 @@ if [ -f /usr/bin/wine ];then inststate=$(($inststate+1)) ;fi
 if [ -f ./drive_c/steamcmd/steamapps/common/Synergy/srcds.exe ];then inststate=$(($inststate+1)) ;fi
 if [ -f ./drive_c/steamcmd/steamapps/common/Half-Life\ 2/hl2/hl2_pak_dir.vpk ];then inststate=$(($inststate+1)) ;fi
 if [ -z $1 ];then
-	if [ $1 == "sm" ];then
+	if [ $1 = "sm" ];then
 		if [ ! -f ./drive_c/steamcmd/steamapps/common/Synergy/synergy/addons/sourcemod.vdf ];then
 			wget "https://sm.alliedmods.net/smdrop/1.11/sourcemod-latest-windows"
 			fullurlcat=https://sm.alliedmods.net/smdrop/1.11/$(cat ./sourcemod-latest-windows)
@@ -139,7 +139,7 @@ if [ ! -d ./drive_c/steamcmd/steamapps/common/Half-Life\ 2/hl2 ];then
 	./steamcmd.sh +@sSteamCmdForcePlatformType windows +login $stusername +force_install_dir ./drive_c/steamcmd/steamapps/common/Half-Life\ 2 +app_update 220 +app_update 380 +app_update 420 +validate +quit
 fi
 if [ ! -d ./drive_c/steamcmd/steamapps/common/Synergy/synergy/addons ];then mkdir ./drive_c/steamcmd/steamapps/common/Synergy/synergy/addons ;fi
-if [ $instsm == "y" ];then
+if [ $instsm = "y" ];then
 	if [ ! -f ./drive_c/steamcmd/steamapps/common/Synergy/synergy/addons/sourcemod.vdf ];then
 		wget "https://sm.alliedmods.net/smdrop/1.11/sourcemod-latest-windows"
 		fullurlcat=https://sm.alliedmods.net/smdrop/1.11/$(cat ./sourcemod-latest-windows)
