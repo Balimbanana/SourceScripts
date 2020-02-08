@@ -53,14 +53,14 @@ if [ $inststate == 3 ];then
 	if [[ ! $(pgrep -a Steam.exe) ]];then
 		DISPLAY=:0 WINEPREFIX=$PWD WINEDEBUG=-all wine start ./drive_c/steamcmd/Steam.exe
 	fi
-	if [ ! -f ./drive_c/steamcmd/steamapps/common/Synergy/synergy/addons/sourcemod.vdf ];then
+	if [ ! -f ./drive_c/steamcmd/steamapps/common/Synergy/synergy/addons/metamod/sourcemod.vdf ];then
 		echo "Would you like to install SourceMod? Y/n"
 		read instsm
 		if [ -z $instsm ];then instsm="y" ;fi
 		instsm=${instsm,,}
 		if [ $instsm = "y" ];then installsm ;fi
 	fi
-	if [ -f ./drive_c/steamcmd/steamapps/common/Synergy/synergy/addons/sourcemod.vdf ];then
+	if [ -f ./drive_c/steamcmd/steamapps/common/Synergy/synergy/addons/metamod/sourcemod.vdf ];then
 		echo "Would you like to install plugins for SourceMod? y/N"
 		read instsm
 		if [ -z $instsm ];then instsm="n" ;fi
@@ -213,7 +213,7 @@ if [ -f ./drive_c/steamcmd/steamapps/common/Synergy/synergy/addons/metamod.vdf ]
 	echo "MetaMod installed!"
 	if [ -f ./drive_c/steamcmd/steamapps/common/Synergy/synergy/$(cat ./mmsource-latest-windows) ];then rm ./drive_c/steamcmd/steamapps/common/Synergy/synergy/$(cat ./mmsource-latest-windows) ;fi
 fi
-if [ -f ./drive_c/steamcmd/steamapps/common/Synergy/synergy/addons/sourcemod.vdf ];then
+if [ -f ./drive_c/steamcmd/steamapps/common/Synergy/synergy/addons/metamod/sourcemod.vdf ];then
 	echo "SourceMod installed!"
 	if [ -f ./drive_c/steamcmd/steamapps/common/Synergy/synergy/$(cat ./sourcemod-latest-windows) ];then rm ./drive_c/steamcmd/steamapps/common/Synergy/synergy/$(cat ./sourcemod-latest-windows) ;fi
 fi
