@@ -53,7 +53,7 @@ if [ $inststate == 3 ];then
 	if [[ ! $(pgrep -a Steam.exe) ]];then
 		DISPLAY=:0 WINEPREFIX=$PWD WINEDEBUG=-all wine start ./drive_c/steamcmd/Steam.exe
 	fi
-	if [ -f ./drive_c/steamcmd/steamapps/common/Synergy/synergy/addons/sourcemod.vdf ];then
+	if [ ! -f ./drive_c/steamcmd/steamapps/common/Synergy/synergy/addons/sourcemod.vdf ];then
 		echo "Would you like to install SourceMod? Y/n"
 		read instsm
 		if [ -z $instsm ];then instsm="y" ;fi
