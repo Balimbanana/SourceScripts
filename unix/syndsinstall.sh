@@ -477,7 +477,7 @@ if [ $pluginsubstr = "m" ];then
 	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/plugins/mapchooser.smx" -P ./$synpath/addons/sourcemod/plugins
 	if [ ! -f ./$synpath/cfg/mapcyclecfg.txt ];then
 		cat ./$synpath/mapcycle.txt | grep d1>./$synpath/cfg/mapcyclecfg.txt
-		cat ./$synpath/mapcycle.txt | grep d2>>./$synpath/cfg/mapcyclecfg/txt
+		cat ./$synpath/mapcycle.txt | grep d2>>./$synpath/cfg/mapcyclecfg.txt
 		cat ./$synpath/mapcycle.txt | grep d3>>./$synpath/cfg/mapcyclecfg.txt
 		cat ./$synpath/mapcycle.txt | grep ep1_>>./$synpath/cfg/mapcyclecfg.txt
 		cat ./$synpath/mapcycle.txt | grep ep2_>>./$synpath/cfg/mapcyclecfg.txt
