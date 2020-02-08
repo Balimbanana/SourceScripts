@@ -188,15 +188,19 @@ start
 installsm() {
 wget "https://sm.alliedmods.net/smdrop/1.11/sourcemod-latest-windows"
 fullurlcat=https://sm.alliedmods.net/smdrop/1.11/$(cat ./sourcemod-latest-windows)
-wget "$fullurlcat" -P ./drive_c/steamcmd/steamapps/common/Synergy/synergy
-if [ -f ./drive_c/steamcmd/steamapps/common/Synergy/synergy/$(cat ./sourcemod-latest-windows) ];then
-	gzip -d ./drive_c/steamcmd/steamapps/common/Synergy/synergy/$(cat ./sourcemod-latest-windows)
+if [ ! -f ./drive_c/steamcmd/steamapps/common/Synergy/synergy/$(cat ./sourcemod-latest-windows) ];then
+	wget "$fullurlcat" -P ./drive_c/steamcmd/steamapps/common/Synergy/synergy
 fi
-wget "https://mms.alliedmods.net/mmsdrop/1.11/mmsource-latest-windows"
+if [ -f ./drive_c/steamcmd/steamapps/common/Synergy/synergy/$(cat ./sourcemod-latest-windows) ];then
+	unzip ./drive_c/steamcmd/steamapps/common/Synergy/synergy/$(cat ./sourcemod-latest-windows) -d ./drive_c/steamcmd/steamapps/common/Synergy/synergy
+fi
+if [ ! -f ./drive_c/steamcmd/steamapps/common/Synergy/synergy/$(cat ./mmsource-latest-windows) ];then
+	wget "https://mms.alliedmods.net/mmsdrop/1.11/mmsource-latest-windows"
+fi
 fullurlcat=https://mms.alliedmods.net/mmsdrop/1.11/$(cat ./mmsource-latest-windows)
 wget "$fullurlcat" -P ./drive_c/steamcmd/steamapps/common/Synergy/synergy
 if [ -f ./drive_c/steamcmd/steamapps/common/Synergy/synergy/$(cat ./mmsource-latest-windows) ];then
-	gzip -d ./drive_c/steamcmd/steamapps/common/Synergy/synergy/$(cat ./mmsource-latest-windows)
+	unzip ./drive_c/steamcmd/steamapps/common/Synergy/synergy/$(cat ./mmsource-latest-windows) -d ./drive_c/steamcmd/steamapps/common/Synergy/synergy
 fi
 if [ -f ./drive_c/steamcmd/steamapps/common/Synergy/synergy/addons/metamod.vdf ];then echo "MetaMod installed!" ;fi
 if [ -f ./drive_c/steamcmd/steamapps/common/Synergy/synergy/addons/sourcemod.vdf ];then echo "SourceMod installed!" ;fi
