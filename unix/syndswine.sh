@@ -49,7 +49,12 @@ fi
 if [ -f /usr/bin/wine ];then inststate=$(($inststate+1)) ;fi
 if [ -f ./drive_c/steamcmd/steamapps/common/Synergy/srcds.exe ];then inststate=$(($inststate+1)) ;fi
 if [ -f ./drive_c/steamcmd/steamapps/common/Half-Life\ 2/hl2/hl2_pak_dir.vpk ];then inststate=$(($inststate+1)) ;fi
-if [ $inststate == 3 ];then winestart;fi
+if [ $inststate == 3 ];then
+	if [[ ! $(pgrep -a Steam.exe) ]];then
+		DISPLAY=:0 WINEPREFIX=$PWD WINEDEBUG=-all wine start ./drive_c/steamcmd/Steam.exe
+	fi
+	winestart
+fi
 if [ ! -f /usr/bin/wine ];then
 	echo "Beginning with install of Wine. Press Enter to fully install Wine development branch. This user must have access to sudo apt for this to work. Press Ctrl+C to exit if you don't want to continue."
 	read opt
