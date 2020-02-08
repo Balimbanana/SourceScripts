@@ -193,29 +193,38 @@ start
 }
 
 installsm() {
+synpath=drive_c/steamcmd/steamapps/common/Synergy/synergy
 wget "https://sm.alliedmods.net/smdrop/1.11/sourcemod-latest-windows"
 fullurlcat=https://sm.alliedmods.net/smdrop/1.11/$(cat ./sourcemod-latest-windows)
-if [ ! -f ./drive_c/steamcmd/steamapps/common/Synergy/synergy/$(cat ./sourcemod-latest-windows) ];then
-	wget "$fullurlcat" -P ./drive_c/steamcmd/steamapps/common/Synergy/synergy
+if [ ! -f ./$synpath/$(cat ./sourcemod-latest-windows) ];then
+	wget "$fullurlcat" -P ./$synpath
 fi
-if [ -f ./drive_c/steamcmd/steamapps/common/Synergy/synergy/$(cat ./sourcemod-latest-windows) ];then
-	unzip ./drive_c/steamcmd/steamapps/common/Synergy/synergy/$(cat ./sourcemod-latest-windows) -d ./drive_c/steamcmd/steamapps/common/Synergy/synergy
+if [ -f ./$synpath/$(cat ./sourcemod-latest-windows) ];then
+	unzip ./$synpath/$(cat ./sourcemod-latest-windows) -d ./$synpath
 fi
 wget "https://mms.alliedmods.net/mmsdrop/1.11/mmsource-latest-windows"
 fullurlcat=https://mms.alliedmods.net/mmsdrop/1.11/$(cat ./mmsource-latest-windows)
-if [ ! -f ./drive_c/steamcmd/steamapps/common/Synergy/synergy/$(cat ./mmsource-latest-windows) ];then
+if [ ! -f ./$synpath/$(cat ./mmsource-latest-windows) ];then
 	wget "$fullurlcat" -P ./drive_c/steamcmd/steamapps/common/Synergy/synergy
 fi
-if [ -f ./drive_c/steamcmd/steamapps/common/Synergy/synergy/$(cat ./mmsource-latest-windows) ];then
-	unzip ./drive_c/steamcmd/steamapps/common/Synergy/synergy/$(cat ./mmsource-latest-windows) -d ./drive_c/steamcmd/steamapps/common/Synergy/synergy
+if [ -f ./$synpath/$(cat ./mmsource-latest-windows) ];then
+	unzip ./$synpath/$(cat ./mmsource-latest-windows) -d ./$synpath
 fi
-if [ -f ./drive_c/steamcmd/steamapps/common/Synergy/synergy/addons/metamod.vdf ];then
+if [ -f ./$synpath/addons/metamod.vdf ];then
 	echo "MetaMod installed!"
-	if [ -f ./drive_c/steamcmd/steamapps/common/Synergy/synergy/$(cat ./mmsource-latest-windows) ];then rm ./drive_c/steamcmd/steamapps/common/Synergy/synergy/$(cat ./mmsource-latest-windows) ;fi
+	if [ -f ./$synpath/$(cat ./mmsource-latest-windows) ];then rm ./$synpath/$(cat ./mmsource-latest-windows) ;fi
 fi
-if [ -f ./drive_c/steamcmd/steamapps/common/Synergy/synergy/addons/metamod/sourcemod.vdf ];then
+if [ -f ./$synpath/addons/metamod/sourcemod.vdf ];then
+	if [ ! -d ./$synpath/addons/sourcemod/gamedata/sdktools.games/custom ];then mkdir ./$synpath/addons/sourcemod/gamedata/sdktools.games/custom ;fi
+	if [ ! -d ./$synpath/addons/sourcemod/gamedata/sdkhooks.games/custom ];then mkdir ./$synpath/addons/sourcemod/gamedata/sdkhooks.games/custom ;fi
+	if [ ! -f ./$synpath/addons/sourcemod/gamedata/sdktools.games/custom/game.synergy.txt ];then
+		wget -nv "https://raw.githubusercontent.com/Balimbanana/SM-Synergy/master/devtwitchgamedata/sdktools.games/custom/game.synergy.txt" -P ./$synpath/addons/sourcemod/gamedata/sdkhooks.games/custom
+	fi
+	if [ ! -f ./$synpath/addons/sourcemod/gamedata/sdkhooks.games/custom/game.synergy.txt ];then
+		wget -nv "https://raw.githubusercontent.com/Balimbanana/SM-Synergy/master/devtwitchgamedata/sdkhooks.games/custom/game.synergy.txt" -P ./$synpath/addons/sourcemod/gamedata/sdkhooks.games/custom
+	fi
 	echo "SourceMod installed!"
-	if [ -f ./drive_c/steamcmd/steamapps/common/Synergy/synergy/$(cat ./sourcemod-latest-windows) ];then rm ./drive_c/steamcmd/steamapps/common/Synergy/synergy/$(cat ./sourcemod-latest-windows) ;fi
+	if [ -f ./$synpath/$(cat ./sourcemod-latest-windows) ];then rm ./$synpath/$(cat ./sourcemod-latest-windows) ;fi
 fi
 if [ -f ./sourcemod-latest-windows ];then rm ./sourcemod-latest-windows ;fi
 if [ -f ./mmsource-latest-windows ];then rm ./mmsource-latest-windows ;fi
