@@ -148,8 +148,8 @@ if '%linkset%'=='0' (
 for /f "delims=" %%V in ('powershell -command "$ab = get-date; $ab.Minute"') do set "starttime=%%V"
 :reds
 echo (%date%)(%time%) SynDS started.
-if %smset%==1 start /wait %synpath%\srcds.exe -console -game synergy +maxplayers 16 +sv_lan 0 +map d1_trainstation_06 +exec %configdir% -ip 0.0.0.0 -port %pnum% -nocrashdialog -insecure -nohltv +sm_basepath %sm_basepath%
-if %smset%==0 start /wait %synpath%\srcds.exe -console -game synergy +maxplayers 16 +sv_lan 0 +map d1_trainstation_06 +exec %configdir% -ip 0.0.0.0 -port %pnum% -nocrashdialog -insecure -nohltv
+if %smset%==1 start /wait %synpath%\srcds.exe -console -game synergy +maxplayers 16 +sv_lan 0 +map "hl2 d1_trainstation_06" +exec %configdir% -ip 0.0.0.0 -port %pnum% -nocrashdialog -insecure -nohltv +sm_basepath %sm_basepath%
+if %smset%==0 start /wait %synpath%\srcds.exe -console -game synergy +maxplayers 16 +sv_lan 0 +map "hl2 d1_trainstation_06" +exec %configdir% -ip 0.0.0.0 -port %pnum% -nocrashdialog -insecure -nohltv
 echo (%date%)(%time%) WARNING: SynDS closed or crashed, restarting.
 for /f "delims=" %%V in ('powershell -command "$ab = get-date; $ab.Minute"') do set "ctime=%%V"
 set /a cttime=ctime-starttime
