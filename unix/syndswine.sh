@@ -1,8 +1,13 @@
 #!/bin/bash
+portnum=27015
+#Skip prompts, just install/start server you will still need to put in a Steam account for downloading.
+skipprompts=n
+
 missingdeps() {
 echo "You are missing dependencies for Steam or other operations"
 echo "Use $packageinf"
 echo "Then restart this script."
+if [ $skipprompts = "y" ];then exit ;fi
 echo "Press enter to exit script"
 read nullptr
 exit
@@ -54,24 +59,32 @@ if [ $inststate == 3 ];then
 		DISPLAY=:0 WINEPREFIX=$PWD WINEDEBUG=-all wine start ./drive_c/steamcmd/Steam.exe
 	fi
 	if [ ! -f ./drive_c/steamcmd/steamapps/common/Synergy/synergy/addons/metamod/sourcemod.vdf ];then
-		echo "Would you like to install SourceMod? Y/n"
-		read instsm
-		if [ -z $instsm ];then instsm="y" ;fi
-		instsm=${instsm,,}
-		if [ $instsm = "y" ];then installsm ;fi
+		if [ $skipprompts = "y" ];then installsm ;fi
+		if [ $skipprompts = "n" ];then
+			echo "Would you like to install SourceMod? Y/n"
+			read instsm
+			if [ -z $instsm ];then instsm="y" ;fi
+			instsm=${instsm,,}
+			if [ $instsm = "y" ];then installsm ;fi
+		fi
 	fi
-	if [ -f ./drive_c/steamcmd/steamapps/common/Synergy/synergy/addons/metamod/sourcemod.vdf ];then
-		echo "Would you like to install plugins for SourceMod? y/N"
-		read instsm
-		if [ -z $instsm ];then instsm="n" ;fi
-		instsm=${instsm,,}
-		if [ $instsm = "y" ];then instsourceplugins ;fi
+	if [ $skipprompts = "n" ];then
+		if [ -f ./drive_c/steamcmd/steamapps/common/Synergy/synergy/addons/metamod/sourcemod.vdf ];then
+			echo "Would you like to install plugins for SourceMod? y/N"
+			read instsm
+			if [ -z $instsm ];then instsm="n" ;fi
+			instsm=${instsm,,}
+			if [ $instsm = "y" ];then instsourceplugins ;fi
+		fi
 	fi
 	winestart
 fi
 if [ ! -f /usr/bin/wine ];then
-	echo "Beginning with install of Wine. Press Enter to fully install Wine development branch. This user must have access to sudo apt for this to work. Press Ctrl+C to exit if you don't want to continue."
-	read opt
+	if [ $skipprompts = "n" ];then
+		echo "Beginning with install of Wine. Press Enter to fully install Wine development branch. This user must have access to sudo apt for this to work. Press Ctrl+C to exit if you don't want to continue."
+		read opt
+	fi
+	if [ $skipprompts = "y" ];then echo "Installing Wine..." ;fi
 	echo "This will take a while..."
 	sudo dpkg --add-architecture i386
 	wget -nc https://dl.winehq.org/wine-builds/winehq.key
@@ -165,8 +178,8 @@ fi
 }
 
 winestart() {
-if [[ ! $(pgrep -a srcds.exe | grep port\ 27015) ]];then
-	DISPLAY=:0 WINEPREFIX=$PWD WINEDEBUG=-all wine start ./drive_c/steamcmd/steamapps/common/Synergy/srcds.exe -console -game synergy +map d1_trainstation_06 +exec server2.cfg +maxplayers 16 +sv_lan 0 -ip 0.0.0.0 -port 27015 -nocrashdialog -insecure -nohltv
+if [[ ! $(pgrep -a srcds.exe | grep port\ $portnum) ]];then
+	DISPLAY=:0 WINEPREFIX=$PWD WINEDEBUG=-all wine start ./drive_c/steamcmd/steamapps/common/Synergy/srcds.exe -console -game synergy +map d1_trainstation_06 +exec server2.cfg +maxplayers 16 +sv_lan 0 -ip 0.0.0.0 -port $portnum -nocrashdialog -insecure -nohltv
 fi
 echo "If there was an error binding to an interface, you will need to start a virtual screen with: Xvfb :0&"
 sleep 1s
@@ -176,8 +189,8 @@ exit
 
 reds() {
 while true; do
-	if [[ ! $(pgrep -a srcds.exe | grep port\ 27015) ]];then
-		DISPLAY=:0 WINEPREFIX=$PWD WINEDEBUG=-all wine start ./drive_c/steamcmd/steamapps/common/Synergy/srcds.exe -console -game synergy +map d1_trainstation_06 +exec server2.cfg +maxplayers 16 +sv_lan 0 -ip 0.0.0.0 -port 27015 -nocrashdialog -insecure -nohltv
+	if [[ ! $(pgrep -a srcds.exe | grep port\ $portnum) ]];then
+		DISPLAY=:0 WINEPREFIX=$PWD WINEDEBUG=-all wine start ./drive_c/steamcmd/steamapps/common/Synergy/srcds.exe -console -game synergy +map d1_trainstation_06 +exec server2.cfg +maxplayers 16 +sv_lan 0 -ip 0.0.0.0 -port $portnum -nocrashdialog -insecure -nohltv
 	fi
 	sleep 4s
 done
