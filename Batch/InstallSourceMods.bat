@@ -159,20 +159,22 @@ if EXIST "%userprofile%\Downloads\bms.rar" goto startdl
 if EXIST "%userprofile%\Downloads\BMS.7z" goto startdl
 if EXIST "%userprofile%\Downloads\blackmesa.zip.001" goto startdl
 if EXIST "%userprofile%\Downloads\Black Mesa Synergy.rar" goto startdl
-echo MegaNZ archive file size is 2.99 GB
+echo MegaNZ archive file size is 3.32 GB
 echo MediaFire archive file size is 3.34 GB
 echo ModDB archive is split, part 1 is 2.64 GB, part 2 is 1.62 GB
-echo Auto is fully automatic, BMS at 2.83 GB and Xen at 449 MB
+echo Auto is fully automatic, BMS at 3.32 GB in 8 parts and Xen at 449 MB
+echo AutoV2 is fully automatic, BMS at 3.32 GB 1 piece and Xen at 449 MB
 echo Warning: ModDB version has a 50/50 chance of downloading corrupted, forcing you to re-download the whole thing again.
 echo It is much more reliable and a smaller download from Mega or MediaFire.
+echo The Mega, Auto and AutoV2 all include VentMod 2.0 and Hazard Course included and is repacked in VPK for faster changelevel.
 echo Be sure to download the archive to either your Downloads directory, or the same directory this script is being run from.
 echo BMSXEN is for the Black Mesa: Improved Xen page.
 echo Enter the word in the () below and press enter. The option you choose will open in your default web browser.
-echo (Mega)  (MediaFire)  (ModDB)  (BMSXEN)  (Auto)
+echo (Mega)  (MediaFire)  (ModDB)  (BMSXEN)  (Auto)  (AutoV2)
 set /p installfrom=
 for /f "delims=" %%V in ('powershell -command "$env:installfrom.ToLower()"') do set "installfrom=%%V"
 if "%installfrom%"=="mega" (
-	start /b https://mega.nz/#!ewtiwYwQ!OOYuvLiBrDnCQpIKZmHSvNd8ajTcX2gBB-CYUqTBpfU
+	start /b https://mega.nz/#!Cp0TWKTL!yS8akebtqaBCLK2DCJM0G2XxC21o80d1JevCq-s9zXM
 	goto downloadingpause
 )
 if "%installfrom%"=="mediafire" (
@@ -221,6 +223,18 @@ if "%installfrom%"=="auto" (
 	if NOT EXIST BMS.7z.007 powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"http://thebdf.org/bm/BMS.7z.007\",\"$PWD\BMS.7z.007\") }"
 	echo ^Downloading BMS Part 8 of 8...
 	if NOT EXIST BMS.7z.008 powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"http://thebdf.org/bm/BMS.7z.008\",\"$PWD\BMS.7z.008\") }"
+	echo ^Finished downloading Black Mesa and Improved Xen, extracting...
+	goto alreadydownloaded
+)
+if "%installfrom%"=="autov2" (
+	echo ^Beginning with Xen at 449MB
+	echo ^This will take a while...
+	echo ^Downloading Xen Part 1 of 2...
+	if NOT EXIST xen.7z.001 powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"http://thebdf.org/bm/xen.7z.001\",\"$PWD\xen.7z.001\") }"
+	echo ^Downloading Xen Part 2 of 2...
+	if NOT EXIST xen.7z.002 powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"http://thebdf.org/bm/xen.7z.002\",\"$PWD\xen.7z.002\") }"
+	echo ^Downloading BMS at 3.32GB...
+	if NOT EXIST BMS.7z powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"http://bdf.crowbar.lt/Maps+modpack/BMS.7z\",\"$PWD\BMS.7z\") }"
 	echo ^Finished downloading Black Mesa and Improved Xen, extracting...
 	goto alreadydownloaded
 )
@@ -276,8 +290,12 @@ if EXIST "%cd%\BMS2012_IMPROVED_XEN_Source2007.1.rar" .\7-Zip\7z.exe x .\BMS2012
 if EXIST "%userprofile%\Downloads\BMS2012_IMPROVED_XEN_Source2007.1.rar" .\7-Zip\7z.exe x "%userprofile%\Downloads\BMS2012_IMPROVED_XEN_Source2007.1.rar" -o"%cldir%" xen
 if EXIST "%cldir%\BMS\maps\bm_c3a2h.bsp" echo BMS installed successfully.
 if EXIST "%cldir%\xen\maps\xen_c5a1.bsp" echo Xen installed successfully.
+if NOT EXIST "%cldir%\xen\maps\xen_c5a1.bsp" (
+	echo ^Something went wrong with the Xen download, possibly an interrupted connection while downloading.
+	echo ^Or your archive became corrupted somehow.
+)
 if NOT EXIST "%cldir%\BMS\maps\bm_c3a2h.bsp" (
-	echo ^Something went wrong with the download, possibly an interrupted connection while downloading.
+	echo ^Something went wrong with the BMS download, possibly an interrupted connection while downloading.
 	echo ^Or your archive became corrupted somehow.
 	echo ^Press any key to restart script...
 	pause
