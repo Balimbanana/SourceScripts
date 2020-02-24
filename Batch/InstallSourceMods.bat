@@ -71,7 +71,7 @@ echo (DH) for DayHard                (R24) for Rock 24
 echo (PTSD) for PTSD and PTCS        (ALC) for Alchemilla
 echo (CITY7) for City7               (DW) for Dangerous World
 echo (RIOT) for Riot Act             (DD) for DeepDown and Aftermath 
-echo (CAL) for Calamity              
+echo (CAL) for Calamity              (AOD) for Avenue Odessa
 echo.
 echo Semi-Auto (download through web browser, then script will install from there).
 echo (BMS) for Black Mesa Source and Improved Xen
@@ -138,6 +138,7 @@ if "%uprun%"=="riot" goto riot
 if "%uprun%"=="r24" goto rock24
 if "%uprun%"=="pen" goto pene
 if "%uprun%"=="ez" goto ezero
+if "%uprun%"=="aod" goto avodessa
 if "%uprun%"=="update" goto updater
 echo.
 echo Choose an option...
@@ -760,6 +761,18 @@ goto start
 :pene
 echo Opening Half-Life 2 Penetration ModDB page...
 start /b https://www.moddb.com/mods/penetration/downloads
+goto start
+:avodessa
+if EXIST "%cldir%\AvenueOdessa\maps\avenueodessa.bsp" (
+	echo ^Avenue Odessa is already installed.
+	pause
+	goto start
+)
+echo Downloading Avenue Odessa...
+powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://www.runthinkshootlive.com/download.php?id=11593^&f=/hl2-ep2/hl2-ep2-sp-avenue-odessa-v101.7z\",\"$PWD\hl2-ep2-sp-avenue-odessa-v101.7z\") }"
+echo Extracting Avenue Odessa...
+if EXIST "%cd%\hl2-ep2-sp-avenue-odessa-v101.7z" .\7-Zip\7z.exe x .\hl2-ep2-sp-avenue-odessa-v101.7z -o"%cldir%"
+if EXIST "%cldir%\AvenueOdessa\maps\avenueodessa.bsp" echo Completed.
 goto start
 
 :dlsteamcmd
