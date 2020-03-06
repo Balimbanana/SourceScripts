@@ -72,6 +72,7 @@ echo (PTSD) for PTSD and PTCS        (ALC) for Alchemilla
 echo (CITY7) for City7               (DW) for Dangerous World
 echo (RIOT) for Riot Act             (DD) for DeepDown and Aftermath 
 echo (CAL) for Calamity              (AOD) for Avenue Odessa
+echo (SESC) for Silent Escape        (EXMO) for Escape by ExMo
 echo.
 echo Semi-Auto (download through web browser, then script will install from there).
 echo (BMS) for Black Mesa Source and Improved Xen
@@ -139,6 +140,8 @@ if "%uprun%"=="r24" goto rock24
 if "%uprun%"=="pen" goto pene
 if "%uprun%"=="ez" goto ezero
 if "%uprun%"=="aod" goto avodessa
+if "%uprun%"=="sesc" goto silentesc
+if "%uprun%"=="exmo" goto escbyexmo
 if "%uprun%"=="update" goto updater
 echo.
 echo Choose an option...
@@ -775,6 +778,33 @@ powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.Secur
 echo Extracting Avenue Odessa...
 if EXIST "%cd%\hl2-ep2-sp-avenue-odessa-v101.7z" .\7-Zip\7z.exe x .\hl2-ep2-sp-avenue-odessa-v101.7z -o"%cldir%"
 if EXIST "%cldir%\AvenueOdessa\maps\avenueodessa.bsp" echo Completed.
+goto start
+:silentesc
+if EXIST "%cldir%\Silent Escape\maps\silent_escape_map_01.bsp" (
+	echo ^Silent Escape is already installed.
+	pause
+	goto start
+)
+echo Downloading Silent Escape...
+powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://www.runthinkshootlive.com/download.php?id=10069^&f=/hl2-ep2/hl2-ep2-sp-silent-escape-v1.1.7z\",\"$PWD\hl2-ep2-sp-silent-escape-v1.1.7z\") }"
+echo Extracting Silent Escape...
+if EXIST "%cd%\hl2-ep2-sp-silent-escape-v1.1.7z" .\7-Zip\7z.exe x .\hl2-ep2-sp-silent-escape-v1.1.7z -o"%cldir%"
+if EXIST "%cldir%\Silent Escape\maps\silent_escape_map_01.bsp" echo Completed.
+goto start
+:escbyexmo
+if EXIST "%cldir%\escape_by_ex-mo\maps\escape_map_01.bsp" (
+	echo ^Silent Escape is already installed.
+	pause
+	goto start
+)
+echo Downloading Escape by ExMo...
+powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://www.runthinkshootlive.com/download.php?id=5921^&f=/half-life-2/hl2-sp-escape-ex-mo-updated.7z\",\"$PWD\hl2-sp-escape-ex-mo-updated.7z\") }"
+echo Extracting Escape by ExMo...
+if EXIST "%cd%\hl2-sp-escape-ex-mo-updated.7z" .\7-Zip\7z.exe x .\hl2-sp-escape-ex-mo-updated.7z -o"%cldir%"
+if EXIST "%cldir%\Escape\maps\escape_map_01.bsp" (
+	rename "%cldir%\Escape" "escape_by_ex-mo"
+)
+if EXIST "%cldir%\escape_by_ex-mo\maps\escape_map_01.bsp" echo Completed.
 goto start
 
 :dlsteamcmd
