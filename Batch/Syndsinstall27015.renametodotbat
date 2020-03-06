@@ -772,33 +772,29 @@ if '%linkset%'=='0' (
 )
 if EXIST "%cldir%\workshop\content\17520\646159916\646159916_pak.vpk" set pmpck1=1
 if EXIST "%cldir%\workshop\content\17520\703682251\703682251_pak.vpk" set pmpck2=1
-if EXIST "%cldir%\workshop\content\17520\729355384\upload.vpk" set pmpck3=1
-if EXIST "%cldir%\workshop\content\17520\1099811040\m_pack4upd.vpk" set pmpck4=1
+if EXIST "%cldir%\workshop\content\17520\2014781572\2014781572_pak.vpk" set pmpck3=1
+if EXIST "%cldir%\workshop\content\17520\2014781572\2014781572_pak.vpk" set pmpck4=1
 if EXIST "%cldir%\workshop\content\17520\1133952585\1133952585_pak.vpk" set pmpck5=1
 if EXIST steamapps\workshop\content\17520\646159916\646159916_pak.vpk set pmpck1=2
 if EXIST steamapps\workshop\content\17520\703682251\703682251_pak.vpk set pmpck2=2
-if EXIST steamapps\workshop\content\17520\729355384\upload.vpk set pmpck3=2
-if EXIST steamapps\workshop\content\17520\1099811040\m_pack4upd.vpk set pmpck4=2
+if EXIST steamapps\workshop\content\17520\2014781572\2014781572_pak.vpk set pmpck3=2
+if EXIST steamapps\workshop\content\17520\2014781572\2014781572_pak.vpk set pmpck4=2
 if EXIST steamapps\workshop\content\17520\1133952585\1133952585_pak.vpk set pmpck5=2
 if '%pmpck1%'=='1' echo Player Model Pack 1 detected in CL workshop dir.
 if '%pmpck2%'=='1' echo Player Model Pack 2 detected in CL workshop dir.
-if '%pmpck3%'=='1' echo Player Model Pack 3 detected in CL workshop dir.
-if '%pmpck4%'=='1' echo Player Model Pack 4 detected in CL workshop dir.
+if '%pmpck3%'=='1' echo Player Model Pack 3 and 4 detected in CL workshop dir.
 if '%pmpck5%'=='1' echo Player Model Pack 5 detected in CL workshop dir.
 if '%pmpck1%'=='2' echo Player Model Pack 1 installed.
 if '%pmpck2%'=='2' echo Player Model Pack 2 installed.
-if '%pmpck3%'=='2' echo Player Model Pack 3 installed.
-if '%pmpck4%'=='2' echo Player Model Pack 4 installed.
+if '%pmpck3%'=='2' echo Player Model Pack 3 and 4 installed.
 if '%pmpck5%'=='2' echo Player Model Pack 5 installed.
 if %pmpck1% LEQ 1 echo (1) To install Pack 1 to your server.
 if %pmpck2% LEQ 1 echo (2) To install Pack 2 to your server.
-if %pmpck3% LEQ 1 echo (3) To install Pack 3 to your server.
-if %pmpck4% LEQ 1 echo (4) To install Pack 4 to your server.
+if %pmpck3% LEQ 1 echo (3) To install Pack 3 and 4 to your server.
 if %pmpck5% LEQ 1 echo (5) To install Pack 5 to your server.
 if '%pmpck1%'=='0' echo (DL1) to download Pack 1.
 if '%pmpck2%'=='0' echo (DL2) to download Pack 2.
-if '%pmpck3%'=='0' echo (DL3) to download Pack 3.
-if '%pmpck4%'=='0' echo (DL4) to download Pack 4.
+if '%pmpck3%'=='0' echo (DL3) to download Pack 3 and 4.
 if '%pmpck5%'=='0' echo (DL5) to download Pack 5.
 echo (B) to go back to start.
 set /p pmpckopt=
@@ -825,16 +821,16 @@ if '%pmpckopt%'=='2' (
 )
 if '%pmpckopt%'=='3' (
 	if '%pmpck3%'=='1' (
-		set pmpckdir=^%cldir%\workshop\content\17520\729355384
-		set pmpckid=^729355384
+		set pmpckdir=^%cldir%\workshop\content\17520\2014781572
+		set pmpckid=^2014781572
 		set part=^3
 		set installing=^1
 	) else echo ^Already installed.
 )
 if '%pmpckopt%'=='4' (
 	if '%pmpck4%'=='1' (
-		set pmpckdir=^%cldir%\workshop\content\17520\1099811040
-		set pmpckid=^1099811040
+		set pmpckdir=^%cldir%\workshop\content\17520\2014781572
+		set pmpckid=^2014781572
 		set part=^4
 		set installing=^1
 	) else echo ^Already installed.
@@ -864,8 +860,8 @@ if '%installing%'=='1' (
 )
 if '%pmpckopt%'=='dl1' steamcmd.exe +login anonymous +workshop_download_item 17520 646159916 +quit
 if '%pmpckopt%'=='dl2' steamcmd.exe +login anonymous +workshop_download_item 17520 703682251 +quit
-if '%pmpckopt%'=='dl3' steamcmd.exe +login anonymous +workshop_download_item 17520 729355384 +quit
-if '%pmpckopt%'=='dl4' steamcmd.exe +login anonymous +workshop_download_item 17520 1099811040 +quit
+if '%pmpckopt%'=='dl3' steamcmd.exe +login anonymous +workshop_download_item 17520 2014781572 +quit
+if '%pmpckopt%'=='dl4' steamcmd.exe +login anonymous +workshop_download_item 17520 2014781572 +quit
 if '%pmpckopt%'=='dl5' steamcmd.exe +login anonymous +workshop_download_item 17520 1133952585 +quit
 ping localhost -n 3 >NUL
 goto instpmpckpass
