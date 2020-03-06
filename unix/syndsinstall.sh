@@ -717,33 +717,29 @@ pmpck4="0"
 pmpck5="0"
 if [ -f "$cldir/workshop/content/17520/646159916/646159916_pak.vpk" ];then pmpck1="1" ;fi
 if [ -f "$cldir/workshop/content/17520/703682251/703682251_pak.vpk" ];then pmpck2="1" ;fi
-if [ -f "$cldir/workshop/content/17520/729355384/upload.vpk" ];then pmpck3="1" ;fi
-if [ -f "$cldir/workshop/content/17520/1099811040/m_pack4upd.vpk" ];then pmpck4="1" ;fi
+if [ -f "$cldir/workshop/content/17520/2014781572/2014781572_pak.vpk" ];then pmpck3="1" ;fi
+if [ -f "$cldir/workshop/content/17520/2014781572/2014781572_pak.vpk" ];then pmpck4="1" ;fi
 if [ -f "$cldir/workshop/content/17520/1133952585/1133952585_pak.vpk" ];then pmpck5="1" ;fi
 if [ -f "./steamapps/workshop/content/17520/646159916/646159916_pak.vpk" ];then pmpck1="2" ;fi
 if [ -f "./steamapps/workshop/content/17520/703682251/703682251_pak.vpk" ];then pmpck2="2" ;fi
-if [ -f "./steamapps/workshop/content/17520/729355384/upload.vpk" ];then pmpck3="2" ;fi
-if [ -f "./steamapps/workshop/content/17520/1099811040/m_pack4upd.vpk" ];then pmpck4="2" ;fi
+if [ -f "./steamapps/workshop/content/17520/2014781572/2014781572_pak.vpk" ];then pmpck3="2" ;fi
+if [ -f "./steamapps/workshop/content/17520/2014781572/2014781572_pak.vpk" ];then pmpck4="2" ;fi
 if [ -f "./steamapps/workshop/content/17520/1133952585/1133952585_pak.vpk" ];then pmpck5="2" ;fi
 if [ "$pmpck1" = "1" ];then echo "Player Model Pack 1 detected in CL workshop dir.";fi
 if [ "$pmpck2" = "1" ];then echo "Player Model Pack 2 detected in CL workshop dir.";fi
-if [ "$pmpck3" = "1" ];then echo "Player Model Pack 3 detected in CL workshop dir.";fi
-if [ "$pmpck4" = "1" ];then echo "Player Model Pack 4 detected in CL workshop dir.";fi
+if [ "$pmpck3" = "1" ];then echo "Player Model Pack 3 and 4 detected in CL workshop dir.";fi
 if [ "$pmpck5" = "1" ];then echo "Player Model Pack 5 detected in CL workshop dir.";fi
 if [ "$pmpck1" = "2" ];then echo "Player Model Pack 1 installed.";fi
 if [ "$pmpck2" = "2" ];then echo "Player Model Pack 2 installed.";fi
-if [ "$pmpck3" = "2" ];then echo "Player Model Pack 3 installed.";fi
-if [ "$pmpck4" = "2" ];then echo "Player Model Pack 4 installed.";fi
+if [ "$pmpck3" = "2" ];then echo "Player Model Pack 3 and 4 installed.";fi
 if [ "$pmpck5" = "2" ];then echo "Player Model Pack 5 installed.";fi
 if [ "$pmpck1" = "1" ];then echo "(1) To install Pack 1 to your server.";fi
 if [ "$pmpck2" = "1" ];then echo "(2) To install Pack 2 to your server.";fi
-if [ "$pmpck3" = "1" ];then echo "(3) To install Pack 3 to your server.";fi
-if [ "$pmpck4" = "1" ];then echo "(4) To install Pack 4 to your server.";fi
+if [ "$pmpck3" = "1" ];then echo "(3) To install Pack 3 and 4 to your server.";fi
 if [ "$pmpck5" = "1" ];then echo "(5) To install Pack 5 to your server.";fi
 if [ "$pmpck1" = "0" ];then echo "(DL1) to download Pack 1.";fi
 if [ "$pmpck2" = "0" ];then echo "(DL2) to download Pack 2.";fi
-if [ "$pmpck3" = "0" ];then echo "(DL3) to download Pack 3.";fi
-if [ "$pmpck4" = "0" ];then echo "(DL4) to download Pack 4.";fi
+if [ "$pmpck3" = "0" ];then echo "(DL3) to download Pack 3 and 4.";fi
 if [ "$pmpck5" = "0" ];then echo "(DL5) to download Pack 5.";fi
 echo "(B) to go back to start."
 read pmpckopt
@@ -752,8 +748,8 @@ pmpckopt=${pmpckopt,,}
 if [ $pmpckopt = "b" ]; then start ;fi
 if [ $pmpckopt = "dl1" ]; then ./steamcmd.sh +login anonymous +workshop_download_item 17520 646159916 +quit;fi
 if [ $pmpckopt = "dl2" ]; then ./steamcmd.sh +login anonymous +workshop_download_item 17520 703682251 +quit;fi
-if [ $pmpckopt = "dl3" ]; then ./steamcmd.sh +login anonymous +workshop_download_item 17520 729355384 +quit;fi
-if [ $pmpckopt = "dl4" ]; then ./steamcmd.sh +login anonymous +workshop_download_item 17520 1099811040 +quit;fi
+if [ $pmpckopt = "dl3" ]; then ./steamcmd.sh +login anonymous +workshop_download_item 17520 2014781572 +quit;fi
+if [ $pmpckopt = "dl4" ]; then ./steamcmd.sh +login anonymous +workshop_download_item 17520 2014781572 +quit;fi
 if [ $pmpckopt = "dl5" ]; then ./steamcmd.sh +login anonymous +workshop_download_item 17520 1133952585 +quit;fi
 if [ $pmpckopt = "1" ]; then
 	if [ -f "./steamapps/workshop/content/17520/646159916/646159916_pak.vpk" ]; then
@@ -772,20 +768,20 @@ if [ $pmpckopt = "2" ]; then
 	cp "$cldir/workshop/content/17520/703682251/703682251_pak.vpk" "./steamapps/workshop/content/17520/703682251/703682251_pak.vpk"
 fi
 if [ $pmpckopt = "3" ]; then
-	if [ -f "./steamapps/workshop/content/17520/729355384/upload.vpk" ]; then
+	if [ -f "./steamapps/workshop/content/17520/2014781572/2014781572_pak.vpk" ]; then
 		echo "Already installed."
 		instpmpckpass
 	fi
-	if [ ! -d "./steamapps/workshop/content/17520/729355384" ]; then mkdir "./steamapps/workshop/content/17520/729355384";fi
-	cp "$cldir/workshop/content/17520/729355384/upload.vpk" "./steamapps/workshop/content/17520/729355384/upload.vpk"
+	if [ ! -d "./steamapps/workshop/content/17520/2014781572" ]; then mkdir "./steamapps/workshop/content/17520/2014781572";fi
+	cp "$cldir/workshop/content/17520/2014781572/2014781572_pak.vpk" "./steamapps/workshop/content/17520/2014781572/2014781572_pak.vpk"
 fi
 if [ $pmpckopt = "4" ]; then
-	if [ -f "./steamapps/workshop/content/17520/1099811040/m_pack4upd.vpk" ]; then
+	if [ -f "./steamapps/workshop/content/17520/2014781572/2014781572_pak.vpk" ]; then
 		echo "Already installed."
 		instpmpckpass
 	fi
-	if [ ! -d "./steamapps/workshop/content/17520/1099811040" ]; then mkdir "./steamapps/workshop/content/17520/1099811040";fi
-	cp "$cldir/workshop/content/17520/1099811040/m_pack4upd.vpk" "./steamapps/workshop/content/17520/1099811040/m_pack4upd.vpk"
+	if [ ! -d "./steamapps/workshop/content/17520/2014781572" ]; then mkdir "./steamapps/workshop/content/17520/2014781572";fi
+	cp "$cldir/workshop/content/17520/2014781572/2014781572_pak.vpk" "./steamapps/workshop/content/17520/2014781572/2014781572_pak.vpk"
 fi
 if [ $pmpckopt = "5" ]; then
 	if [ -f "./steamapps/workshop/content/17520/1133952585/1133952585_pak.vpk" ]; then
