@@ -126,20 +126,33 @@ if [ ! -f ./drive_c/steamcmd/Steam.exe ];then
 	wget -nv "https://steamcdn-a.akamaihd.net/client/installer/SteamSetup.exe" -P ./drive_c/steamcmd
 	if [ -f ./drive_c/steamcmd/SteamSetup.exe ];then
 		echo "Installing Steam client for Steam server connection..."
-		DISPLAY=:0 WINEPREFIX=$PWD WINEDEBUG=-all wine start ./drive_c/steamcmd/SteamSetup.exe /S /D=C:\\steamcmd
+		WINEPREFIX=$PWD WINEDEBUG=-all wine start ./drive_c/steamcmd/SteamSetup.exe /S /D=C:\\steamcmd
+		rechecksetup
 	fi
 fi
 winestart
 }
 
 winestart() {
-DISPLAY=:0 WINEPREFIX=$PWD WINEDEBUG=-all wine start ./drive_c/steamcmd/steamapps/common/Synergy/synergy.exe -game synergy -steam -windowed -noborder -w 1920 -h 1080 -novid +r_hunkalloclightmaps 0 -threads 8 -heapsize 2048000 -mem_max_heapsize 2048 -mem_max_heapsize_dedicated 512
+WINEPREFIX=$PWD WINEDEBUG=-all wine start ./drive_c/steamcmd/steamapps/common/Synergy/synergy.exe -game synergy -steam -windowed -noborder -w 1920 -h 1080 -novid +r_hunkalloclightmaps 0 -threads 8 -heapsize 2048000 -mem_max_heapsize 2048 -mem_max_heapsize_dedicated 512
 echo "If there was an error binding to an interface, you will need to start a virtual screen with: Xvfb :0&"
 sleep 1s
 echo "Press enter to start Synergy again. Or use Ctrl+C to close this script."
 read continuescr
 winestart
 exit
+}
+
+rechecksetup() {
+sleep 5s
+if [ -f ./drive_c/steamcmd/Steam.exe ];then
+	if [[ $(pgrep -a SteamSetup.exe) ]];then
+		kill $(pgrep SteamSetup.exe)
+	fi
+	if [[ $(pgrep -a Steam.exe) ]];then
+		WINEPREFIX=$PWD WINEDEBUG=-all wine start ./drive_c/steamcmd/Steam.exe
+	fi
+fi
 }
 
 inststeam() {
