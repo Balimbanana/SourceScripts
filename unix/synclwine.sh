@@ -127,7 +127,6 @@ if [ ! -f ./drive_c/steamcmd/Steam.exe ];then
 	if [ -f ./drive_c/steamcmd/SteamSetup.exe ];then
 		echo "Installing Steam client for Steam server connection..."
 		DISPLAY=:0 WINEPREFIX=$PWD WINEDEBUG=-all wine start ./drive_c/steamcmd/SteamSetup.exe /S /D=C:\\steamcmd
-		rechecksetup
 	fi
 fi
 winestart
