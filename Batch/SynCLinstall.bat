@@ -213,7 +213,7 @@ goto synstart
 
 :twitchinst
 echo Updating/installing Synergy Twitch Branch
-steamcmd.exe +login %usrname% +force_install_dir steamapps\Common\syntwitch +app_update 17520 -beta twitch -betapassword jonnyhawtsauce -validate +quit
+steamcmd.exe +login %usrname% +force_install_dir steamapps\Common\syntwitch +app_update 17520 -beta twitch -validate +quit
 if NOT EXIST steamapps\common\syntwitch\synergy.exe (
 	echo ^There was an error while attempting to download Synergy...
 	set anonset=15
