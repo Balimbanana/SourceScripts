@@ -1,6 +1,5 @@
 #!/bin/bash
-portnum=27015
-#Skip prompts, just install/start server you will still need to put in a Steam account for downloading.
+#Skip prompts, just install/start game you will still need to put in a Steam account for downloading.
 skipprompts=n
 
 missingdeps() {
@@ -139,7 +138,7 @@ DISPLAY=:0 WINEPREFIX=$PWD WINEDEBUG=-all wine start ./drive_c/steamcmd/steamapp
 echo "If there was an error binding to an interface, you will need to start a virtual screen with: Xvfb :0&"
 sleep 1s
 echo "Press enter to start Synergy again. Or use Ctrl+C to close this script."
-read continue
+read continuescr
 winestart
 exit
 }
