@@ -56,7 +56,7 @@ if [ -f ./drive_c/steamcmd/steamapps/common/Synergy/srcds.exe ];then inststate=$
 if [ -f ./drive_c/steamcmd/steamapps/common/Half-Life\ 2/hl2/hl2_pak_dir.vpk ];then inststate=$(($inststate+1)) ;fi
 if [ $inststate == 3 ];then
 	if [[ ! $(pgrep -a Steam.exe) ]];then
-		DISPLAY=:0 WINEPREFIX=$PWD WINEDEBUG=-all wine start ./drive_c/steamcmd/Steam.exe
+		DISPLAY=:0 WINEARCH="win32" WINEPREFIX=$PWD WINEDEBUG=-all wine start ./drive_c/steamcmd/Steam.exe
 	fi
 	if [ ! -f ./drive_c/steamcmd/steamapps/common/Synergy/synergy/addons/metamod/sourcemod.vdf ];then
 		if [ $skipprompts = "y" ];then installsm ;fi
@@ -155,12 +155,12 @@ if [ ! -f ./drive_c/steamcmd/Steam.exe ];then
 	wget -nv "https://steamcdn-a.akamaihd.net/client/installer/SteamSetup.exe" -P ./drive_c/steamcmd
 	if [ -f ./drive_c/steamcmd/SteamSetup.exe ];then
 		echo "Installing Steam client for Steam server connection..."
-		DISPLAY=:0 WINEPREFIX=$PWD WINEDEBUG=-all wine start ./drive_c/steamcmd/SteamSetup.exe /S /D=C:\\steamcmd
+		DISPLAY=:0 WINEARCH="win32" WINEPREFIX=$PWD WINEDEBUG=-all wine start ./drive_c/steamcmd/SteamSetup.exe /S /D=C:\\steamcmd
 		rechecksetup
 	fi
 fi
 if [[ ! $(pgrep -a Steam.exe) ]];then
-	DISPLAY=:0 WINEPREFIX=$PWD WINEDEBUG=-all wine start ./drive_c/steamcmd/Steam.exe
+	DISPLAY=:0 WINEARCH="win32" WINEPREFIX=$PWD WINEDEBUG=-all wine start ./drive_c/steamcmd/Steam.exe
 fi
 winestart
 }
@@ -172,14 +172,14 @@ if [ -f ./drive_c/steamcmd/Steam.exe ];then
 		kill $(pgrep SteamSetup.exe)
 	fi
 	if [[ $(pgrep -a Steam.exe) ]];then
-		DISPLAY=:0 WINEPREFIX=$PWD WINEDEBUG=-all wine start ./drive_c/steamcmd/Steam.exe
+		DISPLAY=:0 WINEARCH="win32" WINEPREFIX=$PWD WINEDEBUG=-all wine start ./drive_c/steamcmd/Steam.exe
 	fi
 fi
 }
 
 winestart() {
 if [[ ! $(pgrep -a srcds.exe | grep port\ $portnum) ]];then
-	DISPLAY=:0 WINEPREFIX=$PWD WINEDEBUG=-all wine start ./drive_c/steamcmd/steamapps/common/Synergy/srcds.exe -console -game synergy +map d1_trainstation_06 +exec server2.cfg +maxplayers 32 +sv_lan 0 -ip 0.0.0.0 -port $portnum -nocrashdialog -insecure -nohltv -threads 8 -heapsize 2048000 -mem_max_heapsize 2048 -mem_max_heapsize_dedicated 512
+	DISPLAY=:0 WINEARCH="win32" WINEPREFIX=$PWD WINEDEBUG=-all wine start ./drive_c/steamcmd/steamapps/common/Synergy/srcds.exe -console -game synergy +map d1_trainstation_06 +exec server2.cfg +maxplayers 32 +sv_lan 0 -ip 0.0.0.0 -port $portnum -nocrashdialog -insecure -nohltv -threads 8 -heapsize 2048000 -mem_max_heapsize 2048 -mem_max_heapsize_dedicated 512
 fi
 echo "If there was an error binding to an interface, you will need to start a virtual screen with: Xvfb :0&"
 sleep 1s
@@ -190,7 +190,7 @@ exit
 reds() {
 while true; do
 	if [[ ! $(pgrep -a srcds.exe | grep port\ $portnum) ]];then
-		DISPLAY=:0 WINEPREFIX=$PWD WINEDEBUG=-all wine start ./drive_c/steamcmd/steamapps/common/Synergy/srcds.exe -console -game synergy +map d1_trainstation_06 +exec server2.cfg +maxplayers 32 +sv_lan 0 -ip 0.0.0.0 -port $portnum -nocrashdialog -insecure -nohltv -threads 8 -heapsize 2048000 -mem_max_heapsize 2048 -mem_max_heapsize_dedicated 512
+		DISPLAY=:0 WINEARCH="win32" WINEPREFIX=$PWD WINEDEBUG=-all wine start ./drive_c/steamcmd/steamapps/common/Synergy/srcds.exe -console -game synergy +map d1_trainstation_06 +exec server2.cfg +maxplayers 32 +sv_lan 0 -ip 0.0.0.0 -port $portnum -nocrashdialog -insecure -nohltv -threads 8 -heapsize 2048000 -mem_max_heapsize 2048 -mem_max_heapsize_dedicated 512
 	fi
 	sleep 4s
 done
