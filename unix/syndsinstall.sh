@@ -40,6 +40,25 @@ if [ -f /usr/bin/dnf ];then
 	fi
 fi
 
+updatescr() {
+if [ ! -d ./tmpupd ]; then mkdir tmpupd ;fi
+cd ./tmpupd
+if [ -f ./syndsinstall.sh ]; then rm ./syndsinstall.sh ;fi
+wget "https://github.com/Balimbanana/SourceScripts/raw/master/unix/syndsinstall.sh"
+if [ -f ./syndsinstall.sh ]; then
+	chmod +x ./syndsinstall.sh
+	rm ../syndsinstall.sh
+	mv ./syndsinstall.sh ../syndsinstall.sh
+	cd ..
+	echo "Updated..."
+	rm -rf ./tmpupd
+	./syndsinstall.sh
+	exit
+fi
+echo "Failed to update..."
+start
+}
+
 start() {
 anonset=0
 instsmset=0
@@ -65,6 +84,7 @@ if [ -f ./steamapps/common/Synergy/synergy/addons/sourcemod/configs/admins_simpl
 	echo "(SMADMIN) to modify your SourceMod admins file."
 fi
 echo "(IHL2) (IEp1) (IEp2) to install/update HL2 Ep1 or Ep2."
+echo "(update) to update this script."
 read uprun
 uprun=${uprun,,}
 if [ -z $uprun ];then uprun="noneselected" ;fi
@@ -82,6 +102,7 @@ if [ $uprun = "smadmin" ]; then modifysmadmin;fi
 if [ $uprun = "ihl2" ]; then updhl2;fi
 if [ $uprun = "iep1" ]; then updep1;fi
 if [ $uprun = "iep2" ]; then updep2;fi
+if [ $uprun = "update" ]; then updatescr;fi
 echo "Choose an option."
 start
 }
