@@ -64,6 +64,7 @@ fi
 if [ -f ./steamapps/common/Synergy/synergy/addons/sourcemod/configs/admins_simple.ini ]; then
 	echo "(SMADMIN) to modify your SourceMod admins file."
 fi
+echo "(IHL2) (IEp1) (IEp2) to install/update HL2 Ep1 or Ep2."
 read uprun
 uprun=${uprun,,}
 if [ -z $uprun ];then uprun="noneselected" ;fi
@@ -78,6 +79,9 @@ if [ $uprun = "linksm" ]; then linksm;fi
 if [ $uprun = "plr" ]; then instplr;fi
 if [ $uprun = "imp" ]; then instpmpck;fi
 if [ $uprun = "smadmin" ]; then modifysmadmin;fi
+if [ $uprun = "ihl2" ]; then updhl2;fi
+if [ $uprun = "iep1" ]; then updep1;fi
+if [ $uprun = "iep2" ]; then updep2;fi
 echo "Choose an option."
 start
 }
@@ -441,6 +445,42 @@ if [ $hllist > 1 ];then
 fi
 if [ -d ./steamapps/common/Half-Life\ 2 ];then setup;fi
 echo "Something went wrong with installing HL2, restarting script."
+start
+}
+
+updhl2() {
+if [ -z $stusername ];then
+	echo "Enter your username here:"
+	read stusername
+	anonset=2
+	anonblck=${stusername,,}
+	if [ $anonblck = "anonymous" ];then noanon;fi
+fi
+./steamcmd.sh +login $stusername +force_install_dir ./steamapps/common/Half-Life\ 2 +app_update 220 validate +quit
+start
+}
+
+updep1() {
+if [ -z $stusername ];then
+	echo "Enter your username here:"
+	read stusername
+	anonset=2
+	anonblck=${stusername,,}
+	if [ $anonblck = "anonymous" ];then noanon;fi
+fi
+./steamcmd.sh +login $stusername +force_install_dir ./steamapps/common/Half-Life\ 2 +app_update 380 validate +quit
+start
+}
+
+updep2() {
+if [ -z $stusername ];then
+	echo "Enter your username here:"
+	read stusername
+	anonset=2
+	anonblck=${stusername,,}
+	if [ $anonblck = "anonymous" ];then noanon;fi
+fi
+./steamcmd.sh +login $stusername +force_install_dir ./steamapps/common/Half-Life\ 2 +app_update 420 validate +quit
 start
 }
 
