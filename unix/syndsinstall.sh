@@ -251,7 +251,7 @@ fi
 if [ $betaset = "b" ];then betainst;fi
 if [ $betaset = "t" ];then twitchinst;fi
 echo "Updating/installing Synergy DS"
-./steamcmd.sh +login $stusername +force_install_dir ./steamapps/common/Synergy +app_update 17520 validate +quit
+./steamcmd.sh +login $stusername +force_install_dir ./steamapps/common/Synergy +app_update 17520 -beta public validate +quit
 echo "Update/installation Complete"
 echo "If there were errors above, close the script and log in to steamcmd.sh separately, then restart the script."
 if [ ! -f $synpath/synergy/synergy_pak.vpk ]; then
