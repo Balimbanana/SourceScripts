@@ -232,7 +232,8 @@ if NOT EXIST %synpath%\synergy\cfg\%configdir% (
 	echo host_thread_mode 2 >>"%synpath%\synergy\cfg\%configdir%"
 	echo sv_rollangle 0.0 >>"%synpath%\synergy\cfg\%configdir%"
 	echo //Change this to a different savenumber for forked servers>>"%synpath%\synergy\cfg\%configdir%"
-	echo sv_savedir savefork/%pnum%>>"%synpath%\synergy\cfg\%configdir%")
+	echo sv_savedir savefork/%pnum%>>"%synpath%\synergy\cfg\%configdir%"
+	echo content_mount_synergy_mod_path_priority 2 >>"%synpath%\synergy\cfg\%configdir%")
 if NOT EXIST %synpath%\synergy\addons\sourcemod%pnum% (
 	mkdir %synpath%\synergy\addons\sourcemod%pnum%
 	mkdir %synpath%\synergy\addons\sourcemod%pnum%\gamedata
@@ -352,7 +353,8 @@ if NOT EXIST "%synpath%\synergy\cfg\server2.cfg" (
 	echo host_thread_mode 2 >>"%synpath%\synergy\cfg\server2.cfg"
 	echo sv_rollangle 0.0 >>"%synpath%\synergy\cfg\server2.cfg"
 	echo //Change this to a different savenumber for forked servers>>"%synpath%\synergy\cfg\server2.cfg"
-	echo sv_savedir save2/>>"%synpath%\synergy\cfg\server2.cfg")
+	echo sv_savedir save2/>>"%synpath%\synergy\cfg\server2.cfg"
+	echo content_mount_synergy_mod_path_priority 2 >>"%synpath%\synergy\cfg\server2.cfg")
 if NOT EXIST "%synpath%\synergy\cfg\workshop_srv.cfg" (
 	echo 1082553471>"%synpath%\synergy\cfg\workshop_srv.cfg"
 	echo 492916281>>"%synpath%\synergy\cfg\workshop_srv.cfg"
