@@ -506,7 +506,7 @@ if '%betaset%'=='p' (
 if NOT EXIST %synpath% goto notinstalled
 echo This will direct download the required SourceMod files and then extract them.
 echo It may take a few mins depending on your download speed.
-if EXIST "%synpath%\addons\sourcemod" (
+if EXIST "%synpath%\addons\sourcemod\metamod\sourcemod.vdf" (
 	echo "SourceMod is already installed, if you want to re-install, rename the current SourceMod install (addons) to addonsold  and run this script again..."
 	pause
 	goto start )
