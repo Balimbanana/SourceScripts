@@ -54,6 +54,7 @@ if NOT EXIST "%cd%\7-Zip" (
 )
 goto start
 :start
+set returntostep=0
 echo Enter the word or letter in the () below and press enter to download/install that mod.
 echo This is the list of currently supported mods to play co-op in Synergy
 echo.
@@ -314,6 +315,8 @@ powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.Secur
 if EXIST "%cldir%\BMS\scripts" rmdir /S /Q "%cldir%\BMS\scripts"
 if EXIST "%cd%\bmscripts.zip" .\7-Zip\7z.exe -aoa x .\bmscripts.zip -o"%cldir%\BMS"
 if EXIST "%cd%\bmscripts.zip" del /Q "%cd%\bmscripts.zip"
+if NOT EXIST "steamcmd.exe" set returntostep=1
+if NOT EXIST "steamcmd.exe" goto dlsteamcmd
 if NOT EXIST "%cd%\steamapps\workshop\content\17520\1817140991" (
 	echo ^Downloading Synergy Support files through SteamCMD
 	steamcmd.exe +login anonymous +workshop_download_item 17520 1817140991 +quit
@@ -827,6 +830,7 @@ ping localhost -n 1 >NUL
 if EXIST steamcmd.exe goto start
 if '%foundcmd%'=='1' start /wait /min powershell -command "& {Add-Type -AssemblyName System.IO.Compression.FileSystem; [System.IO.Compression.ZipFile]::ExtractToDirectory(\"$PWD\steamcmd.zip\", \"$PWD\") }"
 if '%foundcmd%'=='2' start /wait /min powershell -command "& {Add-Type -AssemblyName System.IO.Compression.FileSystem; [System.IO.Compression.ZipFile]::ExtractToDirectory(\"$HOME\downloads\steamcmd.zip\", \"$PWD\") }"
+if '%returntostep%'=='1' goto applyscriptfix
 if EXIST steamcmd.exe (
 	goto start
 )
