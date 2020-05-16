@@ -316,7 +316,11 @@ if EXIST "%cldir%\BMS\scripts" rmdir /S /Q "%cldir%\BMS\scripts"
 if EXIST "%cd%\bmscripts.zip" .\7-Zip\7z.exe -aoa x .\bmscripts.zip -o"%cldir%\BMS"
 if EXIST "%cd%\bmscripts.zip" del /Q "%cd%\bmscripts.zip"
 if NOT EXIST "steamcmd.exe" set returntostep=1
+if NOT EXIST ".\7-Zip\7z.exe" set returntostep=1
+if NOT EXIST ".\7-Zip\7z.exe" goto dlsteamcmd
 if NOT EXIST "steamcmd.exe" goto dlsteamcmd
+if EXIST ".\7-Zip\7z.exe" set returntostep=0
+if EXIST "steamcmd.exe" set returntostep=0
 if NOT EXIST "%cd%\steamapps\workshop\content\17520\1817140991" (
 	echo ^Downloading Synergy Support files through SteamCMD
 	steamcmd.exe +login anonymous +workshop_download_item 17520 1817140991 +quit
