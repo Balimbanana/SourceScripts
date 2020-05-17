@@ -52,6 +52,10 @@ if NOT EXIST "%cd%\7-Zip" (
 	echo ^Downloading temp pre-requisite 7zip and SteamCMD for auto-extraction when done...
 	goto dlsteamcmd
 )
+set steamcmddir=.
+if NOT EXIST "%steamcmddir%\steamcmd.exe" (
+	if EXIST ..\steamcmd.exe set steamcmddir=..
+)
 goto start
 :start
 set returntostep=0
@@ -315,7 +319,11 @@ powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.Secur
 if EXIST "%cldir%\BMS\scripts" rmdir /S /Q "%cldir%\BMS\scripts"
 if EXIST "%cd%\bmscripts.zip" .\7-Zip\7z.exe -aoa x .\bmscripts.zip -o"%cldir%\BMS"
 if EXIST "%cd%\bmscripts.zip" del /Q "%cd%\bmscripts.zip"
-if NOT EXIST ".\steamcmd.exe" (
+set steamcmddir=.
+if NOT EXIST "%steamcmddir%\steamcmd.exe" (
+	if EXIST ..\steamcmd.exe set steamcmddir=..
+)
+if NOT EXIST "%steamcmddir%\steamcmd.exe" (
 	set returntostep=1
 	echo ^Failed to find SteamCMD for workshop update/install. Attempting to re-download...
 )
@@ -324,11 +332,11 @@ if NOT EXIST ".\7-Zip\7z.exe" (
 	echo ^Failed to find 7-Zip for scripts update/install. Attempting to re-download...
 )
 if NOT EXIST ".\7-Zip\7z.exe" goto dlsteamcmd
-if NOT EXIST ".\steamcmd.exe" goto dlsteamcmd
+if NOT EXIST "%steamcmddir%\steamcmd.exe" goto dlsteamcmd
 set returntostep=0
-if NOT EXIST "%cd%\steamapps\workshop\content\17520\1817140991" (
+if NOT EXIST "%steamcmddir%\steamapps\workshop\content\17520\1817140991" (
 	echo ^Downloading Synergy Support files through SteamCMD
-	.\steamcmd.exe +login anonymous +workshop_download_item 17520 1817140991 +quit
+	%steamcmddir%\steamcmd.exe +login anonymous +workshop_download_item 17520 1817140991 +quit
 )
 echo.
 echo Check for any errors above, if there are any, you may need to re-run this script.
