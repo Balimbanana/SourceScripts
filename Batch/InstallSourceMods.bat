@@ -319,11 +319,10 @@ if NOT EXIST ".\steamcmd.exe" set returntostep=1
 if NOT EXIST ".\7-Zip\7z.exe" set returntostep=1
 if NOT EXIST ".\7-Zip\7z.exe" goto dlsteamcmd
 if NOT EXIST ".\steamcmd.exe" goto dlsteamcmd
-if EXIST ".\7-Zip\7z.exe" set returntostep=0
-if EXIST ".\steamcmd.exe" set returntostep=0
+set returntostep=0
 if NOT EXIST "%cd%\steamapps\workshop\content\17520\1817140991" (
 	echo ^Downloading Synergy Support files through SteamCMD
-	steamcmd.exe +login anonymous +workshop_download_item 17520 1817140991 +quit
+	.\steamcmd.exe +login anonymous +workshop_download_item 17520 1817140991 +quit
 )
 echo.
 echo Check for any errors above, if there are any, you may need to re-run this script.
