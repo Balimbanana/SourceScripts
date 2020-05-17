@@ -315,8 +315,14 @@ powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.Secur
 if EXIST "%cldir%\BMS\scripts" rmdir /S /Q "%cldir%\BMS\scripts"
 if EXIST "%cd%\bmscripts.zip" .\7-Zip\7z.exe -aoa x .\bmscripts.zip -o"%cldir%\BMS"
 if EXIST "%cd%\bmscripts.zip" del /Q "%cd%\bmscripts.zip"
-if NOT EXIST ".\steamcmd.exe" set returntostep=1
-if NOT EXIST ".\7-Zip\7z.exe" set returntostep=1
+if NOT EXIST ".\steamcmd.exe" (
+	set returntostep=1
+	echo ^Failed to find SteamCMD for workshop update/install. Attempting to re-download...
+)
+if NOT EXIST ".\7-Zip\7z.exe" (
+	set returntostep=1
+	echo ^Failed to find 7-Zip for scripts update/install. Attempting to re-download...
+)
 if NOT EXIST ".\7-Zip\7z.exe" goto dlsteamcmd
 if NOT EXIST ".\steamcmd.exe" goto dlsteamcmd
 set returntostep=0
