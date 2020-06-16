@@ -6,7 +6,7 @@ rem //////////////////////////////Save the script as ending in .bat and run it.
 title LFE Dedicated Server
 goto initvars
 :updater
-powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SourceScripts/raw/master/LFEDedicatedServerInstall.renametodotbat\",\"$PWD\LFEDedicatedServerInstall.bat\") }"
+powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SourceScripts/raw/master/Batch/LFEDedicatedServerInstall.renametodotbat\",\"$PWD\LFEDedicatedServerInstall.bat\") }"
 echo Updated...
 start /b "LFE Dedicated Server" "%~dp0LFEDedicatedServerInstall.bat"
 exit
