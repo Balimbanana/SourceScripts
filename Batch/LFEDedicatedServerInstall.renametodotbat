@@ -224,6 +224,8 @@ if '%tf%'=='3' (
 )
 echo Team Fortress 2 and TF2 DS were not found during setup, press any key to install it first or close the script and install it manually.
 steamcmd.exe +login anonymous +app_update 232250 validate +quit
+if '%skipstep%'=='8' goto setup
+if '%skipstep%'=='9' goto srcds
 goto start
 :notconfigured
 echo Half-Life 2 directory was not found in default install location, install halted.
