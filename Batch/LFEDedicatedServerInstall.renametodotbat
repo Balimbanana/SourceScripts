@@ -152,7 +152,7 @@ if '%tf%'=='1' (if EXIST "steamapps\common\Team Fortress 2 Dedicated Server" set
 if '%tf%'=='1' mklink /j "steamapps\common\Team Fortress 2" "%cldir%\common\Team Fortress 2"
 if '%tf%'=='3' mklink /j "steamapps\common\Team Fortress 2 Dedicated Server" "%cldir%\common\Team Fortress 2 Dedicated Server"
 echo Beginning LFE install...
-echo This will take a while, the archive is 977MB
+echo This will take a while, the archive is roughly 977MB
 echo Downloading...
 if NOT EXIST "%cd%\7-Zip\7z.exe" powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SourceScripts/raw/master/synotherfilefixes/7-Zip.zip\",\"$PWD\7zip.zip\") }"
 if EXIST "%cd%\7zip.zip" start /wait /min powershell -command "& {Add-Type -AssemblyName System.IO.Compression.FileSystem; [System.IO.Compression.ZipFile]::ExtractToDirectory(\"$PWD\7zip.zip\", \"$PWD\") }"
