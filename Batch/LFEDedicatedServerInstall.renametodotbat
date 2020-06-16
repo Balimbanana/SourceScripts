@@ -1,0 +1,373 @@
+@echo off
+rem This script was written by Balimbanana.
+rem //////////////////////////////If you are viewing this on GitHub, right click Raw above and click:
+rem //////////////////////////////Save Target As, or Save Linked Content As to download this script.
+rem //////////////////////////////Save the script as ending in .bat and run it.
+title LFE Dedicated Server
+goto initvars
+:updater
+powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SourceScripts/raw/master/LFEDedicatedServerInstall.renametodotbat\",\"$PWD\LFEDedicatedServerInstall.bat\") }"
+echo Updated...
+start /b "LFE Dedicated Server" "%~dp0LFEDedicatedServerInstall.bat"
+exit
+:initvars
+if EXIST "drivers\etc\hosts" cd "%~dp0"
+set instsmset=0
+set username=""
+set pnum=27015
+set skipstep=0
+set "gamedir=.\steamapps\common\Source SDK Base 2013 Dedicated Server"
+set smset=0
+set cldir=%programfiles(x86)%\Steam\steamapps
+if EXIST "C:\SteamLibrary\steamapps\common\Half-Life 2\hl2" set cldir=C:\SteamLibrary\steamapps
+if EXIST "E:\SteamLibrary\steamapps\common\Half-Life 2\hl2" set cldir=E:\SteamLibrary\steamapps
+if EXIST "D:\SteamLibrary\steamapps\common\Half-Life 2\hl2" set cldir=D:\SteamLibrary\steamapps
+if EXIST "F:\SteamLibrary\steamapps\common\Half-Life 2\hl2" set cldir=F:\SteamLibrary\steamapps
+if EXIST "G:\SteamLibrary\steamapps\common\Half-Life 2\hl2" set cldir=G:\SteamLibrary\steamapps
+if EXIST "L:\SteamLibrary\steamapps\common\Half-Life 2\hl2" set cldir=L:\SteamLibrary\steamapps
+if EXIST "C:\Steam\steamapps\common\Half-Life 2\hl2" set cldir=C:\Steam\steamapps
+if EXIST "E:\Steam\steamapps\common\Half-Life 2\hl2" set cldir=E:\Steam\steamapps
+if EXIST "D:\Steam\steamapps\common\Half-Life 2\hl2" set cldir=D:\Steam\steamapps
+if EXIST "F:\Steam\steamapps\common\Half-Life 2\hl2" set cldir=F:\Steam\steamapps
+if EXIST "G:\Steam\steamapps\common\Half-Life 2\hl2" set cldir=G:\Steam\steamapps
+if EXIST "L:\Steam\steamapps\common\Half-Life 2\hl2" set cldir=L:\Steam\steamapps
+if EXIST "C:\Program Files\Steam\steamapps\common\Half-Life 2\hl2" set "cldir=C:\Program Files\Steam\steamapps"
+if EXIST "E:\Program Files\Steam\steamapps\common\Half-Life 2\hl2" set "cldir=E:\Program Files\Steam\steamapps"
+if EXIST "D:\Program Files\Steam\steamapps\common\Half-Life 2\hl2" set "cldir=D:\Program Files\Steam\steamapps"
+if EXIST "F:\Program Files\Steam\steamapps\common\Half-Life 2\hl2" set "cldir=F:\Program Files\Steam\steamapps"
+if EXIST "G:\Program Files\Steam\steamapps\common\Half-Life 2\hl2" set "cldir=G:\Program Files\Steam\steamapps"
+if EXIST "L:\Program Files\Steam\steamapps\common\Half-Life 2\hl2" set "cldir=L:\Program Files\Steam\steamapps"
+set tfdir=%programfiles(x86)%\Steam\steamapps
+if EXIST "C:\SteamLibrary\steamapps\common\Team Fortress 2\tf" set tfdir=C:\SteamLibrary\steamapps
+if EXIST "E:\SteamLibrary\steamapps\common\Team Fortress 2\tf" set tfdir=E:\SteamLibrary\steamapps
+if EXIST "D:\SteamLibrary\steamapps\common\Team Fortress 2\tf" set tfdir=D:\SteamLibrary\steamapps
+if EXIST "F:\SteamLibrary\steamapps\common\Team Fortress 2\tf" set tfdir=F:\SteamLibrary\steamapps
+if EXIST "G:\SteamLibrary\steamapps\common\Team Fortress 2\tf" set tfdir=G:\SteamLibrary\steamapps
+if EXIST "L:\SteamLibrary\steamapps\common\Team Fortress 2\tf" set tfdir=L:\SteamLibrary\steamapps
+if EXIST "C:\Steam\steamapps\common\Team Fortress 2\tf" set tfdir=C:\Steam\steamapps
+if EXIST "E:\Steam\steamapps\common\Team Fortress 2\tf" set tfdir=E:\Steam\steamapps
+if EXIST "D:\Steam\steamapps\common\Team Fortress 2\tf" set tfdir=D:\Steam\steamapps
+if EXIST "F:\Steam\steamapps\common\Team Fortress 2\tf" set tfdir=F:\Steam\steamapps
+if EXIST "G:\Steam\steamapps\common\Team Fortress 2\tf" set tfdir=G:\Steam\steamapps
+if EXIST "L:\Steam\steamapps\common\Team Fortress 2\tf" set tfdir=L:\Steam\steamapps
+if EXIST "C:\Program Files\Steam\steamapps\common\Team Fortress 2\tf" set "tfdir=C:\Program Files\Steam\steamapps"
+if EXIST "E:\Program Files\Steam\steamapps\common\Team Fortress 2\tf" set "tfdir=E:\Program Files\Steam\steamapps"
+if EXIST "D:\Program Files\Steam\steamapps\common\Team Fortress 2\tf" set "tfdir=D:\Program Files\Steam\steamapps"
+if EXIST "F:\Program Files\Steam\steamapps\common\Team Fortress 2\tf" set "tfdir=F:\Program Files\Steam\steamapps"
+if EXIST "G:\Program Files\Steam\steamapps\common\Team Fortress 2\tf" set "tfdir=G:\Program Files\Steam\steamapps"
+if EXIST "L:\Program Files\Steam\steamapps\common\Team Fortress 2\tf" set "tfdir=L:\Program Files\Steam\steamapps"
+if EXIST "C:\SteamLibrary\steamapps\common\Team Fortress 2 Dedicated Server\tf" set tfdir=C:\SteamLibrary\steamapps
+if EXIST "E:\SteamLibrary\steamapps\common\Team Fortress 2 Dedicated Server\tf" set tfdir=E:\SteamLibrary\steamapps
+if EXIST "D:\SteamLibrary\steamapps\common\Team Fortress 2 Dedicated Server\tf" set tfdir=D:\SteamLibrary\steamapps
+if EXIST "F:\SteamLibrary\steamapps\common\Team Fortress 2 Dedicated Server\tf" set tfdir=F:\SteamLibrary\steamapps
+if EXIST "G:\SteamLibrary\steamapps\common\Team Fortress 2 Dedicated Server\tf" set tfdir=G:\SteamLibrary\steamapps
+if EXIST "L:\SteamLibrary\steamapps\common\Team Fortress 2 Dedicated Server\tf" set tfdir=L:\SteamLibrary\steamapps
+if EXIST "C:\Steam\steamapps\common\Team Fortress 2 Dedicated Server\tf" set tfdir=C:\Steam\steamapps
+if EXIST "E:\Steam\steamapps\common\Team Fortress 2 Dedicated Server\tf" set tfdir=E:\Steam\steamapps
+if EXIST "D:\Steam\steamapps\common\Team Fortress 2 Dedicated Server\tf" set tfdir=D:\Steam\steamapps
+if EXIST "F:\Steam\steamapps\common\Team Fortress 2 Dedicated Server\tf" set tfdir=F:\Steam\steamapps
+if EXIST "G:\Steam\steamapps\common\Team Fortress 2 Dedicated Server\tf" set tfdir=G:\Steam\steamapps
+if EXIST "L:\Steam\steamapps\common\Team Fortress 2 Dedicated Server\tf" set tfdir=L:\Steam\steamapps
+if EXIST "C:\Program Files\Steam\steamapps\common\Team Fortress 2 Dedicated Server\tf" set "tfdir=C:\Program Files\Steam\steamapps"
+if EXIST "E:\Program Files\Steam\steamapps\common\Team Fortress 2 Dedicated Server\tf" set "tfdir=E:\Program Files\Steam\steamapps"
+if EXIST "D:\Program Files\Steam\steamapps\common\Team Fortress 2 Dedicated Server\tf" set "tfdir=D:\Program Files\Steam\steamapps"
+if EXIST "F:\Program Files\Steam\steamapps\common\Team Fortress 2 Dedicated Server\tf" set "tfdir=F:\Program Files\Steam\steamapps"
+if EXIST "G:\Program Files\Steam\steamapps\common\Team Fortress 2 Dedicated Server\tf" set "tfdir=G:\Program Files\Steam\steamapps"
+if EXIST "L:\Program Files\Steam\steamapps\common\Team Fortress 2 Dedicated Server\tf" set "tfdir=L:\Program Files\Steam\steamapps"
+:start
+if EXIST srcds.exe (if EXIST "..\..\..\steamcmd.exe" cd "..\..\.." )
+set anonset=0
+if NOT EXIST steamcmd.exe goto notindir
+echo Information: enter the letter inside the () and press enter to continue at the prompts.
+echo First (I)nstall, (U)pdate or (R)un with auto-restart
+if EXIST "%gamedir%\tf_coop_extended\addons\sourcemod\plugins" (
+	echo ^SourceMod is installed.
+)
+echo (Update) to update this script.
+set /p uprun=
+for /f "delims=" %%V in ('powershell -command "$env:uprun.ToLower()"') do set "uprun=%%V"
+if "%uprun%"=="u" goto firstinstall
+if "%uprun%"=="i" goto firstinstall
+if "%uprun%"=="r" goto srcds
+if "%uprun%"=="is" goto instsourcem
+if "%uprun%"=="update" goto updater
+echo Choose an option.
+goto start
+:firstinstall
+if NOT EXIST steamcmd.exe goto notindir
+echo Updating/installing Source SDK Base 2013 DS
+steamcmd.exe +login anonymous +app_update 244310 validate +quit
+if NOT EXIST "steamapps\common\Source SDK Base 2013 Dedicated Server\srcds.exe" (
+	echo ^There was an error while attempting to download Source SDK Base 2013 Dedicated Server...
+	goto firstinstall
+)
+echo Update/installation of SDK Base 2013 Complete
+echo If there were errors states above, close the script and log into SteamCMD.exe separately, then restart the script.
+timeout -T 10
+if "%uprun%"=="i" goto setup
+cls
+:srcds
+if NOT EXIST "%gamedir%\srcds.exe" goto notinstalled
+if NOT EXIST "steamapps\common\Half-Life 2\hl2\hl2_pak_dir.vpk" goto insthl2
+set insttf2=1
+if EXIST "steamapps\common\Team Fortress 2\tf\tf2_misc_dir.vpk" set insttf2=0
+if EXIST "steamapps\common\Team Fortress 2 Dedicated Server\tf\tf2_misc_dir.vpk" set insttf2=0
+if "%insttf2%"=="1" set skipstep=9
+if "%insttf2%"=="1" goto insttf2set
+set skipstep=0
+set linkset=0
+ping localhost -n 1 >NUL
+for /f "delims=" %%V in ('powershell -command "$ab = get-date; $ab.Minute"') do set "starttime=%%V"
+:reds
+echo (%date%)(%time%) LFEDS started.
+start /wait "Lambda Fortress Extended Dedicated Server" "%gamedir%\srcds.exe" -console -game tf_coop_extended +maxplayers 32 +sv_lan 0 +map "d1_trainstation_01" -ip 0.0.0.0 -port %pnum% -nocrashdialog -insecure -nohltv -threads 8 -heapsize 2048000 -mem_max_heapsize 2048 -mem_max_heapsize_dedicated 512
+echo (%date%)(%time%) WARNING: LFEDS closed or crashed, restarting.
+for /f "delims=" %%V in ('powershell -command "$ab = get-date; $ab.Minute"') do set "ctime=%%V"
+set /a cttime=ctime-starttime
+if %cttime%==0 (
+	echo ^The last crash was less than a minute ago, waiting to restart.
+	timeout -T 10
+)
+for /f "delims=" %%V in ('powershell -command "$ab = get-date; $ab.Minute"') do set "starttime=%%V"
+goto reds
+
+:setup
+set hl=1
+set tf=0
+echo Setting up links and first settings in server2.cfg
+if NOT EXIST "%cldir%\common\Half-Life 2" set hl=0
+if '%hl%'=='0' (if EXIST "steamapps\common\Half-Life 2" set hl=2)
+if '%hl%'=='0' goto insthl2
+if '%hl%'=='1' (if EXIST "steamapps\common\Half-Life 2" set hl=2)
+if '%hl%'=='1' mklink /j "steamapps\common\Half-Life 2" "%cldir%\common\Half-Life 2"
+if EXIST "%cldir%\common\Team Fortress 2" set tf=1
+if EXIST "%cldir%\common\Team Fortress 2 Dedicated Server" set tf=1
+if '%tf%'=='0' (if EXIST "steamapps\common\Team Fortress 2" set tf=2)
+if '%tf%'=='0' (if EXIST "steamapps\common\Team Fortress 2 Dedicated Server" set tf=3)
+if '%tf%'=='0' set skipstep=8
+if '%tf%'=='0' goto insttf2set
+set skipstep=0
+if '%tf%'=='1' (if EXIST "steamapps\common\Team Fortress 2" set tf=2)
+if '%tf%'=='1' (if EXIST "steamapps\common\Team Fortress 2 Dedicated Server" set tf=3)
+if '%tf%'=='1' mklink /j "steamapps\common\Team Fortress 2" "%cldir%\common\Team Fortress 2"
+if '%tf%'=='3' mklink /j "steamapps\common\Team Fortress 2 Dedicated Server" "%cldir%\common\Team Fortress 2 Dedicated Server"
+echo Beginning LFE install...
+echo This will take a while, the archive is 977MB
+echo Downloading...
+if NOT EXIST "%cd%\7-Zip\7z.exe" powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SourceScripts/raw/master/synotherfilefixes/7-Zip.zip\",\"$PWD\7zip.zip\") }"
+if EXIST "%cd%\7zip.zip" start /wait /min powershell -command "& {Add-Type -AssemblyName System.IO.Compression.FileSystem; [System.IO.Compression.ZipFile]::ExtractToDirectory(\"$PWD\7zip.zip\", \"$PWD\") }"
+if EXIST "%cd%\7zip.zip" del /Q "%cd%\7zip.zip"
+if NOT EXIST "%cd%\tf_coop_extended_march2020.7z" powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"http://bdf.crowbar.lt/Maps+modpack/tf_coop_extended_march2020.7z\",\"$PWD\tf_coop_extended_march2020.7z\") }"
+if EXIST "%cd%\7-Zip\7z.exe" (
+	echo ^Beginning extraction of archive...
+	start /min /wait "7z" "7-Zip\7z.exe" x tf_coop_extended_march2020.7z -o"%cd%\%gamedir%"
+)
+if NOT EXIST "%gamedir%\tf_coop_extended\cfg\server.cfg" (
+	echo exec banned_user.cfg>"%gamedir%\tf_coop_extended\cfg\server.cfg"
+	echo mp_idlemaxtime 5 >>"%gamedir%\tf_coop_extended\cfg\server.cfg"
+	echo sv_hl1_hd 1 >>"%gamedir%\tf_coop_extended\cfg\server.cfg"
+	echo //Set to 1 to enable fast respawn>>"%gamedir%\tf_coop_extended\cfg\server.cfg"
+	echo mp_disable_respawn_times 0 >>"%gamedir%\tf_coop_extended\cfg\server.cfg"
+	echo sk_bullsquidhl1_health 200 >>"%gamedir%\tf_coop_extended\cfg\server.cfg"
+	echo sk_houndeye_health 150 >>"%gamedir%\tf_coop_extended\cfg\server.cfg"
+	echo sk_zombiehl1_health 75 >>"%gamedir%\tf_coop_extended\cfg\server.cfg"
+	echo sk_gonome_health 700 >>"%gamedir%\tf_coop_extended\cfg\server.cfg"
+)
+echo Should be all configured for server running.
+echo Would you like to edit your server config? (y/N)
+set /p edtconf=
+for /f "delims=" %%V in ('powershell -command "$env:edtconf.ToLower()"') do set "edtconf=%%V"
+if "%edtconf%"=="y" start notepad %gamedir%\tf_coop_extended\cfg\server.cfg
+echo Would you like to install SourceMod as well? (y/N)
+set /p instsmset=
+for /f "delims=" %%V in ('powershell -command "$env:instsmset.ToLower()"') do set "instsmset=%%V"
+if "%instsmset%"=="y" goto instsourcem
+cls
+goto srcds
+:insthl2
+echo Half-Life 2 was not found during setup, press any key to install it first or close the script and install it manually.
+pause
+if EXIST "%programfiles(x86)%\Steam" start /min /wait robocopy /NP /NJS /NJH /NS "%programfiles(x86)%\Steam" "." "ssfn*"
+if '%username%'=='""' (
+	echo ^Enter your username here:
+	set /p username=
+)
+set anonblck=""
+for /f "delims=" %%i in ('powershell -command "$env:usrname.ToLower()"') do set anonblck=%%i
+if "%anonblck%"=="anonymous" (
+	set anonset=2
+	goto noanon
+)
+steamcmd.exe +login %username% +app_update 220 validate +quit
+steamcmd.exe +login %username% +app_update 380 validate +quit
+steamcmd.exe +login %username% +app_update 420 validate +quit
+if EXIST "steamapps\common\Half-Life 2" goto setup
+goto notconfigured
+:insttf2set
+if EXIST "%tfdir%\common\Team Fortress 2" set tf=1
+if EXIST "%tfdir%\common\Team Fortress 2 Dedicated Server" set tf=1
+if '%tf%'=='0' (if EXIST "steamapps\common\Team Fortress 2" set tf=2)
+if '%tf%'=='0' (if EXIST "steamapps\common\Team Fortress 2 Dedicated Server" set tf=3)
+if '%tf%'=='1' (if EXIST "steamapps\common\Team Fortress 2" set tf=2)
+if '%tf%'=='1' (if EXIST "steamapps\common\Team Fortress 2 Dedicated Server" set tf=3)
+if '%tf%'=='1' mklink /j "steamapps\common\Team Fortress 2" "%tfdir%\common\Team Fortress 2"
+if '%tf%'=='1' (
+	if '%skipstep%'=='8' goto setup
+	if '%skipstep%'=='9' goto srcds
+	goto start
+)
+if '%tf%'=='3' mklink /j "steamapps\common\Team Fortress 2 Dedicated Server" "%tfdir%\common\Team Fortress 2 Dedicated Server"
+if '%tf%'=='3' (
+	if '%skipstep%'=='8' goto setup
+	if '%skipstep%'=='9' goto srcds
+	goto start
+)
+echo Team Fortress 2 and TF2 DS were not found during setup, press any key to install it first or close the script and install it manually.
+steamcmd.exe +login anonymous +app_update 232250 validate +quit
+goto start
+:notconfigured
+echo Half-Life 2 directory was not found in default install location, install halted.
+pause
+exit
+:notinstalled
+echo LFE is not installed.
+pause
+goto start
+:notindir
+set foundcmd=0
+echo This script is not being run from the SteamCMD directory, either move the script to the correct directory and try again.
+echo (Note: this may be caused by running as admin, you do not have to run as admin for this)
+echo Or enter the directory here (including drive letter):
+if NOT EXIST "drivers\etc\hosts" (
+	echo ^If you do not have SteamCMD, you can enter ^(S^) to download now.
+	set /p dlstart=
+)
+for /f "delims=" %%V in ('powershell -command "$env:dlstart.ToLower()"') do set "dlstart=%%V"
+if '%dlstart%'=='s' goto dlsteamcmd
+set /p changedir=
+%changedir:~0,2%
+cd %changedir%
+goto start
+
+:dlsteamcmd
+if EXIST "%cd%\steamcmd.zip" set foundcmd=1
+if EXIST "%cd%\steamcmd.zip" goto extractcmd
+if EXIST "%userprofile%\downloads\steamcmd.zip" set foundcmd=2
+if EXIST "%userprofile%\downloads\steamcmd.zip" goto extractcmd
+if '%foundcmd%'=='0' start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://steamcdn-a.akamaihd.net/client/installer/steamcmd.zip\",\"$PWD\steamcmd.zip\") }"
+if EXIST "%cd%\steamcmd.zip" set foundcmd=1
+if EXIST "%cd%\steamcmd.zip" goto extractcmd
+if EXIST "%userprofile%\downloads\steamcmd.zip" set foundcmd=2
+if EXIST "%userprofile%\downloads\steamcmd.zip" goto extractcmd
+goto extractcmd
+
+:extractcmd
+ping localhost -n 1 >NUL
+if EXIST steamcmd.exe goto start
+if '%foundcmd%'=='1' start /wait /min powershell -command "& {Add-Type -AssemblyName System.IO.Compression.FileSystem; [System.IO.Compression.ZipFile]::ExtractToDirectory(\"$PWD\steamcmd.zip\", \"$PWD\") }"
+if '%foundcmd%'=='2' start /wait /min powershell -command "& {Add-Type -AssemblyName System.IO.Compression.FileSystem; [System.IO.Compression.ZipFile]::ExtractToDirectory(\"$HOME\downloads\steamcmd.zip\", \"$PWD\") }"
+if EXIST steamcmd.exe (
+	echo ^Successfully installed SteamCMD to %cd%
+	goto start
+)
+if EXIST "%cd%\7-Zip\7z.exe" (
+	if '%foundcmd%'=='1' (
+		start /min /wait "7z" "%cd%\7-Zip\7z.exe" x steamcmd.zip
+	)
+	if '%foundcmd%'=='2' (
+		start /min /wait "7z" "%cd%\7-Zip\7z.exe" x "%userprofile%\downloads\steamcmd.zip"
+	)
+	if EXIST steamcmd.exe echo ^Successfully installed SteamCMD to %cd%
+)
+goto start
+
+:instsourcem
+if NOT EXIST "%gamedir%\tf_coop_extended" goto notinstalled
+echo This will direct download the required SourceMod files and then extract them.
+echo It may take a few mins depending on your download speed.
+if EXIST "%gamedir%\tf_coop_extended\addons\sourcemod\metamod\sourcemod.vdf" (
+	echo "SourceMod is already installed, if you want to re-install, rename the current SourceMod install (addons) to addonsold  and run this script again..."
+	pause
+	goto start )
+set dlloc=0
+if EXIST "%userprofile%\downloads\sourcemod-1.11.0-git6569-windows.zip" set dlloc=1
+if EXIST "sourcemod-1.11.0-git6569-windows.zip" set dlloc=2
+if '%dlloc%'=='0' start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://sm.alliedmods.net/smdrop/1.11/sourcemod-1.11.0-git6569-windows.zip\",\"$PWD\sourcemod-1.11.0-git6569-windows.zip\") }"
+if EXIST "sourcemod-1.11.0-git6569-windows.zip" set dlloc=2
+set mmloc=0
+if EXIST "%userprofile%\downloads\mmsource-1.11.0-git1130-windows.zip" set mmloc=1
+if EXIST "mmsource-1.11.0-git1130-windows.zip" set mmloc=2
+if '%mmloc%'=='0' start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://mms.alliedmods.net/mmsdrop/1.11/mmsource-1.11.0-git1130-windows.zip\",\"$PWD\mmsource-1.11.0-git1130-windows.zip\") }"
+if EXIST "mmsource-1.11.0-git1130-windows.zip" set mmloc=2
+set steamworksloc=0
+if EXIST "%userprofile%\downloads\SteamWorks-git121-windows.zip" set steamworksloc=1
+if EXIST "SteamWorks-git121-windows.zip" set steamworksloc=2
+if '%steamworksloc%'=='0' start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://users.alliedmods.net/~kyles/builds/SteamWorks/SteamWorks-git121-windows.zip\",\"$PWD\SteamWorks-git121-windows.zip\") }"
+if EXIST "SteamWorks-git121-windows.zip" set steamworksloc=2
+set dlloc=0
+if EXIST "%userprofile%\downloads\sourcemod-1.11.0-git6569-windows.zip" set dlloc=1
+if EXIST "sourcemod-1.11.0-git6569-windows.zip" set dlloc=2
+if '%dlloc%'=='0' goto dltowrong
+echo This may take a minute or two, just wait for the next message after PowerShell finishes extracting SourceMod...
+if '%dlloc%'=='1' start /wait /min powershell -command "& {Add-Type -AssemblyName System.IO.Compression.FileSystem; [System.IO.Compression.ZipFile]::ExtractToDirectory(\"$HOME\downloads\sourcemod-1.11.0-git6569-windows.zip\", \"$PWD\$env:gamedir\tf_coop_extended\"); [System.IO.Compression.ZipFile]::ExtractToDirectory(\"$HOME\downloads\mmsource-1.11.0-git1130-windows.zip\", \"$PWD\$env:gamedir\tf_coop_extended\"); [System.IO.Compression.ZipFile]::ExtractToDirectory(\"$HOME\downloads\SteamWorks-git121-windows.zip\", \"$PWD\$env:gamedir\tf_coop_extended\") }"
+if '%dlloc%'=='2' start /wait /min powershell -command "& {Add-Type -AssemblyName System.IO.Compression.FileSystem; [System.IO.Compression.ZipFile]::ExtractToDirectory(\"$PWD\sourcemod-1.11.0-git6569-windows.zip\", \"$PWD\$env:gamedir\tf_coop_extended\"); [System.IO.Compression.ZipFile]::ExtractToDirectory(\"$PWD\mmsource-1.11.0-git1130-windows.zip\", \"$PWD\$env:gamedir\tf_coop_extended\"); [System.IO.Compression.ZipFile]::ExtractToDirectory(\"$PWD\SteamWorks-git121-windows.zip\", \"$PWD\$env:gamedir\tf_coop_extended\") }"
+if NOT EXIST "%cd%\7-Zip\7z.exe" powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SourceScripts/raw/master/synotherfilefixes/7-Zip.zip\",\"$PWD\7zip.zip\") }"
+if EXIST "%cd%\7zip.zip" start /wait /min powershell -command "& {Add-Type -AssemblyName System.IO.Compression.FileSystem; [System.IO.Compression.ZipFile]::ExtractToDirectory(\"$PWD\7zip.zip\", \"$PWD\") }"
+if EXIST "%cd%\7zip.zip" del /Q "%cd%\7zip.zip"
+set use7z=0
+if NOT EXIST "%gamedir%\tf_coop_extended\addons\metamod.vdf" set use7z=1
+if '%use7z%'=='1' (
+	if '%dlloc%'=='1' (
+		start /min /wait "7z" "7-Zip\7z.exe" x sourcemod-1.11.0-git6569-windows.zip -o"%cd%\%gamedir%\tf_coop_extended"
+	)
+	if '%dlloc%'=='2' (
+		start /min /wait "7z" "7-Zip\7z.exe" x "%userprofile%\downloads\sourcemod-1.11.0-git6569-windows.zip" -o"%cd%\%gamedir%\tf_coop_extended"
+	)
+	if '%mmloc%'=='1' (
+		start /min /wait "7z" "7-Zip\7z.exe" x "%userprofile%\downloads\mmsource-1.11.0-git1130-windows.zip" -o"%cd%\%gamedir%\tf_coop_extended"
+	)
+	if '%mmloc%'=='2' (
+		start /min /wait "7z" "7-Zip\7z.exe" x mmsource-1.11.0-git1130-windows.zip -o"%cd%\%gamedir%\tf_coop_extended"
+	)
+	if '%steamworksloc%'=='1' (
+		start /min /wait "7z" "7-Zip\7z.exe" x "%userprofile%\downloads\SteamWorks-git121-windows.zip" -o"%cd%\%gamedir%\tf_coop_extended"
+	)
+	if '%steamworksloc%'=='2' (
+		start /min /wait "7z" "7-Zip\7z.exe" x SteamWorks-git121-windows.zip -o"%cd%\%gamedir%\tf_coop_extended"
+	)
+)
+if NOT EXIST "%gamedir%\tf_coop_extended\addons\sourcemod\gamedata\core.games\custom" mkdir "%gamedir%\tf_coop_extended\addons\sourcemod\gamedata\core.games\custom"
+if NOT EXIST "%gamedir%\tf_coop_extended\addons\sourcemod\gamedata\sdkhooks.games\custom" mkdir "%gamedir%\tf_coop_extended\addons\sourcemod\gamedata\sdkhooks.games\custom"
+if NOT EXIST "%gamedir%\tf_coop_extended\addons\sourcemod\gamedata\sdktools.games\custom" mkdir "%gamedir%\tf_coop_extended\addons\sourcemod\gamedata\sdktools.games\custom"
+if NOT EXIST "%gamedir%\tf_coop_extended\addons\metamod.vdf" (
+	echo Failed to auto-install SourceMod, you may have an outdated PowerShell, or something else went wrong somewhere.
+	echo You should still be able to manually install it from the downloads earlier.
+	pause
+	goto start )
+start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SM-LambdaFortress/raw/master/gamedata/sdkhooks.games/custom/engine.ep2v.txt\", \"$PWD\$env:gamedir\tf_coop_extended\addons\sourcemod\gamedata\sdkhooks.games\custom\engine.ep2v.txt\") }"
+start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SM-LambdaFortress/raw/master/gamedata/sdkhooks.games/custom/game.lf.txt\", \"$PWD\$env:gamedir\tf_coop_extended\addons\sourcemod\gamedata\sdkhooks.games\custom\game.lf.txt\") }"
+start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SM-LambdaFortress/raw/master/gamedata/sdktools.games/custom/game.lf.txt\", \"$PWD\$env:gamedir\tf_coop_extended\addons\sourcemod\gamedata\sdktools.games\custom\game.lf.txt\") }"
+start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SM-LambdaFortress/raw/master/gamedata/sdktools.games/custom/master.games.txt\", \"$PWD\$env:gamedir\tf_coop_extended\addons\sourcemod\gamedata\sdktools.games\custom\master.games.txt\") }"
+start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SM-LambdaFortress/raw/master/gamedata/core.games/custom/common.games.txt\", \"$PWD\$env:gamedir\tf_coop_extended\addons\sourcemod\gamedata\core.games\custom\common.games.txt\") }"
+if NOT EXIST "%gamedir%\tf_coop_extended\addons\sourcemod\plugins\updater.smx" start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://bitbucket.org/GoD_Tony/updater/downloads/updater.smx\", \"$PWD\$env:gamedir\tf_coop_extended\addons\sourcemod\plugins\updater.smx\") }"
+echo Now you should be able to install any plugins you want.
+explorer "%cd%\%gamedir%\tf_coop_extended\addons\sourcemod\plugins"
+pause
+cls
+goto start
+
+:dltowrong
+echo SourceMod zip not in your users Download folder, or the SteamCMD folder, auto-install halted.
+echo Press any key to re-run the SourceMod install function...
+pause
+goto instsourcem
+
+:noanon
+if '%anonset%'=='2' (
+	echo You cannot use anonymous to install HL2...
+	set username=""
+	goto insthl2
+)
+echo You cannot use anonymous to install this part...
+set anonset=1
+goto firstinstall
