@@ -20,12 +20,21 @@ exit
 }
 
 if [ -f /usr/bin/dpkg-query ];then
-	if [[ ! $(dpkg-query -l lib32gcc1) ]];then
+	if [[ ! $(dpkg-query -l lib32gcc1) ]] && [[ $(arch | grep 64) ]];then
 		if [[ $(cat /etc/os-release | grep ID=ubuntu) ]];then
 			packageinf="Use sudo apt-get install lib32gcc1"
 			missingdeps
 		else
 			packageinf="Use your package manager to install lib32gcc1"
+			missingdeps
+		fi
+	fi
+	if [[ ! $(dpkg-query -l libgcc1) ]] && [[ ! $(arch | grep 64) ]];then
+		if [[ $(cat /etc/os-release | grep ID=ubuntu) ]];then
+			packageinf="Use sudo apt-get install libgcc1"
+			missingdeps
+		else
+			packageinf="Use your package manager to install libgcc1"
 			missingdeps
 		fi
 	fi
