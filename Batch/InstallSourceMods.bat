@@ -831,7 +831,7 @@ if EXIST "%cldir%\Escape\maps\escape_map_01.bsp" (
 if EXIST "%cldir%\escape_by_ex-mo\maps\escape_map_01.bsp" echo Completed.
 goto start
 :lfeinst
-if EXIST "%cldir%\tf_coop_extended\maps\d1_trainstation_01.bsp" (
+if EXIST "%cldir%\tf_coop_extended\bin\server.dll" (
 	echo ^Lambda Fortress Extended is already installed.
 	pause
 	goto start
