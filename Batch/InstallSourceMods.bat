@@ -153,7 +153,7 @@ if "%uprun%"=="exmo" goto escbyexmo
 if "%uprun%"=="lfe" goto lfeinst
 if "%uprun%"=="update" goto updater
 echo.
-echo Choose an option...
+echo You must choose an option inside the ()...
 echo.
 goto start
 
