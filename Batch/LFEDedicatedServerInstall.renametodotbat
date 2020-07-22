@@ -292,10 +292,10 @@ if EXIST "%gamedir%\tf_coop_extended\addons\sourcemod\metamod\sourcemod.vdf" (
 	pause
 	goto start )
 set dlloc=0
-if EXIST "%userprofile%\downloads\sourcemod-1.11.0-git6569-windows.zip" set dlloc=1
-if EXIST "sourcemod-1.11.0-git6569-windows.zip" set dlloc=2
+if EXIST "%userprofile%\downloads\sourcemod-1.11.0-git6569-windows.zip" set dlloc=2
+if EXIST "sourcemod-1.11.0-git6569-windows.zip" set dlloc=1
 if '%dlloc%'=='0' start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://sm.alliedmods.net/smdrop/1.11/sourcemod-1.11.0-git6569-windows.zip\",\"$PWD\sourcemod-1.11.0-git6569-windows.zip\") }"
-if EXIST "sourcemod-1.11.0-git6569-windows.zip" set dlloc=2
+if EXIST "sourcemod-1.11.0-git6569-windows.zip" set dlloc=1
 set mmloc=0
 if EXIST "%userprofile%\downloads\mmsource-1.11.0-git1130-windows.zip" set mmloc=1
 if EXIST "mmsource-1.11.0-git1130-windows.zip" set mmloc=2
@@ -306,13 +306,10 @@ if EXIST "%userprofile%\downloads\SteamWorks-git121-windows.zip" set steamworksl
 if EXIST "SteamWorks-git121-windows.zip" set steamworksloc=2
 if '%steamworksloc%'=='0' start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://users.alliedmods.net/~kyles/builds/SteamWorks/SteamWorks-git121-windows.zip\",\"$PWD\SteamWorks-git121-windows.zip\") }"
 if EXIST "SteamWorks-git121-windows.zip" set steamworksloc=2
-set dlloc=0
-if EXIST "%userprofile%\downloads\sourcemod-1.11.0-git6569-windows.zip" set dlloc=1
-if EXIST "sourcemod-1.11.0-git6569-windows.zip" set dlloc=2
 if '%dlloc%'=='0' goto dltowrong
 echo This may take a minute or two, just wait for the next message after PowerShell finishes extracting SourceMod...
-if '%dlloc%'=='1' start /wait /min powershell -command "& {Add-Type -AssemblyName System.IO.Compression.FileSystem; [System.IO.Compression.ZipFile]::ExtractToDirectory(\"$HOME\downloads\sourcemod-1.11.0-git6569-windows.zip\", \"$PWD\$env:gamedir\tf_coop_extended\"); [System.IO.Compression.ZipFile]::ExtractToDirectory(\"$HOME\downloads\mmsource-1.11.0-git1130-windows.zip\", \"$PWD\$env:gamedir\tf_coop_extended\"); [System.IO.Compression.ZipFile]::ExtractToDirectory(\"$HOME\downloads\SteamWorks-git121-windows.zip\", \"$PWD\$env:gamedir\tf_coop_extended\") }"
-if '%dlloc%'=='2' start /wait /min powershell -command "& {Add-Type -AssemblyName System.IO.Compression.FileSystem; [System.IO.Compression.ZipFile]::ExtractToDirectory(\"$PWD\sourcemod-1.11.0-git6569-windows.zip\", \"$PWD\$env:gamedir\tf_coop_extended\"); [System.IO.Compression.ZipFile]::ExtractToDirectory(\"$PWD\mmsource-1.11.0-git1130-windows.zip\", \"$PWD\$env:gamedir\tf_coop_extended\"); [System.IO.Compression.ZipFile]::ExtractToDirectory(\"$PWD\SteamWorks-git121-windows.zip\", \"$PWD\$env:gamedir\tf_coop_extended\") }"
+if '%dlloc%'=='2' start /wait /min powershell -command "& {Add-Type -AssemblyName System.IO.Compression.FileSystem; [System.IO.Compression.ZipFile]::ExtractToDirectory(\"$HOME\downloads\sourcemod-1.11.0-git6569-windows.zip\", \"$PWD\$env:gamedir\tf_coop_extended\"); [System.IO.Compression.ZipFile]::ExtractToDirectory(\"$HOME\downloads\mmsource-1.11.0-git1130-windows.zip\", \"$PWD\$env:gamedir\tf_coop_extended\"); [System.IO.Compression.ZipFile]::ExtractToDirectory(\"$HOME\downloads\SteamWorks-git121-windows.zip\", \"$PWD\$env:gamedir\tf_coop_extended\") }"
+if '%dlloc%'=='1' start /wait /min powershell -command "& {Add-Type -AssemblyName System.IO.Compression.FileSystem; [System.IO.Compression.ZipFile]::ExtractToDirectory(\"$PWD\sourcemod-1.11.0-git6569-windows.zip\", \"$PWD\$env:gamedir\tf_coop_extended\"); [System.IO.Compression.ZipFile]::ExtractToDirectory(\"$PWD\mmsource-1.11.0-git1130-windows.zip\", \"$PWD\$env:gamedir\tf_coop_extended\"); [System.IO.Compression.ZipFile]::ExtractToDirectory(\"$PWD\SteamWorks-git121-windows.zip\", \"$PWD\$env:gamedir\tf_coop_extended\") }"
 if NOT EXIST "%cd%\7-Zip\7z.exe" powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SourceScripts/raw/master/synotherfilefixes/7-Zip.zip\",\"$PWD\7zip.zip\") }"
 if EXIST "%cd%\7zip.zip" start /wait /min powershell -command "& {Add-Type -AssemblyName System.IO.Compression.FileSystem; [System.IO.Compression.ZipFile]::ExtractToDirectory(\"$PWD\7zip.zip\", \"$PWD\") }"
 if EXIST "%cd%\7zip.zip" del /Q "%cd%\7zip.zip"
