@@ -434,6 +434,10 @@ if EXIST "%cldir%\missionimprobable\maps\mimp1.bsp" (
 echo Downloading Mission Improbable...
 powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://www.runthinkshootlive.com/download.php?id=9865^&f=/hl2-ep2/hl2-ep2-sp-mission-improbable-sdk-base-2013-sp.7z\",\"$PWD\mimp.7z\") }"
 if EXIST "%cd%\mimp.7z" .\7-Zip\7z.exe x .\mimp.7z -o"%cldir%"
+if EXIST "%cldir%\hl2-ep2-sp-mission-improbable-sdk-base-2013-sp\missionimprobable\maps\mimp1.bsp" (
+	move "%cldir%\hl2-ep2-sp-mission-improbable-sdk-base-2013-sp\missionimprobable" "%cldir%\missionimprobable"
+	rmdir /Q /S "%cldir%\hl2-ep2-sp-mission-improbable-sdk-base-2013-sp"
+)
 if NOT EXIST "%cd%\steamapps\workshop\content\17520\683512034" (
 	echo ^Downloading Synergy Support files through SteamCMD
 	steamcmd.exe +login anonymous +workshop_download_item 17520 683512034 +quit
