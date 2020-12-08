@@ -660,9 +660,12 @@ if EXIST "%cldir%\DayHard\maps\dayhardpart1.bsp" (
 	pause
 	goto start
 )
-echo Downloading DayHard...
-powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://www.runthinkshootlive.com/download.php?id=3008^&f=/half-life-2/hl2-sp-dayhard-complete.7z\",\"$PWD\dayhard.7z\") }"
-if EXIST "%cd%\dayhard.7z" .\7-Zip\7z.exe x .\dayhard.7z -o"%cldir%"
+rem echo Downloading DayHard...
+rem RTSL version is outdated
+rem powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://www.runthinkshootlive.com/download.php?id=3008^&f=/half-life-2/hl2-sp-dayhard-complete.7z\",\"$PWD\dayhard.7z\") }"
+rem if EXIST "%cd%\dayhard.7z" .\7-Zip\7z.exe x .\dayhard.7z -o"%cldir%"
+echo Opening DayHard ModDB page...
+start /b https://www.moddb.com/mods/dayhard/downloads
 if NOT EXIST "%cd%\steamapps\workshop\content\17520\1230906124" (
 	echo ^Downloading Synergy Support files through SteamCMD
 	steamcmd.exe +login anonymous +workshop_download_item 17520 1230906124 +quit
