@@ -536,9 +536,10 @@ echo "(SYN) to download SynFixes        (SSR) to download SynSaveRestore"
 echo "(ET) to download EntTools         (FPD) to download FirstPersonDeaths"
 echo "(SM) to download SynModes         (AUTO) to download AutoChangeMap"
 echo "(CR) to download Synergy CrashMap (U) to download Updater with SteamWorks"
+echo "(EDT) to download EDTRebuild, required for some supports."
 echo "(SynDev) to download SynFixes Dev needed for Black Mesa entities"
 echo "(SynSweps) to download Synergy Scripted Weapons also needed for BMS"
-echo "Some plugins will also require their translation files, you can get a full pack of these plugins with (FP)"
+echo "You can get a full pack of these plugins with (FP) then remove ones that you dont need."
 echo "(B) to go back to start"
 read pluginsubstr
 pluginsubstr=${pluginsubstr,,}
@@ -609,6 +610,12 @@ if [ $pluginsubstr = "gt" ];then
 fi
 if [ $pluginsubstr = "gtsp" ];then
 	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/scripting/sm_goto.sp" -P ./$synpath/addons/sourcemod/scripting
+fi
+if [ $pluginsubstr = "edt" ];then
+	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/plugins/edtrebuild.smx" -P ./$synpath/addons/sourcemod/plugins
+fi
+if [ $pluginsubstr = "edtsp" ];then
+	wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/scripting/edtrebuild.sp" -P ./$synpath/addons/sourcemod/scripting
 fi
 if [ $pluginsubstr = "v" ];then
 	if [ -f ./$synpath/addons/sourcemod/plugins/votecar.smx ];then rm -f ./$synpath/addons/sourcemod/plugins/votecar.smx;fi
