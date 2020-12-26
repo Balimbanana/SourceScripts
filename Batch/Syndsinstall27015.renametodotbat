@@ -602,6 +602,7 @@ echo (HD) to download HealthDisplay   (HYP) to download HyperSpawn
 echo (ST) to download Save/Teleport   (SSR) to download SynSaveRestore
 echo (SM) to download SynModes        (U) to download Updater with SteamWorks
 echo (Syn) to download SynFixes standard  (ET) to download EntTools
+echo (EDT) to download EDTRebuild, required for some supports.
 echo (SynSweps) to download Synergy Scripted Weapons, most of the time this will also require SynDev
 echo (SynDev) to download SynFixesDev for custom entity support.
 echo (BCache) to download BuildEntityCache plugin to easily generate content loaders and EDTs.
@@ -663,6 +664,8 @@ if '%pluginsubstr%'=='ml' (
 if '%pluginsubstr%'=='mlsp' start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SM-Synergy/raw/master/scripting/modelloader.sp\",\"$PWD\$env:synpath\addons\sourcemod\scripting\modelloader.sp\") }"
 if '%pluginsubstr%'=='gt' start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SM-Synergy/raw/master/plugins/sm_goto.smx\",\"$PWD\$env:synpath\addons\sourcemod\plugins\sm_goto.smx\") }"
 if '%pluginsubstr%'=='gtsp' start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SM-Synergy/raw/master/scripting/sm_goto.sp\",\"$PWD\$env:synpath\addons\sourcemod\scripting\sm_goto.sp\") }"
+if '%pluginsubstr%'=='edt' start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SM-Synergy/raw/master/plugins/edtrebuild.smx\",\"$PWD\$env:synpath\addons\sourcemod\plugins\edtrebuild.smx\") }"
+if '%pluginsubstr%'=='edtsp' start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SM-Synergy/raw/master/scripting/edtrebuild.sp\",\"$PWD\$env:synpath\addons\sourcemod\scripting\edtrebuild.sp\") }"
 if '%pluginsubstr%'=='hd' (
 	start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SM-Synergy/raw/master/plugins/healthdisplay.smx\",\"$PWD\$env:synpath\addons\sourcemod\plugins\healthdisplay.smx\") }"
 	start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SM-Synergy/raw/master/translations/healthdisplay.phrases.txt\",\"$PWD\$env:synpath\addons\sourcemod\translations\healthdisplay.phrases.txt\") }"
