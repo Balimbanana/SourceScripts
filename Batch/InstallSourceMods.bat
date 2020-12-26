@@ -88,6 +88,7 @@ echo (DF) for DownFall               (RH) for Ravenholm
 echo (YLA) for Year Long Alarm       (KTM) for Kill The Monk
 echo (CE) for Causality Effect       (TH) for They Hunger Again part 1
 echo (PEN) for HL2 Penetration       (EZ) for Entropy Zero
+echo (PTSD2) for PTSD 2
 echo (STTR) for SteamTracksTrouble and Riddles
 echo.
 echo (LFE) not supported in Synergy, but a separate mod that allows playing through HL1, HL2, Ep1, Ep2 with TF2 characters.
@@ -151,6 +152,7 @@ if "%uprun%"=="aod" goto avodessa
 if "%uprun%"=="sesc" goto silentesc
 if "%uprun%"=="exmo" goto escbyexmo
 if "%uprun%"=="lfe" goto lfeinst
+if "%uprun%"=="ptsd2" goto ptsd2
 if "%uprun%"=="update" goto updater
 echo.
 echo You must choose an option inside the ()...
@@ -797,6 +799,10 @@ goto start
 :pene
 echo Opening Half-Life 2 Penetration ModDB page...
 start /b https://www.moddb.com/mods/penetration/downloads
+goto start
+:ptsd2
+echo Opening PTSD 2 ModDB page...
+start /b https://www.moddb.com/mods/the-ptsd-mod-2/downloads
 goto start
 :avodessa
 if EXIST "%cldir%\AvenueOdessa\maps\avenueodessa.bsp" (
