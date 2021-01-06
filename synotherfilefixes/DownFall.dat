@@ -1,0 +1,22 @@
+"DownFall"
+{
+	"tag"	"df"
+	"web"	"http://store.steampowered.com/app/587650"
+	"id"	"587650"
+	"root"	"HL2DownFall"
+	"path"	"downfall"
+	"sup"	"4"
+	"deps"	"ep1 ep2"
+
+	"maps"
+	{
+		dwn01		""
+		dwn01a		""
+		dwn02		""
+	}
+	
+	"maps_background"
+	{
+		dwn_bg01	""
+	}
+}
