@@ -518,7 +518,7 @@ start
 updmods() {
 if [ ! -d "./steamapps/workshop" ];then mkdir "./steamapps/workshop" ;fi
 if [ ! -d "./steamapps/workshop/content" ];then mkdir "./steamapps/workshop/content" ;fi
-if [ ! -d "./steamapps/workshop/content/17520" ];then
+if [[ ! -d "./steamapps/workshop/content/17520" ]] && [[ ! -f "./steamapps/workshop/content/17520" ]];then
 	mkdir "./steamapps/workshop/content/17520"
 	touch ./steamapps/workshop/content/17520/tmpfile
 fi
@@ -825,7 +825,7 @@ instpmpckpass
 instpmpckpass() {
 if [ ! -d "./steamapps/workshop" ];then mkdir "./steamapps/workshop" ;fi
 if [ ! -d "./steamapps/workshop/content" ];then mkdir "./steamapps/workshop/content" ;fi
-if [ ! -d "./steamapps/workshop/content/17520" ];then
+if [[ ! -d "./steamapps/workshop/content/17520" ]] && [[ ! -f "./steamapps/workshop/content/17520" ]];then
 	mkdir "./steamapps/workshop/content/17520"
 	touch ./steamapps/workshop/content/17520/tmpfile
 fi
