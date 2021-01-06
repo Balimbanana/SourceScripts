@@ -546,20 +546,20 @@ if [ -z $stusername ];then
 fi
 if [ $instmod = "none" ];then updmods ;fi
 if [ $instmod = "yla" ];then
-	./steamcmd.sh +@sSteamCmdForcePlatformType windows +login $stusername +force_install_dir ./steamapps/common/Half-Life\ 2\ Year\ Long\ Alarm +app_update 747250 validate +quit
 	if [ ! -f "./steamapps/workshop/content/17520/1654962168/1654962168_pak.vpk" ];then ./steamcmd.sh +login anonymous +workshop_download_item 17520 1654962168 +quit;fi
+	./steamcmd.sh +@sSteamCmdForcePlatformType windows +login $stusername +force_install_dir ./steamapps/common/Half-Life\ 2\ Year\ Long\ Alarm +app_update 747250 validate +quit
 fi
 if [ $instmod = "amal" ];then
-	./steamcmd.sh +@sSteamCmdForcePlatformType windows +login $stusername +force_install_dir ./steamapps/common/Amalgam +app_update 1389950 validate +quit
 	if [ ! -f "./steamapps/workshop/content/17520/2347382988/2347382988_pak.vpk" ];then ./steamcmd.sh +login anonymous +workshop_download_item 17520 2347382988 +quit;fi
+	./steamcmd.sh +@sSteamCmdForcePlatformType windows +login $stusername +force_install_dir ./steamapps/common/Amalgam +app_update 1389950 validate +quit
 fi
 if [ $instmod = "df" ];then
-	./steamcmd.sh +@sSteamCmdForcePlatformType windows +login $stusername +force_install_dir ./steamapps/common/Half-Life\ 2\ DownFall +app_update 587650 validate +quit
 	if [ ! -f "./steamapps/workshop/content/17520/909637644/909637644_pak.vpk" ];then ./steamcmd.sh +login anonymous +workshop_download_item 17520 909637644 +quit;fi
+	./steamcmd.sh +@sSteamCmdForcePlatformType windows +login $stusername +force_install_dir ./steamapps/common/Half-Life\ 2\ DownFall +app_update 587650 validate +quit
 fi
 if [ $instmod = "pros" ];then
-	./steamcmd.sh +@sSteamCmdForcePlatformType windows +login $stusername +force_install_dir ./steamapps/common/Prospekt +app_update 399120 validate +quit
 	if [ ! -f "./steamapps/workshop/content/17520/2338505640/2338505640_pak.vpk" ];then ./steamcmd.sh +login anonymous +workshop_download_item 17520 2338505640 +quit;fi
+	./steamcmd.sh +@sSteamCmdForcePlatformType windows +login $stusername +force_install_dir ./steamapps/common/Prospekt +app_update 399120 validate +quit
 fi
 updmods
 }
