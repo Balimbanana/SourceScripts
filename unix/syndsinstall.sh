@@ -559,7 +559,8 @@ if [ $instmod = "yla" ];then
 			fi
 		fi
 	fi
-	./steamcmd.sh +@sSteamCmdForcePlatformType windows +login $stusername +force_install_dir ./steamapps/common/Half-Life\ 2\ Year\ Long\ Alarm +app_update 747250 validate +quit
+	./steamcmd.sh +@sSteamCmdForcePlatformType windows +login $stusername +force_install_dir ./steamapps/common/yla +app_update 747250 validate +quit
+	if [ ! -f "./steamapps/common/Synergy/synergy/content/yearlongalarm.dat" ];then wget -nv "https://github.com/Balimbanana/SourceScripts/raw/master/synotherfilefixes/yearlongalarm.dat" -P ./steamapps/common/Synergy/synergy/content ;fi
 fi
 if [ $instmod = "amal" ];then
 	if [ ! -f "./steamapps/workshop/content/17520/2347382988/2347382988_pak.vpk" ];then
