@@ -546,19 +546,67 @@ if [ -z $stusername ];then
 fi
 if [ $instmod = "none" ];then updmods ;fi
 if [ $instmod = "yla" ];then
-	if [ ! -f "./steamapps/workshop/content/17520/1654962168/1654962168_pak.vpk" ];then ./steamcmd.sh +login anonymous +workshop_download_item 17520 1654962168 +quit;fi
+	if [ ! -f "./steamapps/workshop/content/17520/1654962168/1654962168_pak.vpk" ];then
+		./steamcmd.sh +login anonymous +workshop_download_item 17520 1654962168 +quit
+		if [ ! -f "./steamapps/workshop/content/17520/1654962168/1654962168_pak.vpk" ];then
+			if [ -f "$HOME/.steam/steam/steamapps/workshop/content/17520/1654962168/1654962168_pak.vpk" ];then
+				if [ ! -L "$HOME/.steam/steam/steamapps/workshop/content/17520" ];then
+					rsync --remove-source-files -a $HOME/.steam/steam/steamapps/workshop/content/17520/* ./steamapps/common/Synergy/synergy/custom
+					rm -rf $HOME/.steam/steam/steamapps/workshop/content/17520
+					ln -s "../../common/Synergy/synergy/custom" "$HOME/.steam/steam/steamapps/workshop/content/17520"
+					if [ -f "./steamapps/common/Synergy/synergy/custom/tmpfile" ];then rm ./steamapps/common/Synergy/synergy/custom/tmpfile ;fi
+				fi
+			fi
+		fi
+	fi
 	./steamcmd.sh +@sSteamCmdForcePlatformType windows +login $stusername +force_install_dir ./steamapps/common/Half-Life\ 2\ Year\ Long\ Alarm +app_update 747250 validate +quit
 fi
 if [ $instmod = "amal" ];then
-	if [ ! -f "./steamapps/workshop/content/17520/2347382988/2347382988_pak.vpk" ];then ./steamcmd.sh +login anonymous +workshop_download_item 17520 2347382988 +quit;fi
+	if [ ! -f "./steamapps/workshop/content/17520/2347382988/2347382988_pak.vpk" ];then
+		./steamcmd.sh +login anonymous +workshop_download_item 17520 2347382988 +quit
+		if [ ! -f "./steamapps/workshop/content/17520/2347382988/2347382988_pak.vpk" ];then
+			if [ -f "$HOME/.steam/steam/steamapps/workshop/content/17520/2347382988/2347382988_pak.vpk" ];then
+				if [ ! -L "$HOME/.steam/steam/steamapps/workshop/content/17520" ];then
+					rsync --remove-source-files -a $HOME/.steam/steam/steamapps/workshop/content/17520/* ./steamapps/common/Synergy/synergy/custom
+					rm -rf $HOME/.steam/steam/steamapps/workshop/content/17520
+					ln -s "../../common/Synergy/synergy/custom" "$HOME/.steam/steam/steamapps/workshop/content/17520"
+					if [ -f "./steamapps/common/Synergy/synergy/custom/tmpfile" ];then rm ./steamapps/common/Synergy/synergy/custom/tmpfile ;fi
+				fi
+			fi
+		fi
+	fi
 	./steamcmd.sh +@sSteamCmdForcePlatformType windows +login $stusername +force_install_dir ./steamapps/common/Amalgam +app_update 1389950 validate +quit
 fi
 if [ $instmod = "df" ];then
-	if [ ! -f "./steamapps/workshop/content/17520/909637644/909637644_pak.vpk" ];then ./steamcmd.sh +login anonymous +workshop_download_item 17520 909637644 +quit;fi
+	if [ ! -f "./steamapps/workshop/content/17520/909637644/909637644_pak.vpk" ];then
+		./steamcmd.sh +login anonymous +workshop_download_item 17520 909637644 +quit
+		if [ ! -f "./steamapps/workshop/content/17520/909637644/909637644_pak.vpk" ];then
+			if [ -f "$HOME/.steam/steam/steamapps/workshop/content/17520/909637644/909637644_pak.vpk" ];then
+				if [ ! -L "$HOME/.steam/steam/steamapps/workshop/content/17520" ];then
+					rsync --remove-source-files -a $HOME/.steam/steam/steamapps/workshop/content/17520/* ./steamapps/common/Synergy/synergy/custom
+					rm -rf $HOME/.steam/steam/steamapps/workshop/content/17520
+					ln -s "../../common/Synergy/synergy/custom" "$HOME/.steam/steam/steamapps/workshop/content/17520"
+					if [ -f "./steamapps/common/Synergy/synergy/custom/tmpfile" ];then rm ./steamapps/common/Synergy/synergy/custom/tmpfile ;fi
+				fi
+			fi
+		fi
+	fi
 	./steamcmd.sh +@sSteamCmdForcePlatformType windows +login $stusername +force_install_dir ./steamapps/common/Half-Life\ 2\ DownFall +app_update 587650 validate +quit
 fi
 if [ $instmod = "pros" ];then
-	if [ ! -f "./steamapps/workshop/content/17520/2338505640/2338505640_pak.vpk" ];then ./steamcmd.sh +login anonymous +workshop_download_item 17520 2338505640 +quit;fi
+	if [ ! -f "./steamapps/workshop/content/17520/2338505640/2338505640_pak.vpk" ];then
+		./steamcmd.sh +login anonymous +workshop_download_item 17520 2338505640 +quit
+		if [ ! -f "./steamapps/workshop/content/17520/2338505640/2338505640_pak.vpk" ];then
+			if [ -f "$HOME/.steam/steam/steamapps/workshop/content/17520/2338505640/2338505640_pak.vpk" ];then
+				if [ ! -L "$HOME/.steam/steam/steamapps/workshop/content/17520" ];then
+					rsync --remove-source-files -a $HOME/.steam/steam/steamapps/workshop/content/17520/* ./steamapps/common/Synergy/synergy/custom
+					rm -rf $HOME/.steam/steam/steamapps/workshop/content/17520
+					ln -s "../../common/Synergy/synergy/custom" "$HOME/.steam/steam/steamapps/workshop/content/17520"
+					if [ -f "./steamapps/common/Synergy/synergy/custom/tmpfile" ];then rm ./steamapps/common/Synergy/synergy/custom/tmpfile ;fi
+				fi
+			fi
+		fi
+	fi
 	./steamcmd.sh +@sSteamCmdForcePlatformType windows +login $stusername +force_install_dir ./steamapps/common/Prospekt +app_update 399120 validate +quit
 fi
 updmods
