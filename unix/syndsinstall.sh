@@ -553,7 +553,7 @@ if [ $instmod = "yla" ];then
 				if [ ! -L "$HOME/.steam/steam/steamapps/workshop/content/17520" ];then
 					rsync --remove-source-files -a $HOME/.steam/steam/steamapps/workshop/content/17520/* ./steamapps/common/Synergy/synergy/custom
 					rm -rf $HOME/.steam/steam/steamapps/workshop/content/17520
-					ln -s "../../common/Synergy/synergy/custom" "$HOME/.steam/steam/steamapps/workshop/content/17520"
+					ln -s "$PWD/steamapps/common/Synergy/synergy/custom" "$HOME/.steam/steam/steamapps/workshop/content/17520"
 					if [ -f "./steamapps/common/Synergy/synergy/custom/tmpfile" ];then rm ./steamapps/common/Synergy/synergy/custom/tmpfile ;fi
 				fi
 			fi
@@ -569,7 +569,7 @@ if [ $instmod = "amal" ];then
 				if [ ! -L "$HOME/.steam/steam/steamapps/workshop/content/17520" ];then
 					rsync --remove-source-files -a $HOME/.steam/steam/steamapps/workshop/content/17520/* ./steamapps/common/Synergy/synergy/custom
 					rm -rf $HOME/.steam/steam/steamapps/workshop/content/17520
-					ln -s "../../common/Synergy/synergy/custom" "$HOME/.steam/steam/steamapps/workshop/content/17520"
+					ln -s "$PWD/steamapps/common/Synergy/synergy/custom" "$HOME/.steam/steam/steamapps/workshop/content/17520"
 					if [ -f "./steamapps/common/Synergy/synergy/custom/tmpfile" ];then rm ./steamapps/common/Synergy/synergy/custom/tmpfile ;fi
 				fi
 			fi
@@ -585,7 +585,7 @@ if [ $instmod = "df" ];then
 				if [ ! -L "$HOME/.steam/steam/steamapps/workshop/content/17520" ];then
 					rsync --remove-source-files -a $HOME/.steam/steam/steamapps/workshop/content/17520/* ./steamapps/common/Synergy/synergy/custom
 					rm -rf $HOME/.steam/steam/steamapps/workshop/content/17520
-					ln -s "../../common/Synergy/synergy/custom" "$HOME/.steam/steam/steamapps/workshop/content/17520"
+					ln -s "$PWD/steamapps/common/Synergy/synergy/custom" "$HOME/.steam/steam/steamapps/workshop/content/17520"
 					if [ -f "./steamapps/common/Synergy/synergy/custom/tmpfile" ];then rm ./steamapps/common/Synergy/synergy/custom/tmpfile ;fi
 				fi
 			fi
@@ -601,7 +601,7 @@ if [ $instmod = "pros" ];then
 				if [ ! -L "$HOME/.steam/steam/steamapps/workshop/content/17520" ];then
 					rsync --remove-source-files -a $HOME/.steam/steam/steamapps/workshop/content/17520/* ./steamapps/common/Synergy/synergy/custom
 					rm -rf $HOME/.steam/steam/steamapps/workshop/content/17520
-					ln -s "../../common/Synergy/synergy/custom" "$HOME/.steam/steam/steamapps/workshop/content/17520"
+					ln -s "$PWD/steamapps/common/Synergy/synergy/custom" "$HOME/.steam/steam/steamapps/workshop/content/17520"
 					if [ -f "./steamapps/common/Synergy/synergy/custom/tmpfile" ];then rm ./steamapps/common/Synergy/synergy/custom/tmpfile ;fi
 				fi
 			fi
