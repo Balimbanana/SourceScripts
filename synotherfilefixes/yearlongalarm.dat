@@ -1,0 +1,21 @@
+"Year Long Alarm"
+{
+	"tag"	"yla"
+	"web"	"https://store.steampowered.com/app/747250"
+	"id"	"747250"
+	"root"	"yla"
+	"path"	"yearlongalarm"
+	"sup"	"3"
+	"deps"	"ep1 ep2"
+
+	"maps"
+	{
+		yla_mine	"Mine"
+		yla_bridge	"Bridge"
+	}
+	
+	"maps_background"
+	{
+		yla_background	""
+	}
+}
