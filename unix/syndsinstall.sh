@@ -92,7 +92,7 @@ fi
 if [ -f ./steamapps/common/Synergy/synergy/addons/sourcemod/configs/admins_simple.ini ]; then
 	echo "(SMADMIN) to modify your SourceMod admins file."
 fi
-echo "(IHL2) (IEp1) (IEp2) to install/update HL2 Ep1 or Ep2."
+echo "(IHL2) (IEp1) (IEp2) to install/update HL2 Ep1 or Ep2. (IMods) to install Steam source mods and supports."
 echo "(update) to update this script."
 read uprun
 uprun=${uprun,,}
@@ -111,6 +111,7 @@ if [ $uprun = "smadmin" ]; then modifysmadmin;fi
 if [ $uprun = "ihl2" ]; then updhl2;fi
 if [ $uprun = "iep1" ]; then updep1;fi
 if [ $uprun = "iep2" ]; then updep2;fi
+if [ $uprun = "imods" ]; then updmods;fi
 if [ $uprun = "update" ]; then updatescr;fi
 echo "Choose an option."
 start
@@ -512,6 +513,53 @@ if [ -z $stusername ];then
 fi
 ./steamcmd.sh +login $stusername +force_install_dir ./steamapps/common/Half-Life\ 2 +app_update 420 validate +quit
 start
+}
+
+updmods() {
+if [ ! -d "./steamapps/workshop" ];then mkdir "./steamapps/workshop" ;fi
+if [ ! -d "./steamapps/workshop/content" ];then mkdir "./steamapps/workshop/content" ;fi
+if [ ! -d "./steamapps/workshop/content/17520" ];then
+	mkdir "./steamapps/workshop/content/17520"
+	touch ./steamapps/workshop/content/17520/tmpfile
+fi
+if [ ! -L "./steamapps/workshop/content/17520" ];then
+	rsync --remove-source-files -a ./steamapps/workshop/content/17520/* ./steamapps/common/Synergy/synergy/custom
+	rm -rf ./steamapps/workshop/content/17520
+	ln -s "../../common/Synergy/synergy/custom" "./steamapps/workshop/content/17520"
+	if [ -f "./steamapps/common/Synergy/synergy/custom/tmpfile" ];then rm ./steamapps/common/Synergy/synergy/custom/tmpfile ;fi
+fi
+echo "Install Steam released mods and support files for Synergy."
+echo "(yla) Year Long Alarm     (amal) Amalgam"
+echo "(pros) Prospekt           (df) DownFall"
+echo "b for back to start"
+read instmod
+if [ -z $instmod ];then instmod=none ;fi
+if [ $instmod = "b" ];then start ;fi
+if [ -z $stusername ];then
+	echo "Enter your username here:"
+	read stusername
+	anonset=2
+	anonblck=${stusername,,}
+	if [ $anonblck = "anonymous" ];then noanon;fi
+fi
+if [ $instmod = "none" ];then updmods ;fi
+if [ $instmod = "yla" ];then
+	./steamcmd.sh +login $stusername +force_install_dir ./steamapps/common/Half-Life\ 2\ Year\ Long\ Alarm +app_update 747250 validate +quit
+	if [ ! -f "./steamapps/workshop/content/17520/1654962168/1654962168_pak.vpk" ];then ./steamcmd.sh +login anonymous +workshop_download_item 17520 1654962168 +quit;fi
+fi
+if [ $instmod = "amal" ];then
+	./steamcmd.sh +login $stusername +force_install_dir ./steamapps/common/Amalgam +app_update 1389950 validate +quit
+	if [ ! -f "./steamapps/workshop/content/17520/2347382988/2347382988_pak.vpk" ];then ./steamcmd.sh +login anonymous +workshop_download_item 17520 2347382988 +quit;fi
+fi
+if [ $instmod = "df" ];then
+	./steamcmd.sh +login $stusername +force_install_dir ./steamapps/common/Half-Life\ 2\ DownFall +app_update 587650 validate +quit
+	if [ ! -f "./steamapps/workshop/content/17520/909637644/909637644_pak.vpk" ];then ./steamcmd.sh +login anonymous +workshop_download_item 17520 909637644 +quit;fi
+fi
+if [ $instmod = "pros" ];then
+	./steamcmd.sh +login $stusername +force_install_dir ./steamapps/common/Prospekt +app_update 399120 validate +quit
+	if [ ! -f "./steamapps/workshop/content/17520/2338505640/2338505640_pak.vpk" ];then ./steamcmd.sh +login anonymous +workshop_download_item 17520 2338505640 +quit;fi
+fi
+updmods
 }
 
 instsourcepluginstop() {
