@@ -592,7 +592,8 @@ if [ $instmod = "df" ];then
 			fi
 		fi
 	fi
-	./steamcmd.sh +@sSteamCmdForcePlatformType windows +login $stusername +force_install_dir ./steamapps/common/Half-Life\ 2\ DownFall +app_update 587650 validate +quit
+	./steamcmd.sh +@sSteamCmdForcePlatformType windows +login $stusername +force_install_dir ./steamapps/common/HL2DownFall +app_update 587650 validate +quit
+	if [ ! -f "./steamapps/common/Synergy/synergy/content/DownFall.dat" ];then wget -nv "https://github.com/Balimbanana/SourceScripts/raw/master/synotherfilefixes/DownFall.dat" -P ./steamapps/common/Synergy/synergy/content ;fi
 fi
 if [ $instmod = "pros" ];then
 	if [ ! -f "./steamapps/workshop/content/17520/2338505640/2338505640_pak.vpk" ];then
