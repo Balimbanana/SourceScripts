@@ -147,7 +147,7 @@ if NOT EXIST "%synpath%\synergy\models" mkdir "%synpath%\synergy\models"
 if NOT EXIST "%synpath%\synergy\models\weapons" mkdir "%synpath%\synergy\models\weapons"
 powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SourceScripts/raw/master/synotherfilefixes/w_physics.phy\",\"$PWD\$env:synpath\synergy\models\weapons\w_physics.phy\") }"
 if NOT EXIST "%synpath%\synergy\cfg\server2.cfg" (
-	echo hostname First Syn %syntype% Server>"%synpath%\synergy\cfg\server2.cfg"
+	echo hostname %USER% Syn %syntype% Server>"%synpath%\synergy\cfg\server2.cfg"
 	echo sv_lan 0 >>"%synpath%\synergy\cfg\server2.cfg"
 	echo mp_friendlyfire 0 >>"%synpath%\synergy\cfg\server2.cfg"
 	echo mp_reset 1 >>"%synpath%\synergy\cfg\server2.cfg"
