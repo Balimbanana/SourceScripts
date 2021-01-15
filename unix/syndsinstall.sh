@@ -533,6 +533,7 @@ fi
 echo "Install Steam released mods and support files for Synergy."
 echo "(yla) Year Long Alarm     (amal) Amalgam"
 echo "(pros) Prospekt           (df) DownFall"
+echo "(ezero) Entropy Zero"
 echo "b for back to start"
 read instmod
 if [ -z $instmod ];then instmod=none ;fi
@@ -610,6 +611,28 @@ if [ $instmod = "pros" ];then
 		fi
 	fi
 	./steamcmd.sh +@sSteamCmdForcePlatformType windows +login $stusername +force_install_dir ./steamapps/common/Prospekt +app_update 399120 validate +quit
+fi
+if [ $instmod = "ezero" ];then
+	if [ ! -f "./steamapps/workshop/content/17520/1877479381/1877479381_pak.vpk" ];then
+		./steamcmd.sh +login anonymous +workshop_download_item 17520 1877479381 +quit
+		if [ ! -f "./steamapps/workshop/content/17520/1877479381/1877479381_pak.vpk" ];then
+			if [ -f "$HOME/.steam/steam/steamapps/workshop/content/17520/1877479381/1877479381_pak.vpk" ];then
+				if [ ! -L "$HOME/.steam/steam/steamapps/workshop/content/17520" ];then
+					rsync --remove-source-files -a $HOME/.steam/steam/steamapps/workshop/content/17520/* ./steamapps/common/Synergy/synergy/custom
+					rm -rf $HOME/.steam/steam/steamapps/workshop/content/17520
+					ln -s "$PWD/steamapps/common/Synergy/synergy/custom" "$HOME/.steam/steam/steamapps/workshop/content/17520"
+					if [ -f "./steamapps/common/Synergy/synergy/custom/tmpfile" ];then rm ./steamapps/common/Synergy/synergy/custom/tmpfile ;fi
+				fi
+			fi
+		fi
+	fi
+	./steamcmd.sh +@sSteamCmdForcePlatformType windows +login $stusername +force_install_dir ./steamapps/common/EZeroRen +app_update 714070 validate +quit
+	if [ -d "./steamapps/common/EZeroRen/Entropy\ Zero/EntropyZero" ];then
+		if [ ! -d "./steamapps/common/EntropyZero" ];then mkdir ./steamapps/common/EntropyZero
+		mv ./steamapps/common/EZeroRen/Entropy\ Zero/EntropyZero ./steamapps/common/EntropyZero/EntropyZero
+		rm -rf ./steamapps/common/EZeroRen
+	fi
+	if [ ! -f "./steamapps/common/Synergy/synergy/content/EntropyZero.dat" ];then wget -nv "https://github.com/Balimbanana/SourceScripts/raw/master/synotherfilefixes/EntropyZero.dat" -P ./steamapps/common/Synergy/synergy/content ;fi
 fi
 updmods
 }
