@@ -627,7 +627,7 @@ if [ $instmod = "ezero" ];then
 		fi
 	fi
 	./steamcmd.sh +@sSteamCmdForcePlatformType windows +login $stusername +force_install_dir ./steamapps/common/EZeroRen +app_update 714070 validate +quit
-	if [ -d "./steamapps/common/EZeroRen/Entropy\ Zero/EntropyZero" ];then
+	if [ -d "./steamapps/common/EZeroRen/Entropy Zero/EntropyZero" ];then
 		if [ ! -d "./steamapps/common/EntropyZero" ];then mkdir ./steamapps/common/EntropyZero ;fi
 		mv ./steamapps/common/EZeroRen/Entropy\ Zero/EntropyZero ./steamapps/common/EntropyZero/EntropyZero
 		rm -rf ./steamapps/common/EZeroRen
