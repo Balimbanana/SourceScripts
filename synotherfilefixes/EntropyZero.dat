@@ -1,0 +1,34 @@
+"Entropy: Zero"
+{
+	"tag"	"ezero"
+	"web"	"http://store.steampowered.com/app/714070/"
+	"id"	"714070"
+	"root"	"EntropyZero"
+	"path"	"EntropyZero"
+	"sup"	"1"
+	"deps"	"ep1 ep2"
+
+	"maps"
+	{
+		az_intro	""
+		az_c1_1		""
+		az_c1_2		""
+		az_c1_3		""
+		az_c2_1		""
+		az_c2_2		""
+		az_c2_3		""
+		az_c3_1		""
+		az_c3_2		""
+		az_c3_3		""
+		az_c4_1		""
+		az_c4_2		""
+		az_c4_3		""
+		az_c4_4		""
+	}
+	
+	"maps_background"
+	{
+		az_bg_default	""
+		az_bg_night		""
+	}
+}
