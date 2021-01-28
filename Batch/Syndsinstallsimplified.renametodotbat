@@ -256,12 +256,15 @@ if EXIST steamcmd.exe (
 	echo ^Successfully installed SteamCMD to %cd%
 	goto start
 )
-if EXIST "C:\Program Files\7-Zip\7z.exe" (
+if NOT EXIST "%cd%\7-Zip\7z.exe" powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SourceScripts/raw/master/synotherfilefixes/7-Zip.zip\",\"$PWD\7zip.zip\") }"
+if EXIST "%cd%\7zip.zip" start /wait /min powershell -command "& {Add-Type -AssemblyName System.IO.Compression.FileSystem; [System.IO.Compression.ZipFile]::ExtractToDirectory(\"$PWD\7zip.zip\", \"$PWD\") }"
+if EXIST "%cd%\7zip.zip" del /Q "%cd%\7zip.zip"
+if EXIST "%cd%\7-Zip\7z.exe" (
 	if '%foundcmd%'=='1' (
-		start /min /wait "7z" "C:\Program Files\7-Zip\7z.exe" x -y steamcmd.zip
+		start /min /wait "7z" "%cd%\7-Zip\7z.exe" x -y steamcmd.zip
 	)
 	if '%foundcmd%'=='2' (
-		start /min /wait "7z" "C:\Program Files\7-Zip\7z.exe" x -y "%userprofile%\downloads\steamcmd.zip"
+		start /min /wait "7z" "%cd%\7-Zip\7z.exe" x -y "%userprofile%\downloads\steamcmd.zip"
 	)
 	if EXIST steamcmd.exe echo ^Successfully installed SteamCMD to %cd%
 )
@@ -351,6 +354,12 @@ if '%linkset%'=='0' (
 	start /wait /min robocopy /S /NP /NJS /NJH /NS "steamapps\workshop\content\17520" "steamapps\common\Synergy\synergy\custom"
 	rd /Q /S "steamapps\workshop\content\17520"
 	mklink /j "steamapps\workshop\content\17520" "steamapps\common\Synergy\synergy\custom"
+)
+start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/yarik2720/Synergy-SM/archive/master.zip\",\"$PWD\$env:synpath\SMMapFixes.zip\") }"
+if EXIST "%synpath%\SMMapFixes.zip" (
+	start /min /wait "7z" "%cd%\7-Zip\7z.exe" x -y "%synpath%\SMMapFixes.zip"
+	start /wait /min robocopy /S /NP /NJS /NJH /NS "%cd%\Synergy-SM-master" "steamapps\common\Synergy\synergy"
+	rd /Q /S "%cd%\Synergy-SM-master"
 )
 echo Now downloading the Mod Supports pack, this may take a while.
 steamcmd.exe +login anonymous +workshop_download_item 17520 2357833111 +quit
