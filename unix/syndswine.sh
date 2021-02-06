@@ -104,6 +104,12 @@ if [ ! -f /usr/bin/wine ];then
 	if [[ $(cat /etc/os-release | grep VERSION_ID=\"19.10) ]];then 
 		sudo apt-add-repository 'deb https://dl.winehq.org/wine-builds/ubuntu/ eoan main'
 	fi
+	if [[ $(cat /etc/os-release | grep VERSION_ID=\"20.04) ]];then 
+		sudo apt-add-repository 'deb https://dl.winehq.org/wine-builds/ubuntu/ focal main'
+	fi
+	if [[ $(cat /etc/os-release | grep VERSION_ID=\"20.10) ]];then 
+		sudo apt-add-repository 'deb https://dl.winehq.org/wine-builds/ubuntu/ groovy main'
+	fi
 	if [[ $(cat /etc/os-release | grep VERSION_CODENAME=stretch) ]];then
 		wget "https://download.opensuse.org/repositories/Emulators:/Wine:/Debian/Debian_10/i386/libfaudio0_20.01-0~buster_i386.deb"
 		wget "https://download.opensuse.org/repositories/Emulators:/Wine:/Debian/Debian_10/amd64/libfaudio0_20.01-0~buster_amd64.deb"
