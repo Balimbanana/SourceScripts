@@ -334,6 +334,12 @@ if '%betaset%'=='t' (
 if '%betaset%'=='p' (
 	set synpath=steamapps\common\synportal
 	set syntype=Portal
+	powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SourceScripts/raw/master/synotherfilefixes/portalscenes.7z\",\"$PWD\portalscenes.7z\") }"
+	if NOT EXIST "%cd%\7-Zip\7z.exe" powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SourceScripts/raw/master/synotherfilefixes/7-Zip.zip\",\"$PWD\7zip.zip\") }"
+	if EXIST "%cd%\7zip.zip" start /wait /min powershell -command "& {Add-Type -AssemblyName System.IO.Compression.FileSystem; [System.IO.Compression.ZipFile]::ExtractToDirectory(\"$PWD\7zip.zip\", \"$PWD\") }"
+	if EXIST "%cd%\7zip.zip" del /Q "%cd%\7zip.zip"
+	start /min /wait "7z" "7-Zip\7z.exe" x portalscenes.7z -o"%cd%\steamapps\common\synportal\synergy"
+	if EXIST "%cd%\portalscenes.7z" del /Q "%cd%\portalscenes.7z"
 )
 powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SM-Synergy/raw/master/scripts/weapon_betagun.txt\",\"$PWD\$env:synpath\synergy\scripts\weapon_betagun.txt\") }"
 if NOT EXIST "%synpath%\synergy\models" mkdir "%synpath%\synergy\models"
@@ -574,6 +580,8 @@ if '%syntype%'=='dev' (
 if '%syntype%'=='portal' (
 	start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SM-Synergy/raw/master/twitchbranchgamedata/sdkhooks.games/custom/game.synergy.txt\", \"$PWD\$env:synpath\addons\sourcemod\gamedata\sdkhooks.games\custom\game.synergy.txt\") }"
 	start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SM-Synergy/raw/master/devtwitchgamedata/sdktools.games/custom/game.synergy.txt\", \"$PWD\$env:synpath\addons\sourcemod\gamedata\sdktools.games\custom\game.synergy.txt\") }"
+	start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SM-Synergy/raw/master/scripting/synportalutil.sp\", \"$PWD\$env:synpath\addons\sourcemod\scripting\synportalutil.sp\") }"
+	start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SM-Synergy/raw/master/plugins/synportalutil.smx\", \"$PWD\$env:synpath\addons\sourcemod\plugins\synportalutil.smx\") }"
 )
 if '%syntype%'=='twitch' (
 	start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SM-Synergy/raw/master/devtwitchgamedata/sdkhooks.games/custom/game.synergy.txt\", \"$PWD\$env:synpath\addons\sourcemod\gamedata\sdkhooks.games\custom\game.synergy.txt\") }"
