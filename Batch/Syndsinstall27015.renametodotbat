@@ -407,6 +407,7 @@ echo Would you like to edit your server config? (Y/N)
 set /p edtconf=
 for /f "delims=" %%V in ('powershell -command "$env:edtconf.ToLower()"') do set "edtconf=%%V"
 if "%edtconf%"=="y" start notepad %synpath%\synergy\cfg\server2.cfg
+if "%betaset%"=="p" goto instsourcem
 echo Would you like to install SourceMod as well? (Y/N)
 set /p instsmset=
 for /f "delims=" %%V in ('powershell -command "$env:instsmset.ToLower()"') do set "instsmset=%%V"
