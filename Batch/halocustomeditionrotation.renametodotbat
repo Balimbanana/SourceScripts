@@ -1,0 +1,184 @@
+@echo off
+rem This script was written by Balimbanana.
+rem //////////////////////////////If you are viewing this on GitHub, right click Raw above and click:
+rem //////////////////////////////Save Target As, or Save Linked Content As to download this script.
+rem //////////////////////////////Save the script as ending in .bat and run it.
+title Halo Custom Edition map rotations
+goto initvars
+:updater
+powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SourceScripts/raw/master/Batch/halocustomeditionrotation.renametodotbat\",\"$PWD\halocustomeditionrotation.bat\") }"
+echo Updated...
+start /b "Halo Custom Edition map rotations" "%~dp0halocustomeditionrotation.bat"
+exit
+:start
+echo Information: enter the letter inside the () and press enter to continue at the prompts.
+echo You can change the map rotation you are using while in-game so long as you are not currently on a map
+echo (D) to download the map rotations and base files.
+echo (info) to print map rotation information.
+if EXIST "%mccdir%\mapsrotation1\bloodgulch.map" (
+	echo ^(R1^) to use Map Rotation 1 	^(R2^) to use Map Rotation 2
+)
+echo (R) to reset to original maps
+echo (Update) to update this script.
+set /p uprun=
+for /f "delims=" %%V in ('powershell -command "$env:uprun.ToLower()"') do set "uprun=%%V"
+if "%uprun%"=="d" goto dlsetup
+if "%uprun%"=="info" goto printinfo
+if "%uprun%"=="r1" goto rotation1
+if "%uprun%"=="r2" goto rotation2
+if "%uprun%"=="r" goto resetmaps
+if "%uprun%"=="update" goto updater
+echo Choose an option.
+goto start
+
+:dlsetup
+if NOT EXIST "%cd%\7-Zip\7z.exe" powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SourceScripts/raw/master/synotherfilefixes/7-Zip.zip\",\"$PWD\7zip.zip\") }"
+if EXIST "%cd%\7zip.zip" start /wait /min powershell -command "& {Add-Type -AssemblyName System.IO.Compression.FileSystem; [System.IO.Compression.ZipFile]::ExtractToDirectory(\"$PWD\7zip.zip\", \"$PWD\") }"
+if EXIST "%cd%\7zip.zip" del /Q "%cd%\7zip.zip"
+if NOT EXIST "%mccdir%\mapsbak.7z" (
+	echo Creating backup of original maps
+	start /wait "7z" "7-Zip\7z.exe" a "%mccdir%\mapsbak" "%mccdir%\maps"
+)
+if NOT EXIST "%cd%\HCEBase.7z" (
+	echo Downloading base required files wait for next prompt...
+	if NOT EXIST "%cd%\HCEBase.7z" powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"http://thebdf.org/hce/HCEBase.7z\",\"$PWD\HCEBase.7z\") }"
+	start /wait "7z" "7-Zip\7z.exe" x HCEBase.7z -o"%mccdir%\maps"
+)
+if EXIST "%cd%\mapsrotation12.7z" goto extractmaps
+if NOT EXIST "%USERPROFILE%\downloads\mapsrotation12.7z" (
+	echo Opening download page for the maps rotations 1 and 2...
+	start http://thebdf.org/hce/mapsrotation12.7z
+	echo Wait until the download is finished, then run D again at the start prompt.
+	pause
+	goto start
+)
+goto extractmaps
+
+:extractmaps
+if EXIST "%cd%\mapsrotation12.7z" (
+	start /wait "7z" "7-Zip\7z.exe" x "%cd%\mapsrotation12.7z" -o"%mccdir%" -y
+	echo Extracted
+	goto start
+)
+if EXIST "%USERPROFILE%\downloads\mapsrotation12.7z" (
+	start /wait "7z" "7-Zip\7z.exe" x "%USERPROFILE%\downloads\mapsrotation12.7z" -o"%mccdir%" -y
+	echo Extracted
+	goto start
+)
+goto start
+
+:rotation1
+if EXIST "%mccdir%\mapsrotation1\bloodgulch.map" robocopy /E /IS "%mccdir%\mapsrotation1" "%mccdir%\maps"
+echo You now have rotation 1 maps...
+echo Make sure you launch MCC with Halo: MCC Anti-Cheat Disabled (Mods and Limited Services)
+goto start
+
+:rotation2
+if EXIST "%mccdir%\mapsrotation2\bloodgulch.map" robocopy /E /IS "%mccdir%\mapsrotation2" "%mccdir%\maps"
+echo You now have rotation 2 maps...
+echo Make sure you launch MCC with Halo: MCC Anti-Cheat Disabled (Mods and Limited Services)
+goto start
+
+:resetmaps
+if EXIST "%mccdir%\mapsbak.7z" start /wait "7z" "7-Zip\7z.exe" x "%mccdir%\mapsbak.7z" -o"%mccdir%" -y
+echo You now have default maps...
+goto start
+
+:notinstalled
+echo MCC Halo 1 not found.
+pause
+exit
+
+:printinfo
+echo Maps list order in-game
+echo map rotation 1
+echo battlecreek	nowayout_MAD
+echo sidewinder	Yoyorast Island V2
+echo damnation	revelations
+echo rat race	vertimad
+echo prisoner	thepillarofautumnspace
+echo hang em high	No_Remorse
+echo chill out	Pimp Hogs 2
+echo derelict	obsolete
+echo boarding action	observatory
+echo chiron tl-34	mmt_sandtrap
+echo blood gulch	Oasis
+echo wizard		mech_gulch
+echo longest		the-maw-muster
+echo death island	septic_exodus
+echo danger canyon	scarab_assault_v1
+echo infinity	maw
+echo timberland	Yoyorast_Island
+echo ice fields	The_Land_of_Hyrule_v0.2
+echo gephyrophobia	Massacre_Mountain_Race
+echo.
+echo map rotation 2
+echo battlecreek	Abandoned Turf
+echo sidewinder	[H2]_sanctuary
+echo damnation	DMT-OD-Waterworks
+echo rat race	[H2]_New_mombassa
+echo prisoner	[H2]_ascension
+echo hang em high	h2-snowing
+echo chill out	base_havoc_beta
+echo derelict	cmt_Snow_Grove
+echo boarding action	cmt_tensity
+echo chiron tl-34	desertdunestwo
+echo blood gulch	FusionIsland
+echo wizard		[h3]_sandtrap_race
+echo longest		rocketwinder
+echo death island	haloball
+echo danger canyon	hypothermia_v0.2
+echo infinity	lake_bovatoya
+echo timberland	[H2]_warlock
+echo ice fields	h3t-coagulation
+echo gephyrophobia	Launch_Bay_X
+echo.
+goto start
+
+:initvars
+if EXIST "drivers\etc\hosts" cd "%~dp0"
+set "mccdir=C:\Program Files (x86)\Steam\steamapps\common\Halo The Master Chief Collection\halo1\original\build"
+if EXIST "C:\SteamLibrary\steamapps\common\Halo The Master Chief Collection\halo1\original\build" set "mccdir=C:\SteamLibrary\steamapps\common\Halo The Master Chief Collection\halo1\original\build"
+if EXIST "E:\SteamLibrary\steamapps\common\Halo The Master Chief Collection\halo1\original\build" set "mccdir=E:\SteamLibrary\steamapps\common\Halo The Master Chief Collection\halo1\original\build"
+if EXIST "D:\SteamLibrary\steamapps\common\Halo The Master Chief Collection\halo1\original\build" set "mccdir=D:\SteamLibrary\steamapps\common\Halo The Master Chief Collection\halo1\original\build"
+if EXIST "F:\SteamLibrary\steamapps\common\Halo The Master Chief Collection\halo1\original\build" set "mccdir=F:\SteamLibrary\steamapps\common\Halo The Master Chief Collection\halo1\original\build"
+if EXIST "G:\SteamLibrary\steamapps\common\Halo The Master Chief Collection\halo1\original\build" set "mccdir=G:\SteamLibrary\steamapps\common\Halo The Master Chief Collection\halo1\original\build"
+if EXIST "L:\SteamLibrary\steamapps\common\Halo The Master Chief Collection\halo1\original\build" set "mccdir=L:\SteamLibrary\steamapps\common\Halo The Master Chief Collection\halo1\original\build"
+if EXIST "I:\SteamLibrary\steamapps\common\Halo The Master Chief Collection\halo1\original\build" set "mccdir=I:\SteamLibrary\steamapps\common\Halo The Master Chief Collection\halo1\original\build"
+if EXIST "C:\Steam\steamapps\common\Halo The Master Chief Collection\halo1\original\build" set "mccdir=C:\Steam\steamapps\common\Halo The Master Chief Collection\halo1\original\build"
+if EXIST "E:\Steam\steamapps\common\Halo The Master Chief Collection\halo1\original\build" set "mccdir=E:\Steam\steamapps\common\Halo The Master Chief Collection\halo1\original\build"
+if EXIST "D:\Steam\steamapps\common\Halo The Master Chief Collection\halo1\original\build" set "mccdir=D:\Steam\steamapps\common\Halo The Master Chief Collection\halo1\original\build"
+if EXIST "F:\Steam\steamapps\common\Halo The Master Chief Collection\halo1\original\build" set "mccdir=F:\Steam\steamapps\common\Halo The Master Chief Collection\halo1\original\build"
+if EXIST "G:\Steam\steamapps\common\Halo The Master Chief Collection\halo1\original\build" set "mccdir=G:\Steam\steamapps\common\Halo The Master Chief Collection\halo1\original\build"
+if EXIST "L:\Steam\steamapps\common\Halo The Master Chief Collection\halo1\original\build" set "mccdir=L:\Steam\steamapps\common\Halo The Master Chief Collection\halo1\original\build"
+if EXIST "I:\Steam\steamapps\common\Halo The Master Chief Collection\halo1\original\build" set "mccdir=I:\Steam\steamapps\common\Halo The Master Chief Collection\halo1\original\build"
+if EXIST "C:\Program Files\Steam\steamapps\common\Halo The Master Chief Collection\halo1\original\build" set "mccdir=C:\Program Files\Steam\steamapps\common\Halo The Master Chief Collection\halo1\original\build"
+if EXIST "E:\Program Files\Steam\steamapps\common\Halo The Master Chief Collection\halo1\original\build" set "mccdir=E:\Program Files\Steam\steamapps\common\Halo The Master Chief Collection\halo1\original\build"
+if EXIST "D:\Program Files\Steam\steamapps\common\Halo The Master Chief Collection\halo1\original\build" set "mccdir=D:\Program Files\Steam\steamapps\common\Halo The Master Chief Collection\halo1\original\build"
+if EXIST "F:\Program Files\Steam\steamapps\common\Halo The Master Chief Collection\halo1\original\build" set "mccdir=F:\Program Files\Steam\steamapps\common\Halo The Master Chief Collection\halo1\original\build"
+if EXIST "G:\Program Files\Steam\steamapps\common\Halo The Master Chief Collection\halo1\original\build" set "mccdir=G:\Program Files\Steam\steamapps\common\Halo The Master Chief Collection\halo1\original\build"
+if EXIST "L:\Program Files\Steam\steamapps\common\Halo The Master Chief Collection\halo1\original\build" set "mccdir=L:\Program Files\Steam\steamapps\common\Halo The Master Chief Collection\halo1\original\build"
+if EXIST "I:\Program Files\Steam\steamapps\common\Halo The Master Chief Collection\halo1\original\build" set "mccdir=I:\Program Files\Steam\steamapps\common\Halo The Master Chief Collection\halo1\original\build"
+if EXIST "C:\SteamLibrary\steamapps\common\Halo The Master Chief Collection\halo1\original\build" set "mccdir=C:\SteamLibrary\steamapps\common\Halo The Master Chief Collection\halo1\original\build"
+if EXIST "E:\SteamLibrary\steamapps\common\Halo The Master Chief Collection\halo1\original\build" set "mccdir=E:\SteamLibrary\steamapps\common\Halo The Master Chief Collection\halo1\original\build"
+if EXIST "D:\SteamLibrary\steamapps\common\Halo The Master Chief Collection\halo1\original\build" set "mccdir=D:\SteamLibrary\steamapps\common\Halo The Master Chief Collection\halo1\original\build"
+if EXIST "F:\SteamLibrary\steamapps\common\Halo The Master Chief Collection\halo1\original\build" set "mccdir=F:\SteamLibrary\steamapps\common\Halo The Master Chief Collection\halo1\original\build"
+if EXIST "G:\SteamLibrary\steamapps\common\Halo The Master Chief Collection\halo1\original\build" set "mccdir=G:\SteamLibrary\steamapps\common\Halo The Master Chief Collection\halo1\original\build"
+if EXIST "L:\SteamLibrary\steamapps\common\Halo The Master Chief Collection\halo1\original\build" set "mccdir=L:\SteamLibrary\steamapps\common\Halo The Master Chief Collection\halo1\original\build"
+if EXIST "I:\SteamLibrary\steamapps\common\Halo The Master Chief Collection\halo1\original\build" set "mccdir=I:\SteamLibrary\steamapps\common\Halo The Master Chief Collection\halo1\original\build"
+if EXIST "C:\Steam\steamapps\common\Halo The Master Chief Collection\halo1\original\build" set "mccdir=C:\Steam\steamapps\common\Halo The Master Chief Collection\halo1\original\build"
+if EXIST "E:\Steam\steamapps\common\Halo The Master Chief Collection\halo1\original\build" set "mccdir=E:\Steam\steamapps\common\Halo The Master Chief Collection\halo1\original\build"
+if EXIST "D:\Steam\steamapps\common\Halo The Master Chief Collection\halo1\original\build" set "mccdir=D:\Steam\steamapps\common\Halo The Master Chief Collection\halo1\original\build"
+if EXIST "F:\Steam\steamapps\common\Halo The Master Chief Collection\halo1\original\build" set "mccdir=F:\Steam\steamapps\common\Halo The Master Chief Collection\halo1\original\build"
+if EXIST "G:\Steam\steamapps\common\Halo The Master Chief Collection\halo1\original\build" set "mccdir=G:\Steam\steamapps\common\Halo The Master Chief Collection\halo1\original\build"
+if EXIST "L:\Steam\steamapps\common\Halo The Master Chief Collection\halo1\original\build" set "mccdir=L:\Steam\steamapps\common\Halo The Master Chief Collection\halo1\original\build"
+if EXIST "I:\Steam\steamapps\common\Halo The Master Chief Collection\halo1\original\build" set "mccdir=I:\Steam\steamapps\common\Halo The Master Chief Collection\halo1\original\build"
+if EXIST "C:\Program Files\Steam\steamapps\common\Halo The Master Chief Collection\halo1\original\build" set "mccdir=C:\Program Files\Steam\steamapps\common\Halo The Master Chief Collection\halo1\original\build"
+if EXIST "E:\Program Files\Steam\steamapps\common\Halo The Master Chief Collection\halo1\original\build" set "mccdir=E:\Program Files\Steam\steamapps\common\Halo The Master Chief Collection\halo1\original\build"
+if EXIST "D:\Program Files\Steam\steamapps\common\Halo The Master Chief Collection\halo1\original\build" set "mccdir=D:\Program Files\Steam\steamapps\common\Halo The Master Chief Collection\halo1\original\build"
+if EXIST "F:\Program Files\Steam\steamapps\common\Halo The Master Chief Collection\halo1\original\build" set "mccdir=F:\Program Files\Steam\steamapps\common\Halo The Master Chief Collection\halo1\original\build"
+if EXIST "G:\Program Files\Steam\steamapps\common\Halo The Master Chief Collection\halo1\original\build" set "mccdir=G:\Program Files\Steam\steamapps\common\Halo The Master Chief Collection\halo1\original\build"
+if EXIST "L:\Program Files\Steam\steamapps\common\Halo The Master Chief Collection\halo1\original\build" set "mccdir=L:\Program Files\Steam\steamapps\common\Halo The Master Chief Collection\halo1\original\build"
+if EXIST "I:\Program Files\Steam\steamapps\common\Halo The Master Chief Collection\halo1\original\build" set "mccdir=I:\Program Files\Steam\steamapps\common\Halo The Master Chief Collection\halo1\original\build"
+if NOT EXIST "%mccdir%" goto notinstalled
+goto start
