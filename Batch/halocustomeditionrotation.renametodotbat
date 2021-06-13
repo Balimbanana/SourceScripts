@@ -13,19 +13,25 @@ exit
 :start
 echo Information: enter the letter inside the () and press enter to continue at the prompts.
 echo You can change the map rotation you are using while in-game so long as you are not currently on a map
-echo (D) to download the map rotations and base files.
+echo (D) to download the map rotations 1, 2 and base files.	(D2) to download map rotations 3 and 4.
 echo (info) to print map rotation information.
 if EXIST "%mccdir%\mapsrotation1\bloodgulch.map" (
 	echo ^(R1^) to use Map Rotation 1 	^(R2^) to use Map Rotation 2
+)
+if EXIST "%mccdir%\mapsrotation3\bloodgulch.map" (
+	echo ^(R3^) to use Map Rotation 3 	^(R4^) to use Map Rotation 4
 )
 echo (R) to reset to original maps
 echo (Update) to update this script.
 set /p uprun=
 for /f "delims=" %%V in ('powershell -command "$env:uprun.ToLower()"') do set "uprun=%%V"
+if "%uprun%"=="d2" goto dlsetupnext
 if "%uprun%"=="d" goto dlsetup
 if "%uprun%"=="info" goto printinfo
 if "%uprun%"=="r1" goto rotation1
 if "%uprun%"=="r2" goto rotation2
+if "%uprun%"=="r3" goto rotation3
+if "%uprun%"=="r4" goto rotation4
 if "%uprun%"=="r" goto resetmaps
 if "%uprun%"=="update" goto updater
 echo Choose an option.
@@ -54,6 +60,30 @@ if NOT EXIST "%USERPROFILE%\downloads\mapsrotation12.7z" (
 )
 goto extractmaps
 
+:dlsetupnext
+rem need to ensure base files and 7Zip are available if someone wants part 3 and 4 but not 1 and 2
+if NOT EXIST "%cd%\7-Zip\7z.exe" powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SourceScripts/raw/master/synotherfilefixes/7-Zip.zip\",\"$PWD\7zip.zip\") }"
+if EXIST "%cd%\7zip.zip" start /wait /min powershell -command "& {Add-Type -AssemblyName System.IO.Compression.FileSystem; [System.IO.Compression.ZipFile]::ExtractToDirectory(\"$PWD\7zip.zip\", \"$PWD\") }"
+if EXIST "%cd%\7zip.zip" del /Q "%cd%\7zip.zip"
+if NOT EXIST "%mccdir%\mapsbak.7z" (
+	echo Creating backup of original maps
+	start /wait "7z" "7-Zip\7z.exe" a "%mccdir%\mapsbak" "%mccdir%\maps"
+)
+if NOT EXIST "%cd%\HCEBase.7z" (
+	echo Downloading base required files wait for next prompt...
+	if NOT EXIST "%cd%\HCEBase.7z" powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"http://thebdf.org/hce/HCEBase.7z\",\"$PWD\HCEBase.7z\") }"
+	start /wait "7z" "7-Zip\7z.exe" x HCEBase.7z -o"%mccdir%\maps"
+)
+if EXIST "%cd%\mapsrotation34.7z" goto extractmapsnext
+if NOT EXIST "%USERPROFILE%\downloads\mapsrotation34.7z" (
+	echo Opening download page for the maps rotations 3 and 4...
+	start http://thebdf.org/hce/mapsrotation34.7z
+	echo Wait until the download is finished, then run D2 again at the start prompt.
+	pause
+	goto start
+)
+goto extractmapsnext
+
 :extractmaps
 if EXIST "%cd%\mapsrotation12.7z" (
 	start /wait "7z" "7-Zip\7z.exe" x "%cd%\mapsrotation12.7z" -o"%mccdir%" -y
@@ -62,6 +92,19 @@ if EXIST "%cd%\mapsrotation12.7z" (
 )
 if EXIST "%USERPROFILE%\downloads\mapsrotation12.7z" (
 	start /wait "7z" "7-Zip\7z.exe" x "%USERPROFILE%\downloads\mapsrotation12.7z" -o"%mccdir%" -y
+	echo Extracted
+	goto start
+)
+goto start
+
+:extractmapsnext
+if EXIST "%cd%\mapsrotation34.7z" (
+	start /wait "7z" "7-Zip\7z.exe" x "%cd%\mapsrotation34.7z" -o"%mccdir%" -y
+	echo Extracted
+	goto start
+)
+if EXIST "%USERPROFILE%\downloads\mapsrotation34.7z" (
+	start /wait "7z" "7-Zip\7z.exe" x "%USERPROFILE%\downloads\mapsrotation34.7z" -o"%mccdir%" -y
 	echo Extracted
 	goto start
 )
@@ -76,6 +119,18 @@ goto start
 :rotation2
 if EXIST "%mccdir%\mapsrotation2\bloodgulch.map" robocopy /E /IS "%mccdir%\mapsrotation2" "%mccdir%\maps"
 echo You now have rotation 2 maps...
+echo Make sure you launch MCC with Halo: MCC Anti-Cheat Disabled (Mods and Limited Services)
+goto start
+
+:rotation3
+if EXIST "%mccdir%\mapsrotation3\bloodgulch.map" robocopy /E /IS "%mccdir%\mapsrotation3" "%mccdir%\maps"
+echo You now have rotation 3 maps...
+echo Make sure you launch MCC with Halo: MCC Anti-Cheat Disabled (Mods and Limited Services)
+goto start
+
+:rotation4
+if EXIST "%mccdir%\mapsrotation4\bloodgulch.map" robocopy /E /IS "%mccdir%\mapsrotation4" "%mccdir%\maps"
+echo You now have rotation 4 maps...
 echo Make sure you launch MCC with Halo: MCC Anti-Cheat Disabled (Mods and Limited Services)
 goto start
 
@@ -133,6 +188,48 @@ echo timberland	[H2]_warlock
 echo ice fields	h3t-coagulation
 echo gephyrophobia	Launch_Bay_X
 echo.
+echo map rotation 3
+echo beavercreek	aquarii_final
+echo sidewinder	Armageddon
+echo damnation	Train.Station
+echo ratrace		bob_omb_battlefield
+echo prisoner	boss_grounds
+echo hangemhigh	ChaosGulch
+echo chillout	extinction
+echo derelict	ForestOfDeath
+echo boardingaction	house2v2
+echo chiron tl-34	hugeass
+echo bloodgulch	hugesnap_finalbeta
+echo wizard		Hydrolysis
+echo longest		hyrulefield
+echo deathisland	immure
+echo dangercanyon	immure2
+echo infinity	Mystic
+echo timberland	Nukem_INTENSE
+echo icefields	rt_starwars_complete AI map
+echo gephyrophobia	the_moon_hotel
+echo.
+echo map rotation 4
+echo all AI maps
+echo beavercreek	ai_mombassa
+echo sidewinder	area49
+echo damnation	area50
+echo ratrace		area51
+echo prisoner	area52
+echo hangemhigh	area53
+echo chillout	area54
+echo derelict	area55
+echo boardingaction	b30coop
+echo chiron tl-34	floodcoviemarinewar
+echo bloodgulch	act3
+echo wizard		covenantbasev1.1
+echo longest		the_mummy_7
+echo deathisland	madnessp4
+echo dangercanyon	sandtrap_ai
+echo infinity	the_floods
+echo timberland	the_floods_part2
+echo icefields	the_floods_part3
+echo gephyrophobia	rpg_beta_5_final_version
 goto start
 
 :initvars
