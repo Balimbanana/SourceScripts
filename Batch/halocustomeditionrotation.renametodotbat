@@ -235,7 +235,7 @@ goto start
 :initvars
 if EXIST "drivers\etc\hosts" cd "%~dp0"
 set "mccdir=C:\Program Files (x86)\Steam\steamapps\common\Halo The Master Chief Collection\halo1"
-for /f "skip=2 tokens=1,3* delims== " %%i in ('reg QUERY HKEY_CURRENT_USER\Software\Valve\Steam /f SteamPath /t REG_SZ /v') do set "mccdir=%%j%%k" & goto start
+for /f "skip=2 tokens=1,3* delims== " %%i in ('reg QUERY HKEY_CURRENT_USER\Software\Valve\Steam /f SteamPath /t REG_SZ /v') do set "mccdir=%%j%%k"
 for /f "delims=" %%V in ('powershell -command "$env:mccdir.Replace(\"/\",\"\\\")"') do set "mccdir=%%V"
 for /f "delims=" %%V in ('powershell -command "$env:mccdir.Replace(\"programfiles\",\"\Program Files\")"') do set "mccdir=%%V"
 if EXIST "C:\SteamLibrary\steamapps\common\Halo The Master Chief Collection\halo1" set "mccdir=C:\SteamLibrary\steamapps\common\Halo The Master Chief Collection\halo1"
