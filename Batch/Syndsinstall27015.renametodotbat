@@ -1177,6 +1177,18 @@ if '%linkset%'=='0' (
 )
 steamcmd.exe +login anonymous +workshop_download_item 17520 1817140991 +quit
 echo.
+echo Now extracting VPK...
+timeout -T 2
+if EXIST "steamapps\common\Synergy\bin\vpk.exe" goto setupbm
+goto instmodsup
+
+:setupbm
+steamapps\common\Synergy\bin\vpk.exe "steamapps\common\Synergy\synergy\custom\1817140991\BlackMesaSupport.vpk"
+if EXIST "steamapps\common\Synergy\synergy\custom\1817140991\blackmesasupport" (
+	start /wait /min robocopy /S /NP /NJS /NJH /NS "steamapps\common\Synergy\synergy\custom\1817140991\blackmesasupport" "steamapps\common\Synergy\synergy"
+	rd /Q /S "steamapps\common\Synergy\synergy\custom\1817140991\blackmesasupport"
+	del "steamapps\common\Synergy\synergy\custom\1817140991\BlackMesaSupport.vpk"
+)
 goto instmodsup
 
 :installalcsupport
