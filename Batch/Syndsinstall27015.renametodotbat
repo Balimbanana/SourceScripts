@@ -68,6 +68,7 @@ if "%uprun%"=="i" goto firstinstall
 if "%uprun%"=="rb" goto srcds
 if "%uprun%"=="rt" goto srcds
 if "%uprun%"=="rp" goto srcds
+if "%uprun%"=="rd" goto srcds
 if "%uprun%"=="r" goto srcds
 if "%uprun%"=="rf" goto srcdscustom
 if "%uprun%"=="is" goto instsourcem
@@ -146,6 +147,7 @@ if '%linkset%'=='0' (
 	mklink /j "%synpath%\synergy\user_custom" "%synpath%\synergy\download\user_custom">NUL
 )
 for /f "delims=" %%V in ('powershell -command "$ab = get-date; $ab.Minute"') do set "starttime=%%V"
+if "%uprun%"=="rd" goto redsdev
 :reds
 echo (%date%)(%time%) SynDS started.
 if %smset%==1 start /wait %synpath%\srcds.exe -console -game synergy +maxplayers 64 +sv_lan 0 +map "hl2 d1_trainstation_06" +exec %configdir% -ip 0.0.0.0 -port %pnum% -nocrashdialog -insecure -nohltv -threads 8 -heapsize 2048000 -mem_max_heapsize 2048 -mem_max_heapsize_dedicated 512 +sm_basepath %sm_basepath%
@@ -159,6 +161,20 @@ if %cttime%==0 (
 )
 for /f "delims=" %%V in ('powershell -command "$ab = get-date; $ab.Minute"') do set "starttime=%%V"
 goto reds
+
+:redsdev
+echo (%date%)(%time%) SynDS started.
+if %smset%==1 start /wait %synpath%\srcds.exe -console -game synergy +maxplayers 64 +sv_lan 0 +map "hl2 d1_trainstation_06" +exec %configdir% -ip 0.0.0.0 -port %pnum% -nocrashdialog -insecure -nohltv -threads 8 -heapsize 2048000 -mem_max_heapsize 2048 -mem_max_heapsize_dedicated 512 +sm_basepath %sm_basepath% -allowdebug -condebug +developer 1
+if %smset%==0 start /wait %synpath%\srcds.exe -console -game synergy +maxplayers 64 +sv_lan 0 +map "hl2 d1_trainstation_06" +exec %configdir% -ip 0.0.0.0 -port %pnum% -nocrashdialog -insecure -nohltv -threads 8 -heapsize 2048000 -mem_max_heapsize 2048 -mem_max_heapsize_dedicated 512 -allowdebug -condebug +developer 1
+echo (%date%)(%time%) WARNING: SynDS closed or crashed, restarting.
+for /f "delims=" %%V in ('powershell -command "$ab = get-date; $ab.Minute"') do set "ctime=%%V"
+set /a cttime=ctime-starttime
+if %cttime%==0 (
+	echo ^The last crash was less than a minute ago, waiting to restart.
+	timeout -T 10
+)
+for /f "delims=" %%V in ('powershell -command "$ab = get-date; $ab.Minute"') do set "starttime=%%V"
+goto redsdev
 
 :srcdscustom
 if %skipstep% LEQ 0 (echo Regular, ^(B^)eta, ^(T^)witch, or ^(P^)ortal? ^(anything except b, t, or p will do regular^)
