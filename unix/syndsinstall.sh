@@ -311,7 +311,7 @@ firstinstall
 
 twitchinst() {
 echo "Updating/installing Synergy Twitch Branch DS"
-./steamcmd.sh +login $stusername +force_install_dir ./steamapps/common/syntwitch +app_update 17520 -beta twitch -betapassword jonnyhawtsauce -validate +quit
+./steamcmd.sh +login $stusername +force_install_dir ./steamapps/common/syntwitch +app_update 17520 -beta twitch -validate +quit
 echo "Update/installation Complete"
 echo "If there were errors above, close the script and log in to steamcmd.sh separately, then restart this script."
 if [ ! -f $synpath/synergy/synergy_pak.vpk ]; then
