@@ -160,6 +160,7 @@ if [ ! -d ./$synpath/addons/sourcemod ];then
 	read nullptr
 	start
 fi
+if [ -f ./$synpath/addons/metamod_x64.vdf ];then rm ./$synpath/addons/metamod_x64.vdf ;fi
 if [ ! -d ./$synpath/addons/sourcemod/gamedata/sdkhooks.games/custom ];then
 	mkdir ./$synpath/addons/sourcemod/gamedata/sdkhooks.games/custom
 fi
