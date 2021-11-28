@@ -234,6 +234,7 @@ fi
 if [ -f ./$synpath/addons/metamod.vdf ];then
 	echo "MetaMod installed!"
 	if [ -f ./$synpath/$(cat ./mmsource-latest-windows) ];then rm ./$synpath/$(cat ./mmsource-latest-windows) ;fi
+	if [ -f ./$synpath/addons/metamod_x64.vdf ];then rm ./$synpath/addons/metamod_x64.vdf ;fi
 fi
 if [ -f ./$synpath/addons/metamod/sourcemod.vdf ];then
 	if [ ! -d ./$synpath/addons/sourcemod/gamedata/sdktools.games/custom ];then mkdir ./$synpath/addons/sourcemod/gamedata/sdktools.games/custom ;fi
