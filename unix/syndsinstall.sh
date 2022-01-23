@@ -432,7 +432,7 @@ reds
 reds() {
 curdatetime=$(date -u)
 echo "$curdatetime SynDS started."
-./$synpath/srcds_run -game synergy -console +maxplayers 32 +sv_lan 0 +map d1_trainstation_06 +exec server2.cfg -ip 0.0.0.0 -port 27015 -nocrashdialog -insecure -nohltv
+./$synpath/srcds_run -game synergy -console -norestart +maxplayers 32 +sv_lan 0 +map d1_trainstation_06 +exec server2.cfg -ip 0.0.0.0 -port 27015 -nocrashdialog -insecure -nohltv
 curdatetime=$(date -u)
 echo "$curdatetime WARNING: SynDS closed or crashed, restarting."
 sleep 1
