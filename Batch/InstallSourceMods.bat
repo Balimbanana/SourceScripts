@@ -73,12 +73,12 @@ echo (STRI) for Strider Mountain     (CIT2) for The Citizen Returns
 echo (LUTS) for Lost Under The Snow  (MOP) for Mistake of Pythagoras
 echo (EYE) for Eye of The Storm      (MPR) for The Masked Prisoner
 echo (BTI) for Below The Ice         (LLP) for Liberation aka LifeLostPrison
-echo (DH) for DayHard                (R24) for Rock 24
 echo (PTSD) for PTSD and PTCS        (ALC) for Alchemilla
 echo (CITY7) for City7               (DW) for Dangerous World
 echo (RIOT) for Riot Act             (DD) for DeepDown and Aftermath 
 echo (CAL) for Calamity              (AOD) for Avenue Odessa
 echo (SESC) for Silent Escape        (EXMO) for Escape by ExMo
+echo (R24) for Rock 24
 echo.
 echo Semi-Auto (download through web browser, then script will install from there).
 echo (BMS) for Black Mesa Source and Improved Xen
@@ -88,7 +88,7 @@ echo (DF) for DownFall               (RH) for Ravenholm
 echo (YLA) for Year Long Alarm       (KTM) for Kill The Monk
 echo (CE) for Causality Effect       (TH) for They Hunger Again part 1
 echo (PEN) for HL2 Penetration       (EZ) for Entropy Zero
-echo (PTSD2) for PTSD 2
+echo (PTSD2) for PTSD 2              (DH) for DayHard
 echo (STTR) for SteamTracksTrouble and Riddles
 echo.
 echo (LFE) not supported in Synergy, but a separate mod that allows playing through HL1, HL2, Ep1, Ep2 with TF2 characters.
