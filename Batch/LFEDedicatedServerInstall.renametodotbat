@@ -177,7 +177,7 @@ echo Should be all configured for server running.
 echo Would you like to edit your server config? (y/N)
 set /p edtconf=
 for /f "delims=" %%V in ('powershell -command "$env:edtconf.ToLower()"') do set "edtconf=%%V"
-if "%edtconf%"=="y" start notepad %gamedir%\tf_coop_extended\cfg\server.cfg
+if "%edtconf%"=="y" start "ServerEdit" notepad.exe "%gamedir%\tf_coop_extended\cfg\server.cfg"
 echo Would you like to install SourceMod as well? (y/N)
 set /p instsmset=
 for /f "delims=" %%V in ('powershell -command "$env:instsmset.ToLower()"') do set "instsmset=%%V"
