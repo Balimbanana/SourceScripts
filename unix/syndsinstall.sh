@@ -177,7 +177,7 @@ else
 	wget -nv "https://raw.githubusercontent.com/Balimbanana/SM-Synergy/master/56.16lin/sdkhooks.games/custom/game.synergy.txt" -P ./$synpath/addons/sourcemod/gamedata/sdkhooks.games/custom
 	wget -nv "https://raw.githubusercontent.com/Balimbanana/SM-Synergy/master/56.16lin/sdktools.games/custom/game.synergy.txt" -P ./$synpath/addons/sourcemod/gamedata/sdktools.games/custom
 fi
-if [ -f ./$synpath/addons/sourcemod/plugins/updater.smx ];then wget -nv "https://bitbucket.org/GoD_Tony/updater/downloads/updater.smx" -P ./$synpath/addons/sourcemod/plugins ;fi
+if [ -f ./$synpath/addons/sourcemod/plugins/updater.smx ];then wget -nv "https://github.com/Balimbanana/SourceScripts/raw/master/synotherfilefixes/addons/sourcemod/plugins/updater.smx" -P ./$synpath/addons/sourcemod/plugins ;fi
 # remove nextmap as it does not work in Synergy
 rm -f ./$synpath/addons/sourcemod/plugins/nextmap.smx
 echo "SourceMod installed, you can put plugins in ./$synpath/addons/sourcemod/plugins"
@@ -363,7 +363,13 @@ if [ $betaset = "t" ];then
 fi
 rm -f ./$synpath/synergy/scripts/weapon_betagun.txt
 wget -nv "https://github.com/Balimbanana/SM-Synergy/raw/master/scripts/weapon_betagun.txt" -P ./$synpath/synergy/scripts
-if [ ! -f $synpath/synergy/cfg/server2.cfg ];then
+if [ ! -d ./$synpath/synergy/scripts/talker ];then mkdir ./$synpath/synergy/scripts/talker ;fi
+if [ ! -d ./$synpath/synergy/scripts/talker/player ];then mkdir ./$synpath/synergy/scripts/talker/player ;fi
+wget -nv "https://github.com/Balimbanana/SourceScripts/raw/master/synotherfilefixes/scripts/talker/player/humans.txt" -P ./$synpath/synergy/scripts/talker/player
+if [ ! -d ./$synpath/synergy/models ];then mkdir ./$synpath/synergy/models ;fi
+if [ ! -d ./$synpath/synergy/models/weapons ];then mkdir ./$synpath/synergy/models/weapons ;fi
+if [ ! -f ./$synpath/synergy/models/weapons/w_physics.phy ];then wget -nv "https://github.com/Balimbanana/SourceScripts/raw/master/synotherfilefixes/w_physics.phy" -P ./$synpath/synergy/models/weapons ;fi
+if [ ! -f ./$synpath/synergy/cfg/server2.cfg ];then
 	echo hostname First Syn $syntype Server>$synpath/synergy/cfg/server2.cfg
 	echo sv_lan 0 >>$synpath/synergy/cfg/server2.cfg
 	echo mp_friendlyfire 0 >>$synpath/synergy/cfg/server2.cfg
@@ -422,6 +428,10 @@ fi
 if [ ! -L ./$synpath/bin/libvstdlib.so ];then
 	mv ./$synpath/bin/libvstdlib.so ./$synpath/bin/libvstdlib.so.bak
 	ln -s libvstdlib_srv.so ./$synpath/bin/libvstdlib.so
+fi
+if [ ! -L ./$synpath/bin/steamclient.so ];then
+	mv ./$synpath/bin/steamclient.so ./$synpath/bin/steamclient.so.bak
+	ln -s ../../../../linux32/steamclient.so ./$synpath/bin/steamclient.so
 fi
 if [ ! -d ./$synpath/synergy/download ];then mkdir ./$synpath/synergy/download ;fi
 if [ ! -d ./$synpath/synergy/download/user_custom ];then mkdir ./$synpath/synergy/download/user_custom ;fi
@@ -860,7 +870,7 @@ if [ $pluginsubstr = "syndevsp" ];then
 fi
 if [ $pluginsubstr = "u" ];then
 	if [ -f ./$synpath/addons/sourcemod/plugins/updater.smx ];then rm -f ./$synpath/addons/sourcemod/plugins/updater.smx;fi
-	wget -nv "https://bitbucket.org/GoD_Tony/updater/downloads/updater.smx" -P ./$synpath/addons/sourcemod/plugins
+	wget -nv "https://github.com/Balimbanana/SourceScripts/raw/master/synotherfilefixes/addons/sourcemod/plugins/updater.smx" -P ./$synpath/addons/sourcemod/plugins
 	if [ -f ./$synpath/addons/sourcemod/extensions/SteamWorks.ext.so ];then rm -f ./$synpath/addons/sourcemod/extensions/SteamWorks.ext.so;fi
 	curl -sqL "https://users.alliedmods.net/~kyles/builds/SteamWorks/SteamWorks-git121-linux.tar.gz" | tar zxvf - -C ./$synpath
 	if [ -f ./$synpath/addons/sourcemod/extensions/SteamWorks.ext.so ];then echo "Installed SteamWorks";fi
