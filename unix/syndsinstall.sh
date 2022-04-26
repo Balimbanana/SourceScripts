@@ -79,6 +79,7 @@ if [ $PWD == $HOME/Steam ]; then
 	cd ./SteamCMD
 fi
 if [ ! -f ./steamcmd.sh ];then notindir; fi
+echo
 echo "Information: enter the letter inside the () and press enter to continue at the prompts."
 echo "First (I)nstall, (U)pdate, (R)un with auto-restart"
 echo "(RB) to run Synergy 18.x beta, (RT) to run Synergy Twitch branch."
@@ -88,6 +89,9 @@ if [ ! -d ./steamapps/common/Synergy/synergy/addons/plr ]; then
 	if [ -d ./steamapps/common/Synergy/synergy/addons/metamod ]; then
 		echo "(PLR) to install Player Limit Remover, allows for up to 64 players (only v56.16)"
 	fi
+fi
+if [ -d ./steamapps/common/Synergy/synergy/addons/metamod ]; then
+	echo "(UtilFixes) to update/install Synergy reverse engineered fixes (only v56.16)"
 fi
 if [ -f ./steamapps/common/Synergy/synergy/addons/sourcemod/configs/admins_simple.ini ]; then
 	echo "(SMADMIN) to modify your SourceMod admins file."
@@ -112,6 +116,7 @@ if [ $uprun = "ihl2" ]; then updhl2;fi
 if [ $uprun = "iep1" ]; then updep1;fi
 if [ $uprun = "iep2" ]; then updep2;fi
 if [ $uprun = "imods" ]; then updmods;fi
+if [ $uprun = "utilfixes" ]; then updutilfix;fi
 if [ $uprun = "update" ]; then updatescr;fi
 echo "Choose an option."
 start
@@ -152,8 +157,8 @@ if [ -d ./$synpath/addons/sourcemod ];then
 	read nullptr
 	start
 fi
-curl -sqL "https://sm.alliedmods.net/smdrop/1.11/sourcemod-1.11.0-git6473-linux.tar.gz" | tar zxvf - -C ./$synpath
-curl -sqL "https://mms.alliedmods.net/mmsdrop/1.11/mmsource-1.11.0-git1128-linux.tar.gz" | tar zxvf - -C ./$synpath
+curl -sqL "https://sm.alliedmods.net/smdrop/1.10/sourcemod-1.10.0-git6503-linux.tar.gz" | tar zxvf - -C ./$synpath
+curl -sqL "https://mms.alliedmods.net/mmsdrop/1.11/mmsource-1.11.0-git1145-linux.tar.gz" | tar zxvf - -C ./$synpath
 curl -sqL "https://users.alliedmods.net/~kyles/builds/SteamWorks/SteamWorks-git131-linux.tar.gz" | tar zxvf - -C ./$synpath
 if [ ! -d ./$synpath/addons/sourcemod ];then
 	echo "Failed to auto-install SourceMod, you may have to manually install it."
@@ -161,6 +166,8 @@ if [ ! -d ./$synpath/addons/sourcemod ];then
 	start
 fi
 if [ -f ./$synpath/addons/metamod_x64.vdf ];then rm ./$synpath/addons/metamod_x64.vdf ;fi
+if [ -d ./$synpath/addons/metamod/bin/linux64 ]; then rm -rf ./$synpath/addons/metamod/bin/linux64 ;fi
+if [ -d ./$synpath/addons/sourcemod/bin/x64 ]; then rm -rf ./$synpath/addons/sourcemod/bin/x64 ;fi
 if [ ! -d ./$synpath/addons/sourcemod/gamedata/sdkhooks.games/custom ];then
 	mkdir ./$synpath/addons/sourcemod/gamedata/sdkhooks.games/custom
 fi
@@ -183,7 +190,7 @@ rm -f ./$synpath/addons/sourcemod/plugins/nextmap.smx
 echo "SourceMod installed, you can put plugins in ./$synpath/addons/sourcemod/plugins"
 if [ ! -d ./steamapps/common/Synergy/synergy/addons/plr ]; then
 	if [ -d ./steamapps/common/Synergy/synergy/addons/metamod ]; then
-		echo "Would you like to also install Player Limit Remover? Allows for up to 64 players (only v56.16)"
+		echo "Would you like to also install Player Limit Remover? Allows for up to 64 players (only v56.16) y/N"
 		read installplr
 		if [ -z $installplr ];then installplr="n" ;fi
 		if [ $installplr = "y" ]; then
@@ -646,6 +653,22 @@ if [ $instmod = "ezero" ];then
 	if [ ! -f "./steamapps/common/Synergy/synergy/content/EntropyZero.dat" ];then wget -nv "https://github.com/Balimbanana/SourceScripts/raw/master/synotherfilefixes/EntropyZero.dat" -P ./steamapps/common/Synergy/synergy/content ;fi
 fi
 updmods
+}
+
+updutilfix() {
+if [ -f ./steamapps/common/Synergy/synergy/addons/sourcemod/extensions/synergy_utils.ext.so ]; then
+	mv ./steamapps/common/Synergy/synergy/addons/sourcemod/extensions/synergy_utils.ext.so "./steamapps/common/Synergy/synergy/addons/sourcemod/extensions/synergy_utils.ext.so.bak$(date -u)"
+fi
+if [ ! -f ./steamapps/common/Synergy/synergy/addons/sourcemod/extensions/synergy_utils.autoload ]; then echo "" > ./steamapps/common/Synergy/synergy/addons/sourcemod/extensions/synergy_utils.autoload ;fi
+wget -nv "https://github.com/ReservedRegister/Synergy_ReverseEngineering/raw/master/build/package/addons/sourcemod/extensions/synergy_utils.ext.2.sdk2013.so" -P ./steamapps/common/Synergy/synergy/addons/sourcemod/extensions
+mv ./steamapps/common/Synergy/synergy/addons/sourcemod/extensions/synergy_utils.ext.2.sdk2013.so ./steamapps/common/Synergy/synergy/addons/sourcemod/extensions/synergy_utils.ext.so
+echo 
+if [ -f ./steamapps/common/Synergy/synergy/addons/sourcemod/extensions/synergy_utils.ext.so ]; then
+	echo "Installed/updated!"
+else
+	echo "Failed to install!"
+fi
+start
 }
 
 instsourcepluginstop() {
