@@ -149,6 +149,11 @@ if [ ! -f $synpath/synergy/synergy_pak.vpk ]; then
 	echo "Failed to install"
 	exit
 fi
+if [ ! -d $synpath/synergy/custom/Synergy-SM-master/maps ]; then
+	wget -nv "https://github.com/yarik2720/Synergy-SM/archive/refs/heads/master.zip" -P ./$synpath/synergy/custom
+	unzip ./$synpath/synergy/custom/master.zip -d ./$synpath/synergy/custom
+	rm -f ./$synpath/synergy/custom/master.zip
+fi
 if [ $installsm = "1" ];then instsourcem;fi
 srcds
 }
@@ -261,7 +266,6 @@ exit
 
 insthl2() {
 ./steamcmd.sh +force_install_dir ./steamapps/common/Half-Life\ 2 +login $username +app_update 220 validate +quit
-./steamcmd.sh +force_install_dir ./steamapps/common/Half-Life\ 2 +login $username +app_update 280 validate +quit
 ./steamcmd.sh +force_install_dir ./steamapps/common/Half-Life\ 2 +login $username +app_update 340 validate +quit
 ./steamcmd.sh +force_install_dir ./steamapps/common/Half-Life\ 2 +login $username +app_update 380 validate +quit
 ./steamcmd.sh +force_install_dir ./steamapps/common/Half-Life\ 2 +login $username +app_update 420 validate +quit
