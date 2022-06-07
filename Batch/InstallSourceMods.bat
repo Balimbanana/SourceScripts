@@ -42,6 +42,8 @@ if NOT EXIST "%cd%\steamapps\workshop\content\17520" (
 )
 if EXIST "%cldir%" echo Found sourcemods directory here: %cldir%
 if NOT EXIST "%cldir%" if EXIST "%programfiles(x86)%\Steam\steamapps" set cldir=%programfiles(x86)%\Steam\steamapps\sourcemods
+if NOT EXIST "%cldir%" if EXIST ".\steamapps\sourcemods" set cldir=.\steamapps\sourcemods
+if NOT EXIST "%cldir%" if EXIST "..\..\steamapps\sourcemods" set cldir=..\..\steamapps\sourcemods
 if NOT EXIST "%cldir%" (
 	echo ^Could not determine sourcemods directory, checked\:
 	echo "%programfiles(x86)%\Steam\steamapps and %cldir%"
