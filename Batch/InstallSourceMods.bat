@@ -14,7 +14,7 @@ exit
 if EXIST "drivers\etc\hosts" cd "%~dp0"
 set cldir=%programfiles(x86)%\Steam\steamapps
 for /f "skip=2 tokens=1,3* delims== " %%i in ('reg QUERY HKEY_CURRENT_USER\Software\Valve\Steam /f SteamPath /t REG_SZ /v') do (
-	set "cldir=%%j%%k"
+	set "cldir=%%j %%k"
 	goto skiploop
 )
 :skiploop
