@@ -73,6 +73,7 @@ if '%foundcmd%'=='1' start /wait /min powershell -command "& {Add-Type -Assembly
 if '%foundcmd%'=='2' start /wait /min powershell -command "& {Add-Type -AssemblyName System.IO.Compression.FileSystem; [System.IO.Compression.ZipFile]::ExtractToDirectory(\"$HOME\downloads\steamcmd.zip\", \"$PWD\") }"
 if EXIST steamcmd.exe (
 	echo ^Successfully installed SteamCMD to %cd%
+	del /Q steamcmd.zip
 	goto start
 )
 if NOT EXIST "%cd%\7-Zip\7z.exe" powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SourceScripts/raw/master/synotherfilefixes/7-Zip.zip\",\"$PWD\7zip.zip\") }"
@@ -86,6 +87,7 @@ if EXIST "%cd%\7-Zip\7z.exe" (
 		start /min /wait "7z" "%cd%\7-Zip\7z.exe" x -y "%userprofile%\downloads\steamcmd.zip"
 	)
 	if EXIST steamcmd.exe echo ^Successfully installed SteamCMD to %cd%
+	del /Q steamcmd.zip
 )
 goto start
 
@@ -120,12 +122,14 @@ if NOT EXIST "%cssdirpath%\addons\sourcemod" set use7z=1
 if '%use7z%'=='1' (
 	if '%dlloc%'=='1' (
 		start /min /wait "7z" "7-Zip\7z.exe" x -y sourcemod-1.11.0-git6691-windows.zip -o"%cd%\%cssdirpath%"
+		del /Q "sourcemod-1.11.0-git6691-windows.zip"
 	)
 	if '%dlloc%'=='2' (
 		start /min /wait "7z" "7-Zip\7z.exe" x -y "%userprofile%\downloads\sourcemod-1.11.0-git6691-windows.zip" -o"%cd%\%cssdirpath%"
 	)
 	if '%mmloc%'=='1' (
 		start /min /wait "7z" "7-Zip\7z.exe" x -y mmsource-1.12.0-git1150-windows.zip -o"%cd%\%cssdirpath%"
+		del /Q "mmsource-1.12.0-git1150-windows.zip"
 	)
 	if '%mmloc%'=='2' (
 		start /min /wait "7z" "7-Zip\7z.exe" x -y "%userprofile%\downloads\mmsource-1.12.0-git1150-windows.zip" -o"%cd%\%cssdirpath%"
