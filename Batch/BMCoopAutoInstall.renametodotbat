@@ -33,6 +33,7 @@ if NOT EXIST "%bmpath%\srcds.exe" (
 )
 echo Update/installation Complete
 timeout -T 1
+if NOT EXIST "%bmpath%\bms\cfg\sourcemod" mkdir "%bmpath%\bms\cfg\sourcemod"
 if NOT EXIST "%bmpath%\bms\cfg\%configtoexec%" goto createconf
 goto instsourcem
 :srcds
