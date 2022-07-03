@@ -30,16 +30,23 @@ set /a skipindex+=1
 goto start
 
 :startcl
-tasklist /fi "imagename eq srcds.exe" /fo csv 2>NUL | find /I "srcds.exe">NUL
-if "%ERRORLEVEL%"=="1" goto notrunningserver
+tasklist /fi "imagename eq srcds.exe" /fo csv 2>NUL | find /I "srcds.exe" >nul && echo Server running || goto notrunningserver
 set localip=0.0.0.0
 rem echo Found Black Mesa at %cldir%
 netsh interface ipv4 show addresses > ipaddrs
 for /f "tokens=1,2*" %%i in ('findstr .IP. ipaddrs') do set localip=%%k & goto breakoutofloop
 :breakoutofloop
 del /Q ipaddrs
-rem echo join %localip%
-start /b "BMCL" "%cldir%\steamapps\common\Black Mesa\bms.exe" -game bms -steam -multirun -oldgameui -novid -nosplash +connect "%localip%"
+set localip=%localip:~0,-1%
+
+set portnumber=27015
+netstat -a -n -p udp 2>NUL | find /I "27015" >nul && set portnumber=27015 || set portnumber=0
+if %portnumber%==0 netstat -a -n -p udp 2>NUL | find /I "27016" >nul && set portnumber=27016 || set portnumber=0
+if %portnumber%==0 netstat -a -n -p udp 2>NUL | find /I "27017" >nul && set portnumber=27017 || goto notrunningserver
+
+rem echo join %localip%:%portnumber%
+pause
+start /b "BMCL" "%cldir%\steamapps\common\Black Mesa\bms.exe" -game bms -steam -multirun -oldgameui -novid -nosplash +connect "%localip%:%portnumber%"
 exit
 
 :cannotfind
