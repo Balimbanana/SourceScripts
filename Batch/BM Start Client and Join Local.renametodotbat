@@ -1,0 +1,57 @@
+@echo off
+rem This script was written by Balimbanana.
+rem //////////////////////////////If you are viewing this on GitHub, right click Raw above and click:
+rem //////////////////////////////Save Target As, or Save Linked Content As to download this script.
+rem //////////////////////////////Save the script as ending in .bat and run it.
+title BMCL
+set skipindex=1
+set cldir=""
+for /f "skip=2 tokens=1,3* delims== " %%i in ('reg QUERY HKEY_CURRENT_USER\Software\Valve\Steam /f SteamPath /t REG_SZ /v') do set "cldir=%%j %%k" & goto start
+:start
+for /f "delims=" %%V in ('powershell -command "$env:cldir.Replace(\"/\",\"\\\")"') do set "cldir=%%V"
+if EXIST "%cldir%\steamapps\common\Black Mesa\bms.exe" goto startcl
+set cldirs=
+for /f "skip=%skipindex% tokens=1,2* delims==\\ " %%i in ('findstr .path. "%cldir%\steamapps\libraryfolders.vdf" ') do set "cldirs=%%j" & goto compare
+goto cannotfind
+
+:compare
+set cldirs=%cldirs:~0,-1%
+if '%skipindex%'=='1' set "cldirs=D:\%cldirs%"
+if '%skipindex%'=='2' set "cldirs=E:\%cldirs%"
+if '%skipindex%'=='3' set "cldirs=F:\%cldirs%"
+if '%skipindex%'=='4' set "cldirs=G:\%cldirs%"
+if '%skipindex%'=='5' set "cldirs=H:\%cldirs%"
+if '%skipindex%'=='6' set "cldirs=I:\%cldirs%"
+if '%skipindex%'=='7' set "cldirs=J:\%cldirs%"
+if '%skipindex%'=='8' set "cldirs=K:\%cldirs%"
+if '%skipindex%'=='9' goto cannotfind
+rem echo Checking if installed at: %cldirs%
+if EXIST "%cldirs%\steamapps\common\Black Mesa\bms.exe" (
+	set "cldir=%cldirs%"
+	goto startcl
+)
+set /a skipindex+=1
+goto start
+
+:startcl
+tasklist /fi "imagename eq srcds.exe" /fo csv 2>NUL | find /I "srcds.exe">NUL
+if "%ERRORLEVEL%"=="1" goto notrunningserver
+set localip=0.0.0.0
+rem echo Found Black Mesa at %cldir%
+netsh interface ipv4 show addresses > ipaddrs
+for /f "tokens=1,2*" %%i in ('findstr .IP. ipaddrs') do set localip=%%k & goto breakoutofloop
+:breakoutofloop
+del /Q ipaddrs
+rem echo join %localip%
+start /b "BMCL" "%cldir%\steamapps\common\Black Mesa\bms.exe" -game bms -steam -multirun -oldgameui -novid -nosplash +connect "%localip%"
+exit
+
+:cannotfind
+echo Could not determine location of Black Mesa client...
+pause
+exit
+
+:notrunningserver
+echo Server is not running...
+start /b "BMCL" "%cldir%\steamapps\common\Black Mesa\bms.exe" -game bms -steam -multirun -oldgameui -novid -nosplash
+exit

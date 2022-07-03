@@ -1,0 +1,186 @@
+@echo off
+rem This script was written by Balimbanana.
+rem //////////////////////////////If you are viewing this on GitHub, right click Raw above and click:
+rem //////////////////////////////Save Target As, or Save Linked Content As to download this script.
+rem //////////////////////////////Save the script as ending in .bat and run it.
+title BMDS 15
+:initvars
+if EXIST "drivers\etc\hosts" cd "%~dp0"
+set instsmset=0
+set pnum=27015
+set configtoexec="server2.cfg"
+set skipstep=0
+set "bmpath=steamapps\common\Black Mesa Dedicated Server"
+set sm_basepath=addons/sourcemod
+set smset=0
+:start
+if EXIST srcds.exe (if EXIST "..\..\..\steamcmd.exe" cd "..\..\.." )
+if NOT EXIST steamcmd.exe goto notindir
+if NOT EXIST "%bmpath%\bms\bms_maps_021.vpk" (
+	set uprun=i
+	goto firstinstall
+)
+if NOT EXIST "%bmpath%\bms\addons\sourcemod\plugins\srccoop.smx" goto instsourcem
+goto srcds
+
+:firstinstall
+if NOT EXIST steamcmd.exe goto notindir
+echo Updating/installing Black Mesa DS
+steamcmd.exe +login anonymous +app_update 346680 validate +quit
+if NOT EXIST "%bmpath%\srcds.exe" (
+	echo ^There was an error while attempting to download Black Mesa Dedicated Server...
+	goto firstinstall
+)
+echo Update/installation Complete
+timeout -T 1
+if NOT EXIST "%bmpath%\bms\cfg\%configtoexec%" goto createconf
+goto instsourcem
+:srcds
+if NOT EXIST "%bmpath%\srcds.exe" goto firstinstall
+for /f "delims=" %%V in ('powershell -command "$ab = get-date; $ab.Minute"') do set "starttime=%%V"
+:reds
+echo (%date%)(%time%) BMDS started.
+start /wait "BMDS" "%bmpath%\srcds.exe" -console -game bms -maxplayers 64 +sv_lan 0 +map "bm_c0a0a" +exec %configtoexec% -ip 0.0.0.0 -port %pnum% -nocrashdialog -nohltv -threads 8 -heapsize 2048000 -mem_max_heapsize 2048 -mem_max_heapsize_dedicated 512 +sm_basepath %sm_basepath%
+echo (%date%)(%time%) WARNING: BMDS closed or crashed, restarting.
+for /f "delims=" %%V in ('powershell -command "$ab = get-date; $ab.Minute"') do set "ctime=%%V"
+set /a cttime=ctime-starttime
+if %cttime%==0 (
+	echo ^The last crash was less than a minute ago, waiting to restart.
+	timeout -T 10
+)
+for /f "delims=" %%V in ('powershell -command "$ab = get-date; $ab.Minute"') do set "starttime=%%V"
+goto reds
+
+:notindir
+set foundcmd=0
+goto dlsteamcmd
+
+:dlsteamcmd
+if EXIST "%cd%\steamcmd.zip" set foundcmd=1
+if EXIST "%cd%\steamcmd.zip" goto extractcmd
+if EXIST "%userprofile%\downloads\steamcmd.zip" set foundcmd=2
+if EXIST "%userprofile%\downloads\steamcmd.zip" goto extractcmd
+if '%foundcmd%'=='0' start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://steamcdn-a.akamaihd.net/client/installer/steamcmd.zip\",\"$PWD\steamcmd.zip\") }"
+if EXIST "%cd%\steamcmd.zip" set foundcmd=1
+if EXIST "%cd%\steamcmd.zip" goto extractcmd
+if EXIST "%userprofile%\downloads\steamcmd.zip" set foundcmd=2
+if EXIST "%userprofile%\downloads\steamcmd.zip" goto extractcmd
+goto extractcmd
+
+:extractcmd
+ping localhost -n 1 >NUL
+if EXIST steamcmd.exe goto start
+if '%foundcmd%'=='1' start /wait /min powershell -command "& {Add-Type -AssemblyName System.IO.Compression.FileSystem; [System.IO.Compression.ZipFile]::ExtractToDirectory(\"$PWD\steamcmd.zip\", \"$PWD\") }"
+if '%foundcmd%'=='2' start /wait /min powershell -command "& {Add-Type -AssemblyName System.IO.Compression.FileSystem; [System.IO.Compression.ZipFile]::ExtractToDirectory(\"$HOME\downloads\steamcmd.zip\", \"$PWD\") }"
+if EXIST steamcmd.exe (
+	echo ^Successfully installed SteamCMD to %cd%
+	del /Q steamcmd.zip
+	goto start
+)
+if NOT EXIST "%cd%\7-Zip\7z.exe" powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SourceScripts/raw/master/synotherfilefixes/7-Zip.zip\",\"$PWD\7zip.zip\") }"
+if EXIST "%cd%\7zip.zip" start /wait /min powershell -command "& {Add-Type -AssemblyName System.IO.Compression.FileSystem; [System.IO.Compression.ZipFile]::ExtractToDirectory(\"$PWD\7zip.zip\", \"$PWD\") }"
+if EXIST "%cd%\7zip.zip" del /Q "%cd%\7zip.zip"
+if EXIST "%cd%\7-Zip\7z.exe" (
+	if '%foundcmd%'=='1' (
+		start /min /wait "7z" "%cd%\7-Zip\7z.exe" x -y steamcmd.zip
+	)
+	if '%foundcmd%'=='2' (
+		start /min /wait "7z" "%cd%\7-Zip\7z.exe" x -y "%userprofile%\downloads\steamcmd.zip"
+	)
+	if EXIST steamcmd.exe echo ^Successfully installed SteamCMD to %cd%
+	del /Q steamcmd.zip
+)
+goto start
+
+:createconf
+echo exec sourcemod\srccoopauto>"%bmpath%\bms\cfg\server.cfg"
+echo // Black Mesa config file>"%bmpath%\bms\cfg\%configtoexec%"
+echo hostname "Black Mesa Co-operative">>"%bmpath%\bms\cfg\%configtoexec%"
+echo mp_timelimit "900">>"%bmpath%\bms\cfg\%configtoexec%"
+echo mp_fraglimit "30">>"%bmpath%\bms\cfg\%configtoexec%"
+echo.>>"%bmpath%\bms\cfg\%configtoexec%"
+echo // provides lag-free noblock, shows teammates as friendly>>"%bmpath%\bms\cfg\%configtoexec%"
+echo // and puts an arrow above their head (srccoop handles team switching)>>"%bmpath%\bms\cfg\%configtoexec%"
+echo mp_teamplay "1">>"%bmpath%\bms\cfg\%configtoexec%"
+echo.>>"%bmpath%\bms\cfg\%configtoexec%"
+echo // set 1 if you hate your friends>>"%bmpath%\bms\cfg\%configtoexec%"
+echo mp_friendlyfire "0">>"%bmpath%\bms\cfg\%configtoexec%"
+echo.>>"%bmpath%\bms\cfg\%configtoexec%"
+echo // setting 1 sets always sprinting>>"%bmpath%\bms\cfg\%configtoexec%"
+echo sv_always_run "0">>"%bmpath%\bms\cfg\%configtoexec%"
+echo.>>"%bmpath%\bms\cfg\%configtoexec%"
+echo // Skips team select dialog to spawn players in instantly>>"%bmpath%\bms\cfg\sourcemod\srccoopauto.cfg"
+echo sourcecoop_disable_teamselect "1">>"%bmpath%\bms\cfg\sourcemod\srccoopauto.cfg"
+echo.>>"%bmpath%\bms\cfg\sourcemod\srccoopauto.cfg"
+echo // Sets changing map message type, 0 is panel, 1 is hud text>>"%bmpath%\bms\cfg\sourcemod\srccoopauto.cfg"
+echo sourcecoop_end_wait_display_mode "1">>"%bmpath%\bms\cfg\sourcemod\srccoopauto.cfg"
+echo.>>"%bmpath%\bms\cfg\sourcemod\srccoopauto.cfg"
+echo // Prevents using stuck for this many seconds after using.>>"%bmpath%\bms\cfg\sourcemod\srccoopauto.cfg"
+echo sourcecoop_next_stuck "60">>"%bmpath%\bms\cfg\sourcemod\srccoopauto.cfg"
+echo.>>"%bmpath%\bms\cfg\sourcemod\srccoopauto.cfg"
+echo sv_tags "custom, coop, sourcecoop">>"%bmpath%\bms\cfg\%configtoexec%"
+goto instsourcem
+
+:instsourcem
+set "bmdirpath=%bmpath%\bms"
+if NOT EXIST "%bmpath%" goto firstinstall
+echo This will direct download the required SourceMod files and then extract them.
+echo It may take a few mins depending on your download speed.
+if EXIST "%bmdirpath%\addons\sourcemod\metamod\sourcemod.vdf" goto start
+set dlloc=0
+if EXIST "%userprofile%\downloads\sourcemod-1.11.0-git6874-windows.zip" set dlloc=2
+if EXIST "sourcemod-1.11.0-git6874-windows.zip" set dlloc=1
+if '%dlloc%'=='0' start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://sm.alliedmods.net/smdrop/1.11/sourcemod-1.11.0-git6874-windows.zip\",\"$PWD\sourcemod-1.11.0-git6874-windows.zip\") }"
+if EXIST "sourcemod-1.11.0-git6874-windows.zip" set dlloc=2
+set mmloc=0
+if EXIST "%userprofile%\downloads\mmsource-1.11.0-git1143-windows.zip" set mmloc=2
+if EXIST "mmsource-1.11.0-git1143-windows.zip" set mmloc=1
+if '%mmloc%'=='0' start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://mms.alliedmods.net/mmsdrop/1.11/mmsource-1.11.0-git1143-windows.zip\",\"$PWD\mmsource-1.11.0-git1143-windows.zip\") }"
+if EXIST "mmsource-1.11.0-git1143-windows.zip" set mmloc=1
+set dlloc=0
+if EXIST "%userprofile%\downloads\sourcemod-1.11.0-git6874-windows.zip" set dlloc=2
+if EXIST "sourcemod-1.11.0-git6874-windows.zip" set dlloc=1
+if '%dlloc%'=='0' goto dltowrong
+echo This may take a minute or two, just wait for the next message after PowerShell finishes extracting SourceMod...
+if '%dlloc%'=='1' start /wait /min powershell -command "& {Add-Type -AssemblyName System.IO.Compression.FileSystem; [System.IO.Compression.ZipFile]::ExtractToDirectory(\"$HOME\downloads\sourcemod-1.11.0-git6874-windows.zip\", \"$PWD\$env:bmdirpath\"); [System.IO.Compression.ZipFile]::ExtractToDirectory(\"$HOME\downloads\mmsource-1.11.0-git1143-windows.zip\", \"$PWD\$env:bmdirpath\") }"
+if '%dlloc%'=='2' start /wait /min powershell -command "& {Add-Type -AssemblyName System.IO.Compression.FileSystem; [System.IO.Compression.ZipFile]::ExtractToDirectory(\"$PWD\sourcemod-1.11.0-git6874-windows.zip\", \"$PWD\$env:bmdirpath\"); [System.IO.Compression.ZipFile]::ExtractToDirectory(\"$PWD\mmsource-1.11.0-git1143-windows.zip\", \"$PWD\$env:bmdirpath\") }"
+if NOT EXIST "%cd%\7-Zip\7z.exe" powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SourceScripts/raw/master/synotherfilefixes/7-Zip.zip\",\"$PWD\7zip.zip\") }"
+if EXIST "%cd%\7zip.zip" start /wait /min powershell -command "& {Add-Type -AssemblyName System.IO.Compression.FileSystem; [System.IO.Compression.ZipFile]::ExtractToDirectory(\"$PWD\7zip.zip\", \"$PWD\") }"
+if EXIST "%cd%\7zip.zip" del /Q "%cd%\7zip.zip"
+set use7z=0
+if NOT EXIST "%bmdirpath%\addons\sourcemod" set use7z=1
+if '%use7z%'=='1' (
+	if '%dlloc%'=='1' (
+		start /min /wait "7z" "7-Zip\7z.exe" x -y sourcemod-1.11.0-git6874-windows.zip -o"%cd%\%bmdirpath%"
+		del /Q "sourcemod-1.11.0-git6874-windows.zip"
+	)
+	if '%dlloc%'=='2' (
+		start /min /wait "7z" "7-Zip\7z.exe" x -y "%userprofile%\downloads\sourcemod-1.11.0-git6874-windows.zip" -o"%cd%\%bmdirpath%"
+	)
+	if '%mmloc%'=='1' (
+		start /min /wait "7z" "7-Zip\7z.exe" x -y mmsource-1.11.0-git1143-windows.zip -o"%cd%\%bmdirpath%"
+		del /Q "mmsource-1.11.0-git1143-windows.zip"
+	)
+	if '%mmloc%'=='2' (
+		start /min /wait "7z" "7-Zip\7z.exe" x -y "%userprofile%\downloads\mmsource-1.11.0-git1143-windows.zip" -o"%cd%\%bmdirpath%"
+	)
+)
+start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/ampreeT/SourceCoop/archive/refs/heads/master.zip\",\"$PWD\SrcCoopMaster.zip\") }"
+start /min /wait "7z" "7-Zip\7z.exe" x -y "%cd%\SrcCoopMaster.zip" -o"%cd%\%bmdirpath%\addons\sourcemod"
+if EXIST "%cd%\%bmdirpath%\addons\sourcemod\SourceCoop-master" start /wait /min robocopy /S /NP /NJS /NJH /NS "%cd%\%bmdirpath%\addons\sourcemod\SourceCoop-master" "%cd%\%bmdirpath%\addons\sourcemod"
+start /wait /min robocopy /S /NP /NJS /NJH /NS "%cd%\%bmdirpath%\addons\sourcemod\gamecontent_bms" "%cd%\%bmdirpath%"
+del /Q "%cd%\%bmdirpath%\addons\sourcemod\SourceCoop-master"
+del /Q "%cd%\%bmdirpath%\addons\sourcemod\gamecontent_bms"
+del /Q "%cd%\%bmdirpath%\addons\sourcemod\.gitignore"
+del /Q "%cd%\%bmdirpath%\addons\sourcemod\README.md"
+start /wait /min "Compile" "%cd%\%bmdirpath%\addons\sourcemod\scripting\spcomp.exe" "%cd%\%bmdirpath%\addons\sourcemod\scripting\srccoop.sp" -o "%cd%\%bmdirpath%\addons\sourcemod\plugins\srccoop"
+start /wait /min "Compile" "%cd%\%bmdirpath%\addons\sourcemod\scripting\spcomp.exe" "%cd%\%bmdirpath%\addons\sourcemod\scripting\srccoop_addon_effects_fix.sp" -o "%cd%\%bmdirpath%\addons\sourcemod\plugins\srccoop_addon_effects_fix"
+start /wait /min "Compile" "%cd%\%bmdirpath%\addons\sourcemod\scripting\spcomp.exe" "%cd%\%bmdirpath%\addons\sourcemod\scripting\srccoop_addon_revive.sp" -o "%cd%\%bmdirpath%\addons\sourcemod\plugins\srccoop_addon_revive"
+echo.
+goto start
+
+:dltowrong
+echo SourceMod zip not in your users Download folder, or the SteamCMD folder, auto-install halted.
+echo Press any key to re-run the SourceMod install function...
+pause
+goto instsourcem
