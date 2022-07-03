@@ -24,6 +24,12 @@ if NOT EXIST "%bmpath%\bms\addons\sourcemod\plugins\srccoop.smx" goto instsource
 goto srcds
 
 :firstinstall
+rem Minimum space required 30GB in bytes also check here in case SteamCMD is already downloaded
+set minrequiredspace=32212254720
+set "cldrive=%cd:~0,2%"
+echo Checking Drive %cldrive% for available space...
+for /f "skip=6 tokens=1,3*" %%i in ('dir /-c /w %cldrive%') do set iSpace=%%j
+if "%minrequiredspace%" gtr "%iSpace%" goto notenoughspace
 if NOT EXIST steamcmd.exe goto notindir
 echo Updating/installing Black Mesa DS
 steamcmd.exe +login anonymous +app_update 346680 validate +quit
@@ -53,6 +59,12 @@ for /f "delims=" %%V in ('powershell -command "$ab = get-date; $ab.Minute"') do 
 goto reds
 
 :notindir
+rem Minimum space required 30GB in bytes
+set minrequiredspace=32212254720
+set "cldrive=%cd:~0,2%"
+echo Checking Drive %cldrive% for available space...
+for /f "skip=6 tokens=1,3*" %%i in ('dir /-c /w %cldrive%') do set iSpace=%%j
+if "%minrequiredspace%" gtr "%iSpace%" goto notenoughspace
 set foundcmd=0
 goto dlsteamcmd
 
@@ -185,3 +197,9 @@ echo SourceMod zip not in your users Download folder, or the SteamCMD folder, au
 echo Press any key to re-run the SourceMod install function...
 pause
 goto instsourcem
+
+:notenoughspace
+echo You do not have enough space on this drive to install Black Mesa Dedicated Server...
+echo The server requires at least 30GB space.
+pause
+exit
