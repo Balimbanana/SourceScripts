@@ -189,6 +189,7 @@ del /Q "%cd%\%bmdirpath%\addons\sourcemod\README.md"
 start /wait /min "Compile" "%cd%\%bmdirpath%\addons\sourcemod\scripting\spcomp.exe" "%cd%\%bmdirpath%\addons\sourcemod\scripting\srccoop.sp" -o "%cd%\%bmdirpath%\addons\sourcemod\plugins\srccoop"
 start /wait /min "Compile" "%cd%\%bmdirpath%\addons\sourcemod\scripting\spcomp.exe" "%cd%\%bmdirpath%\addons\sourcemod\scripting\srccoop_addon_effects_fix.sp" -o "%cd%\%bmdirpath%\addons\sourcemod\plugins\srccoop_addon_effects_fix"
 start /wait /min "Compile" "%cd%\%bmdirpath%\addons\sourcemod\scripting\spcomp.exe" "%cd%\%bmdirpath%\addons\sourcemod\scripting\srccoop_addon_revive.sp" -o "%cd%\%bmdirpath%\addons\sourcemod\plugins\srccoop_addon_revive"
+start /wait /min "Compile" "%cd%\%bmdirpath%\addons\sourcemod\scripting\spcomp.exe" "%cd%\%bmdirpath%\addons\sourcemod\scripting\srccoop_addon_voting.sp" -o "%cd%\%bmdirpath%\addons\sourcemod\plugins\srccoop_addon_voting"
 echo.
 goto start
 
