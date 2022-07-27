@@ -5,6 +5,8 @@ if [ ! -d $cldir ]; then
 	if [ -d $HOME/.local/share/Steam/steamapps ]; then cldir=$HOME/.local/share/Steam/steamapps ;fi
 	if [ -d $HOME/Steam/steamapps ]; then cldir=$HOME/Steam/steamapps ;fi
 	if [ -d $HOME/steam/steamapps ]; then cldir=$HOME/steam/steamapps ;fi
+	if [ -d $HOME/.steam/steamapps ]; then cldir=$HOME/.steam/steamapps ;fi
+	if [ -d $HOME/.steam/steam/steamapps ]; then cldir=$HOME/.steam/steam/steamapps ;fi
 	if [ -d $HOME/Library/Application\ Support/Steam/SteamApps ]; then cldir=$HOME/Library/Application\ Support/Steam/SteamApps ;fi
 	if [ $cldir == $PWD ]; then cldir=none ;fi
 	if [ ! -d $cldir ]; then cldir=none ;fi
