@@ -7,7 +7,7 @@ title BMCL
 set skipindex=1
 set cldir=""
 set cldrive=""
-for /f "skip=2 tokens=1,3* delims== " %%i in ('reg QUERY HKEY_CURRENT_USER\Software\Valve\Steam /f SteamPath /t REG_SZ /v') do set "cldir=%%j %%k" & goto start
+for /f "skip=2 tokens=1,2* delims== " %%i in ('reg QUERY HKEY_CURRENT_USER\Software\Valve\Steam /f SteamPath /t REG_SZ /v') do set "cldir=%%k" & goto start
 :start
 for /f "delims=" %%V in ('powershell -command "$env:cldir.Replace(\"/\",\"\\\")"') do set "cldir=%%V"
 if EXIST "%cldir%\steamapps\common\Black Mesa\bms.exe" goto startcl
