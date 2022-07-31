@@ -157,7 +157,7 @@ echo Downloading...
 if NOT EXIST "%cd%\7-Zip\7z.exe" powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SourceScripts/raw/master/synotherfilefixes/7-Zip.zip\",\"$PWD\7zip.zip\") }"
 if EXIST "%cd%\7zip.zip" start /wait /min powershell -command "& {Add-Type -AssemblyName System.IO.Compression.FileSystem; [System.IO.Compression.ZipFile]::ExtractToDirectory(\"$PWD\7zip.zip\", \"$PWD\") }"
 if EXIST "%cd%\7zip.zip" del /Q "%cd%\7zip.zip"
-if NOT EXIST "%cd%\tf_coop_extended_march2020.7z" powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"http://thebdf.org/tf_coop_extended_march2020.7z\",\"$PWD\tf_coop_extended_march2020.7z\") }"
+if NOT EXIST "%cd%\tf_coop_extended_march2020.7z" powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"http://open.crowbar.lt/TheBDF/tf_coop_extended_march2020.7z\",\"$PWD\tf_coop_extended_march2020.7z\") }"
 if EXIST "%cd%\7-Zip\7z.exe" (
 	echo ^Beginning extraction of archive...
 	start /min /wait "7z" "7-Zip\7z.exe" x tf_coop_extended_march2020.7z -o"%cd%\%gamedir%"
