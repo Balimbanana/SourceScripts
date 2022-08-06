@@ -27,7 +27,11 @@ set cldir=%programfiles(x86)%\Steam\steamapps
 set betadir=%programfiles(x86)%\Steam\steamapps
 set twitchdir=%programfiles(x86)%\Steam\steamapps
 set devpdir=%programfiles(x86)%\Steam\steamapps
-for /f "skip=2 tokens=1,3* delims== " %%i in ('reg QUERY HKEY_CURRENT_USER\Software\Valve\Steam /f SteamPath /t REG_SZ /v') do set "cldir=%%j%%k" & goto start
+set cldir=%programfiles(x86)%\Steam\steamapps
+for /f "skip=2 tokens=1,2* delims== " %%i in ('reg QUERY HKEY_CURRENT_USER\Software\Valve\Steam /f SteamPath /t REG_SZ /v') do (
+	set "cldir=%%k"
+	goto start
+)
 :start
 for /f "delims=" %%V in ('powershell -command "$env:cldir.Replace(\"/\",\"\\\")"') do set "cldir=%%V"
 for /f "delims=" %%V in ('powershell -command "$env:cldir.Replace(\"programfiles\",\"\Program Files\")"') do set "cldir=%%V"
@@ -71,7 +75,7 @@ if EXIST "E:\Steam\steamapps\common\syndevp\synergy" set devpdir=E:\Steam
 if EXIST "D:\Steam\steamapps\common\syndevp\synergy" set devpdir=D:\Steam
 if EXIST "F:\Steam\steamapps\common\syndevp\synergy" set devpdir=F:\Steam
 if EXIST "G:\Steam\steamapps\common\syndevp\synergy" set devpdir=G:\Steam
-if NOT EXIST %cldir%\steamapps\common\Synergy\synergy (
+if NOT EXIST "%cldir%\steamapps\common\Synergy\synergy" (
 	echo ^CL Directory not found...
 	set cldir=%cd%
 	pause
