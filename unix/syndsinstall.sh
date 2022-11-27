@@ -24,8 +24,15 @@ exit
 if [ -f /usr/bin/dpkg-query ];then
 	if [[ ! $(dpkg-query -l lib32gcc1) ]] && [[ $(arch | grep 64) ]];then
 		if [[ $(cat /etc/os-release | grep ID=ubuntu) ]];then
-			packageinf="Use sudo apt-get install lib32gcc1"
-			missingdeps
+			if [[ $(cat /etc/os-release | grep VERSION_ID=\"22) ]];then
+				if [[ ! $(dpkg-query -l lib32gcc-s1) ]];then
+					packageinf="Use sudo apt-get install lib32gcc-s1"
+					missingdeps
+				fi
+			else
+				packageinf="Use sudo apt-get install lib32gcc1"
+				missingdeps
+			fi
 		else
 			packageinf="Use your package manager to install lib32gcc1"
 			missingdeps
@@ -134,7 +141,6 @@ start
 }
 
 instsourcem() {
-if [ ! -d ./steamapps/common/Synergy/synergy ];then notinstalled;fi
 if [ $instsmset = "0" ];then
 	echo "This function is designed for the current version of Synergy, the development branch may be unstable."
 	echo "Install SourceMod for Regular, (B)eta, or (T)witch? (anything except b or t will do regular)"
@@ -296,7 +302,7 @@ fi
 if [ $betaset = "b" ];then betainst;fi
 if [ $betaset = "t" ];then twitchinst;fi
 echo "Updating/installing Synergy DS"
-./steamcmd.sh +login $stusername +force_install_dir ./steamapps/common/Synergy +app_update 17520 -beta public validate +quit
+./steamcmd.sh +force_install_dir ./steamapps/common/Synergy +login $stusername +app_update 17520 -beta public validate +quit
 echo "Update/installation Complete"
 echo "If there were errors above, close the script and log in to steamcmd.sh separately, then restart the script."
 if [ ! -f $synpath/synergy/synergy_pak.vpk ]; then
@@ -321,7 +327,7 @@ firstinstall
 
 twitchinst() {
 echo "Updating/installing Synergy Twitch Branch DS"
-./steamcmd.sh +login $stusername +force_install_dir ./steamapps/common/syntwitch +app_update 17520 -beta twitch -validate +quit
+./steamcmd.sh +force_install_dir ./steamapps/common/syntwitch +login $stusername +app_update 17520 -beta twitch -validate +quit
 echo "Update/installation Complete"
 echo "If there were errors above, close the script and log in to steamcmd.sh separately, then restart this script."
 if [ ! -f $synpath/synergy/synergy_pak.vpk ]; then
@@ -335,7 +341,7 @@ srcds
 
 betainst() {
 echo "Updating/installing Synergy Beta DS"
-./steamcmd.sh +login $stusername +force_install_dir ./steamapps/common/synbeta +app_update 17520 -beta development -validate +quit
+./steamcmd.sh +force_install_dir ./steamapps/common/synbeta +login $stusername +app_update 17520 -beta development -validate +quit
 echo "Update/installation Complete"
 echo "If there were errors above, close the script and log in to steamcmd.sh separately, then restart this script."
 if [ ! -f $synpath/synergy/synergy_pak.vpk ]; then
@@ -483,16 +489,16 @@ if [ -z $stusername ];then
 	anonblck=${stusername,,}
 	if [ $anonblck = "anonymous" ];then noanon;fi
 fi
-./steamcmd.sh +login $stusername +force_install_dir ./steamapps/common/Half-Life\ 2 +app_update 220 validate +quit
+./steamcmd.sh +force_install_dir ./steamapps/common/Half-Life\ 2 +login $stusername +app_update 220 validate +quit
 if [ $hllist > 2 ];then
-	./steamcmd.sh +login $stusername +force_install_dir ./steamapps/common/Half-Life\ 2 +app_update 280 validate +quit
-	./steamcmd.sh +login $stusername +force_install_dir ./steamapps/common/Half-Life\ 2 +app_update 340 validate +quit
+	./steamcmd.sh +force_install_dir ./steamapps/common/Half-Life\ 2 +login $stusername +app_update 280 validate +quit
+	./steamcmd.sh +force_install_dir ./steamapps/common/Half-Life\ 2 +login $stusername +app_update 340 validate +quit
 fi
 if [ $hllist > 0 ];then
-	./steamcmd.sh +login $stusername +force_install_dir ./steamapps/common/Half-Life\ 2 +app_update 380 validate +quit
+	./steamcmd.sh +force_install_dir ./steamapps/common/Half-Life\ 2 +login $stusername +app_update 380 validate +quit
 fi
 if [ $hllist > 1 ];then
-	./steamcmd.sh +login $stusername +force_install_dir ./steamapps/common/Half-Life\ 2 +app_update 420 validate +quit
+	./steamcmd.sh +force_install_dir ./steamapps/common/Half-Life\ 2 +login $stusername +app_update 420 validate +quit
 fi
 if [ -d ./steamapps/common/Half-Life\ 2 ];then setup;fi
 echo "Something went wrong with installing HL2, restarting script."
@@ -507,7 +513,7 @@ if [ -z $stusername ];then
 	anonblck=${stusername,,}
 	if [ $anonblck = "anonymous" ];then noanon;fi
 fi
-./steamcmd.sh +login $stusername +force_install_dir ./steamapps/common/Half-Life\ 2 +app_update 220 validate +quit
+./steamcmd.sh +force_install_dir ./steamapps/common/Half-Life\ 2 +login $stusername +app_update 220 validate +quit
 start
 }
 
@@ -519,7 +525,7 @@ if [ -z $stusername ];then
 	anonblck=${stusername,,}
 	if [ $anonblck = "anonymous" ];then noanon;fi
 fi
-./steamcmd.sh +login $stusername +force_install_dir ./steamapps/common/Half-Life\ 2 +app_update 380 validate +quit
+./steamcmd.sh +force_install_dir ./steamapps/common/Half-Life\ 2 +login $stusername +app_update 380 validate +quit
 start
 }
 
@@ -531,7 +537,7 @@ if [ -z $stusername ];then
 	anonblck=${stusername,,}
 	if [ $anonblck = "anonymous" ];then noanon;fi
 fi
-./steamcmd.sh +login $stusername +force_install_dir ./steamapps/common/Half-Life\ 2 +app_update 420 validate +quit
+./steamcmd.sh +force_install_dir ./steamapps/common/Half-Life\ 2 +login $stusername +app_update 420 validate +quit
 start
 }
 
@@ -580,7 +586,7 @@ if [ $instmod = "yla" ];then
 			fi
 		fi
 	fi
-	./steamcmd.sh +@sSteamCmdForcePlatformType windows +login $stusername +force_install_dir ./steamapps/common/yla +app_update 747250 validate +quit
+	./steamcmd.sh +@sSteamCmdForcePlatformType windows +force_install_dir ./steamapps/common/yla +login $stusername +app_update 747250 validate +quit
 	if [ ! -f "./steamapps/common/Synergy/synergy/content/yearlongalarm.dat" ];then wget -nv "https://github.com/Balimbanana/SourceScripts/raw/master/synotherfilefixes/yearlongalarm.dat" -P ./steamapps/common/Synergy/synergy/content ;fi
 fi
 if [ $instmod = "amal" ];then
@@ -597,7 +603,7 @@ if [ $instmod = "amal" ];then
 			fi
 		fi
 	fi
-	./steamcmd.sh +@sSteamCmdForcePlatformType windows +login $stusername +force_install_dir ./steamapps/common/Amalgam +app_update 1389950 validate +quit
+	./steamcmd.sh +@sSteamCmdForcePlatformType windows +force_install_dir ./steamapps/common/Amalgam +login $stusername +app_update 1389950 validate +quit
 fi
 if [ $instmod = "df" ];then
 	if [ ! -f "./steamapps/workshop/content/17520/909637644/909637644_pak.vpk" ];then
@@ -613,7 +619,7 @@ if [ $instmod = "df" ];then
 			fi
 		fi
 	fi
-	./steamcmd.sh +@sSteamCmdForcePlatformType windows +login $stusername +force_install_dir ./steamapps/common/HL2DownFall +app_update 587650 validate +quit
+	./steamcmd.sh +@sSteamCmdForcePlatformType windows +force_install_dir ./steamapps/common/HL2DownFall +login $stusername +app_update 587650 validate +quit
 	if [ ! -f "./steamapps/common/Synergy/synergy/content/DownFall.dat" ];then wget -nv "https://github.com/Balimbanana/SourceScripts/raw/master/synotherfilefixes/DownFall.dat" -P ./steamapps/common/Synergy/synergy/content ;fi
 fi
 if [ $instmod = "pros" ];then
@@ -630,7 +636,7 @@ if [ $instmod = "pros" ];then
 			fi
 		fi
 	fi
-	./steamcmd.sh +@sSteamCmdForcePlatformType windows +login $stusername +force_install_dir ./steamapps/common/Prospekt +app_update 399120 validate +quit
+	./steamcmd.sh +@sSteamCmdForcePlatformType windows +force_install_dir ./steamapps/common/Prospekt +login $stusername +app_update 399120 validate +quit
 fi
 if [ $instmod = "ezero" ];then
 	if [ ! -f "./steamapps/workshop/content/17520/1877479381/1877479381_pak.vpk" ];then
@@ -646,7 +652,7 @@ if [ $instmod = "ezero" ];then
 			fi
 		fi
 	fi
-	./steamcmd.sh +@sSteamCmdForcePlatformType windows +login $stusername +force_install_dir ./steamapps/common/EZeroRen +app_update 714070 validate +quit
+	./steamcmd.sh +@sSteamCmdForcePlatformType windows +force_install_dir ./steamapps/common/EZeroRen +login $stusername +app_update 714070 validate +quit
 	if [ -d "./steamapps/common/EZeroRen/Entropy Zero/EntropyZero" ];then
 		if [ ! -d "./steamapps/common/EntropyZero" ];then mkdir ./steamapps/common/EntropyZero ;fi
 		mv ./steamapps/common/EZeroRen/Entropy\ Zero/EntropyZero ./steamapps/common/EntropyZero/EntropyZero
