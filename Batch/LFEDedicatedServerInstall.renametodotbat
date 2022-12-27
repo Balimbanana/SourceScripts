@@ -103,10 +103,11 @@ if NOT EXIST "steamapps\common\Source SDK Base 2013 Dedicated Server\srcds.exe" 
 )
 echo Update/installation of SDK Base 2013 Complete
 echo If there were errors states above, close the script and log into SteamCMD.exe separately, then restart the script.
-timeout -T 10
+timeout -T 5
 if "%uprun%"=="i" goto setup
 cls
 :srcds
+cls
 if NOT EXIST "%gamedir%\srcds.exe" goto notinstalled
 if NOT EXIST "steamapps\common\Half-Life 2\hl2\hl2_pak_dir.vpk" goto insthl2
 set insttf2=1
@@ -160,7 +161,7 @@ if EXIST "%cd%\7zip.zip" del /Q "%cd%\7zip.zip"
 if NOT EXIST "%cd%\tf_coop_extended_march2020.7z" powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"http://open.crowbar.lt/TheBDF/tf_coop_extended_march2020.7z\",\"$PWD\tf_coop_extended_march2020.7z\") }"
 if EXIST "%cd%\7-Zip\7z.exe" (
 	echo ^Beginning extraction of archive...
-	start /min /wait "7z" "7-Zip\7z.exe" x tf_coop_extended_march2020.7z -o"%cd%\%gamedir%"
+	start /min /wait "7z" "7-Zip\7z.exe" x -y tf_coop_extended_march2020.7z -o"%cd%\%gamedir%"
 )
 if NOT EXIST "%gamedir%\tf_coop_extended\cfg\server.cfg" (
 	echo exec banned_user.cfg>"%gamedir%\tf_coop_extended\cfg\server.cfg"
@@ -174,27 +175,26 @@ if NOT EXIST "%gamedir%\tf_coop_extended\cfg\server.cfg" (
 	echo sk_gonome_health 700 >>"%gamedir%\tf_coop_extended\cfg\server.cfg"
 	echo mp_gamemode 1 >>"%gamedir%\tf_coop_extended\cfg\server.cfg"
 )
-powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://raw.githubusercontent.com/Balimbanana/SourceScripts/master/synotherfilefixes/lfe/gameinfo.txt\",\"$PWD\gameinfofixed.txt\") }"
-powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://raw.githubusercontent.com/Balimbanana/SourceScripts/master/synotherfilefixes/lfe/gamemounting.txt\",\"$PWD\gamemountingfixed.txt\") }"
-if EXIST "%cd%\gameinfofixed.txt" (
+powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://raw.githubusercontent.com/Balimbanana/SourceScripts/master/synotherfilefixes/lfe/gameinfo.txt\",\"$PWD\gameinfo.txt\") }"
+powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://raw.githubusercontent.com/Balimbanana/SourceScripts/master/synotherfilefixes/lfe/gamemounting.txt\",\"$PWD\gamemounting.txt\") }"
+if EXIST "%cd%\gameinfo.txt" (
 	del /Q "%gamedir%\tf_coop_extended\gameinfo.txt"
-	move /Y "%cd%\gameinfofixed.txt" "%gamedir%\tf_coop_exended\gameinfo.txt"
+	start /min /wait robocopy /NP /NJS /NJH /NS "." "%gamedir%\tf_coop_extended" "gameinfo.txt"
 )
-if EXIST "%cd%\gamemountingfixed.txt" (
+if EXIST "%cd%\gamemounting.txt" (
 	del /Q "%gamedir%\tf_coop_extended\gamemounting.txt"
-	move /Y "%cd%\gamemountingfixed.txt" "%gamedir%\tf_coop_exended\gamemounting.txt"
+	start /min /wait robocopy /NP /NJS /NJH /NS "." "%gamedir%\tf_coop_extended" "gamemounting.txt"
 )
 echo Should be all configured for server running.
 echo Would you like to edit your server config? (y/N)
 set /p edtconf=
 for /f "delims=" %%V in ('powershell -command "$env:edtconf.ToLower()"') do set "edtconf=%%V"
 if "%edtconf%"=="y" start "ServerEdit" notepad.exe "%gamedir%\tf_coop_extended\cfg\server.cfg"
-echo Would you like to install SourceMod as well? (y/N)
+echo Would you like to install SourceMod as well? (Y/n)
 set /p instsmset=
 for /f "delims=" %%V in ('powershell -command "$env:instsmset.ToLower()"') do set "instsmset=%%V"
-if "%instsmset%"=="y" goto instsourcem
-cls
-goto srcds
+if "%instsmset%"=="n" goto srcds
+goto instsourcem
 :insthl2
 echo Half-Life 2 was not found during setup, press any key to install it first or close the script and install it manually.
 pause
@@ -285,10 +285,10 @@ if EXIST steamcmd.exe (
 )
 if EXIST "%cd%\7-Zip\7z.exe" (
 	if '%foundcmd%'=='1' (
-		start /min /wait "7z" "%cd%\7-Zip\7z.exe" x steamcmd.zip
+		start /min /wait "7z" "%cd%\7-Zip\7z.exe" x -y steamcmd.zip
 	)
 	if '%foundcmd%'=='2' (
-		start /min /wait "7z" "%cd%\7-Zip\7z.exe" x "%userprofile%\downloads\steamcmd.zip"
+		start /min /wait "7z" "%cd%\7-Zip\7z.exe" x -y "%userprofile%\downloads\steamcmd.zip"
 	)
 	if EXIST steamcmd.exe echo ^Successfully installed SteamCMD to %cd%
 )
@@ -328,22 +328,22 @@ set use7z=0
 if NOT EXIST "%gamedir%\tf_coop_extended\addons\metamod.vdf" set use7z=1
 if '%use7z%'=='1' (
 	if '%dlloc%'=='1' (
-		start /min /wait "7z" "7-Zip\7z.exe" x sourcemod-1.11.0-git6569-windows.zip -o"%cd%\%gamedir%\tf_coop_extended"
+		start /min /wait "7z" "7-Zip\7z.exe" x -y sourcemod-1.11.0-git6569-windows.zip -o"%cd%\%gamedir%\tf_coop_extended"
 	)
 	if '%dlloc%'=='2' (
-		start /min /wait "7z" "7-Zip\7z.exe" x "%userprofile%\downloads\sourcemod-1.11.0-git6569-windows.zip" -o"%cd%\%gamedir%\tf_coop_extended"
+		start /min /wait "7z" "7-Zip\7z.exe" x -y "%userprofile%\downloads\sourcemod-1.11.0-git6569-windows.zip" -o"%cd%\%gamedir%\tf_coop_extended"
 	)
 	if '%mmloc%'=='1' (
-		start /min /wait "7z" "7-Zip\7z.exe" x "%userprofile%\downloads\mmsource-1.11.0-git1130-windows.zip" -o"%cd%\%gamedir%\tf_coop_extended"
+		start /min /wait "7z" "7-Zip\7z.exe" x -y "%userprofile%\downloads\mmsource-1.11.0-git1130-windows.zip" -o"%cd%\%gamedir%\tf_coop_extended"
 	)
 	if '%mmloc%'=='2' (
-		start /min /wait "7z" "7-Zip\7z.exe" x mmsource-1.11.0-git1130-windows.zip -o"%cd%\%gamedir%\tf_coop_extended"
+		start /min /wait "7z" "7-Zip\7z.exe" x -y mmsource-1.11.0-git1130-windows.zip -o"%cd%\%gamedir%\tf_coop_extended"
 	)
 	if '%steamworksloc%'=='1' (
-		start /min /wait "7z" "7-Zip\7z.exe" x "%userprofile%\downloads\SteamWorks-git121-windows.zip" -o"%cd%\%gamedir%\tf_coop_extended"
+		start /min /wait "7z" "7-Zip\7z.exe" x -y "%userprofile%\downloads\SteamWorks-git121-windows.zip" -o"%cd%\%gamedir%\tf_coop_extended"
 	)
 	if '%steamworksloc%'=='2' (
-		start /min /wait "7z" "7-Zip\7z.exe" x SteamWorks-git121-windows.zip -o"%cd%\%gamedir%\tf_coop_extended"
+		start /min /wait "7z" "7-Zip\7z.exe" x -y SteamWorks-git121-windows.zip -o"%cd%\%gamedir%\tf_coop_extended"
 	)
 )
 if NOT EXIST "%gamedir%\tf_coop_extended\addons\sourcemod\gamedata\core.games\custom" mkdir "%gamedir%\tf_coop_extended\addons\sourcemod\gamedata\core.games\custom"
@@ -361,8 +361,9 @@ start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProt
 start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SM-LambdaFortress/raw/master/addons/sourcemod/gamedata/core.games/custom/common.games.txt\", \"$PWD\$env:gamedir\tf_coop_extended\addons\sourcemod\gamedata\core.games\custom\common.games.txt\") }"
 start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SM-LambdaFortress/raw/master/addons/sourcemod/plugins/tfcoopmisc.smx\", \"$PWD\$env:gamedir\tf_coop_extended\addons\sourcemod\plugins\tfcoopmisc.smx\") }"
 start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SM-LambdaFortress/raw/master/addons/sourcemod/scripting/tfcoopmisc.sp\", \"$PWD\$env:gamedir\tf_coop_extended\addons\sourcemod\scripting\tfcoopmisc.sp\") }"
-rem Updater is no longer available at this repo
-rem if NOT EXIST "%gamedir%\tf_coop_extended\addons\sourcemod\plugins\updater.smx" start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://bitbucket.org/GoD_Tony/updater/downloads/updater.smx\", \"$PWD\$env:gamedir\tf_coop_extended\addons\sourcemod\plugins\updater.smx\") }"
+start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SM-LambdaFortress/raw/master/addons/sourcemod/plugins/lfportalfix.smx\", \"$PWD\$env:gamedir\tf_coop_extended\addons\sourcemod\plugins\lfportalfix.smx\") }"
+start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SM-LambdaFortress/raw/master/addons/sourcemod/scripting/lfportalfix.sp\", \"$PWD\$env:gamedir\tf_coop_extended\addons\sourcemod\scripting\lfportalfix.sp\") }"
+if NOT EXIST "%gamedir%\tf_coop_extended\addons\sourcemod\plugins\updater.smx" start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SourceScripts/raw/master/synotherfilefixes/addons/sourcemod/plugins/updater.smx\", \"$PWD\$env:gamedir\tf_coop_extended\addons\sourcemod\plugins\updater.smx\") }"
 if EXIST "%gamedir%\tf_coop_extended\addons\sourcemod\plugins\nextmap.smx" del /Q "%gamedir%\tf_coop_extended\addons\sourcemod\plugins\nextmap.smx"
 echo Now you should be able to install any plugins you want.
 explorer "%cd%\%gamedir%\tf_coop_extended\addons\sourcemod\plugins"
