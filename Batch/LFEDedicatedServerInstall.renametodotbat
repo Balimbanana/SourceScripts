@@ -172,6 +172,17 @@ if NOT EXIST "%gamedir%\tf_coop_extended\cfg\server.cfg" (
 	echo sk_houndeye_health 150 >>"%gamedir%\tf_coop_extended\cfg\server.cfg"
 	echo sk_zombiehl1_health 75 >>"%gamedir%\tf_coop_extended\cfg\server.cfg"
 	echo sk_gonome_health 700 >>"%gamedir%\tf_coop_extended\cfg\server.cfg"
+	echo mp_gamemode 1 >>"%gamedir%\tf_coop_extended\cfg\server.cfg"
+)
+powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://raw.githubusercontent.com/Balimbanana/SourceScripts/master/synotherfilefixes/lfe/gameinfo.txt\",\"$PWD\gameinfofixed.txt\") }"
+powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://raw.githubusercontent.com/Balimbanana/SourceScripts/master/synotherfilefixes/lfe/gamemounting.txt\",\"$PWD\gamemountingfixed.txt\") }"
+if EXIST "%cd%\gameinfofixed.txt" (
+	del /Q "%gamedir%\tf_coop_extended\gameinfo.txt"
+	move /Y "%cd%\gameinfofixed.txt" "%gamedir%\tf_coop_exended\gameinfo.txt"
+)
+if EXIST "%cd%\gamemountingfixed.txt" (
+	del /Q "%gamedir%\tf_coop_extended\gamemounting.txt"
+	move /Y "%cd%\gamemountingfixed.txt" "%gamedir%\tf_coop_exended\gamemounting.txt"
 )
 echo Should be all configured for server running.
 echo Would you like to edit your server config? (y/N)
