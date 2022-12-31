@@ -121,7 +121,7 @@ ping localhost -n 1 >NUL
 for /f "delims=" %%V in ('powershell -command "$ab = get-date; $ab.Minute"') do set "starttime=%%V"
 :reds
 echo (%date%)(%time%) LFEDS started.
-start /wait "Lambda Fortress Extended Dedicated Server" "%gamedir%\srcds.exe" -console -game tf_coop_extended +maxplayers 32 +sv_lan 0 +map "d1_trainstation_01" -ip 0.0.0.0 -port %pnum% -nocrashdialog -insecure -nohltv -threads 8 -heapsize 2048000 -mem_max_heapsize 2048 -mem_max_heapsize_dedicated 512
+start /wait "Lambda Fortress Extended Dedicated Server" "%gamedir%\srcds.exe" -console -game tf_coop_extended +maxplayers 32 +sv_lan 0 +map "d1_trainstation_01" -ip 0.0.0.0 -port %pnum% -nocrashdialog -nohltv -threads 8 -heapsize 2048000 -mem_max_heapsize 2048 -mem_max_heapsize_dedicated 512
 echo (%date%)(%time%) WARNING: LFEDS closed or crashed, restarting.
 for /f "delims=" %%V in ('powershell -command "$ab = get-date; $ab.Minute"') do set "ctime=%%V"
 set /a cttime=ctime-starttime
