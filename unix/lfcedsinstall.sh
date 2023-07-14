@@ -435,19 +435,19 @@ if [ -z $stusername ];then
 fi
 if [ $instmod = "none" ];then updmods ;fi
 if [ $instmod = "yla" ];then
-	./steamcmd.sh +@sSteamCmdForcePlatformType windows +force_install_dir ./steamapps/common/yla +login $stusername +app_update 747250 validate +quit
+	./steamcmd.sh +@sSteamCmdForcePlatformType windows +force_install_dir "./steamapps/common/Half-Life 2 Year Long Alarm" +login $stusername +app_update 747250 validate +quit
 fi
 if [ $instmod = "amal" ];then
 	./steamcmd.sh +@sSteamCmdForcePlatformType windows +force_install_dir ./steamapps/common/Amalgam +login $stusername +app_update 1389950 validate +quit
 fi
 if [ $instmod = "df" ];then
-	./steamcmd.sh +@sSteamCmdForcePlatformType windows +force_install_dir ./steamapps/common/HL2DownFall +login $stusername +app_update 587650 validate +quit
+	./steamcmd.sh +@sSteamCmdForcePlatformType windows +force_install_dir "./steamapps/common/Half-Life 2 DownFall" +login $stusername +app_update 587650 validate +quit
 fi
 if [ $instmod = "pros" ];then
 	./steamcmd.sh +@sSteamCmdForcePlatformType windows +force_install_dir ./steamapps/common/Prospekt +login $stusername +app_update 399120 validate +quit
 fi
 if [ $instmod = "ezero" ];then
-	./steamcmd.sh +@sSteamCmdForcePlatformType windows +force_install_dir ./steamapps/common/EZeroRen +login $stusername +app_update 714070 validate +quit
+	./steamcmd.sh +@sSteamCmdForcePlatformType windows +force_install_dir "./steamapps/common/Entropy Zero" +login $stusername +app_update 714070 validate +quit
 fi
 updmods
 }
