@@ -268,9 +268,10 @@ if [ s = 0 ];then echo "sourcemods not found, not linking.";fi
 if [ s = 1 ];then ln -s $cldir/sourcemods ./steamapps/sourcemods;fi
 lfcepath=./steamapps/common/Source\ SDK\ Base\ 2013\ Dedicated\ Server
 if [ ! -f "./$lfcepath/tf_coop_lambda/cfg/server2.cfg" ];then
-	echo hostname LFCE Linux Server>"$lfcepath/tf_coop_lambda/cfg/server2.cfg"
+	echo hostname FC Linux Server>"$lfcepath/tf_coop_lambda/cfg/server2.cfg"
 	echo sv_lan 0 >>"$lfcepath/tf_coop_lambda/cfg/server2.cfg"
 	echo mp_friendlyfire 0 >>"$lfcepath/tf_coop_lambda/cfg/server2.cfg"
+	echo //Reloads the map when all players die>>"$lfcepath/tf_coop_lambda/cfg/server2.cfg"
 	echo mp_reset 1 >>"$lfcepath/tf_coop_lambda/cfg/server2.cfg"
 	echo mp_transition_time 45 >>"$lfcepath/tf_coop_lambda/cfg/server2.cfg"
 	echo mp_transition_percent 68 >>"$lfcepath/tf_coop_lambda/cfg/server2.cfg"
@@ -421,7 +422,7 @@ updmods() {
 echo "Install Steam released mods to be used in LFCE."
 echo "(yla) Year Long Alarm     (amal) Amalgam"
 echo "(pros) Prospekt           (df) DownFall"
-echo "(ezero) Entropy Zero"
+echo "(ezero) Entropy Zero      (portal) Portal"
 echo "b for back to start"
 read instmod
 if [ -z $instmod ];then instmod=none ;fi
@@ -448,6 +449,9 @@ if [ $instmod = "pros" ];then
 fi
 if [ $instmod = "ezero" ];then
 	./steamcmd.sh +@sSteamCmdForcePlatformType windows +force_install_dir "./steamapps/common/Entropy Zero" +login $stusername +app_update 714070 validate +quit
+fi
+if [ $instmod = "portal" ];then
+	./steamcmd.sh +@sSteamCmdForcePlatformType windows +force_install_dir "./steamapps/common/Portal" +login $stusername +app_update 400 validate +quit
 fi
 updmods
 }
