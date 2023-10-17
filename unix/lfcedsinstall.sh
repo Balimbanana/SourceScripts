@@ -97,7 +97,7 @@ echo
 echo "Information: enter the letter inside the () and press enter to continue at the prompts."
 echo "First (I)nstall, (U)pdate, (R)un with auto-restart"
 echo "(IS) to install SourceMod."
-if [ -f ./steamapps/common/Source\ SDK\ Base\ 2013\ Dedicated\ Server/tf_coop_lambda/addons/sourcemod/configs/admins_simple.ini ]; then
+if [ -f ./steamapps/common/Source\ SDK\ Base\ 2013\ Dedicated\ Server/fc/addons/sourcemod/configs/admins_simple.ini ]; then
 	echo "(SMADMIN) to modify your SourceMod admins file."
 fi
 echo "(IHL2) (IEp1) (IEp2) to install/update HL2 Ep1 or Ep2. (IMods) to install Steam source mods and supports."
@@ -126,10 +126,10 @@ start
 
 updategit() {
 if [ ! -d ./steamapps/common/Source\ SDK\ Base\ 2013\ Dedicated\ Server ];then firstinstall;fi
-if [ ! -d ./steamapps/common/Source\ SDK\ Base\ 2013\ Dedicated\ Server/tf_coop_lambda ];then 
-	git -C ./steamapps/common/Source\ SDK\ Base\ 2013\ Dedicated\ Server clone --depth 1 "https://github.com/Lambdagon/tf_coop_lambda.git"
+if [ ! -d ./steamapps/common/Source\ SDK\ Base\ 2013\ Dedicated\ Server/fc ];then 
+	git -C ./steamapps/common/Source\ SDK\ Base\ 2013\ Dedicated\ Server clone --depth 1 "https://github.com/Lambdagon/fc.git"
 else
-	cd ./steamapps/common/Source\ SDK\ Base\ 2013\ Dedicated\ Server/tf_coop_lambda
+	cd ./steamapps/common/Source\ SDK\ Base\ 2013\ Dedicated\ Server/fc
 	git reset --hard
 	git pull
 	cd ../../../..
@@ -147,7 +147,7 @@ start
 }
 
 instsourcem() {
-lfcepath=steamapps/common/Source\ SDK\ Base\ 2013\ Dedicated\ Server/tf_coop_lambda
+lfcepath=steamapps/common/Source\ SDK\ Base\ 2013\ Dedicated\ Server/fc
 if [ ! -d "./$lfcepath" ];then notinstalled;fi
 echo "This will direct download the required SourceMod files and then extract them."
 if [ -d "./$lfcepath/addons/sourcemod/bin/sourcemod_mm.so" ];then
@@ -267,23 +267,23 @@ if [ hl = 1 ];then ln -s $cldir/common/Half-Life\ 2 ./steamapps/common/Half-Life
 if [ s = 0 ];then echo "sourcemods not found, not linking.";fi
 if [ s = 1 ];then ln -s $cldir/sourcemods ./steamapps/sourcemods;fi
 lfcepath=./steamapps/common/Source\ SDK\ Base\ 2013\ Dedicated\ Server
-if [ ! -f "./$lfcepath/tf_coop_lambda/cfg/server2.cfg" ];then
-	echo hostname FC Linux Server>"$lfcepath/tf_coop_lambda/cfg/server2.cfg"
-	echo sv_lan 0 >>"$lfcepath/tf_coop_lambda/cfg/server2.cfg"
-	echo mp_friendlyfire 0 >>"$lfcepath/tf_coop_lambda/cfg/server2.cfg"
-	echo //Reloads the map when all players die>>"$lfcepath/tf_coop_lambda/cfg/server2.cfg"
-	echo mp_reset 1 >>"$lfcepath/tf_coop_lambda/cfg/server2.cfg"
-	echo mp_transition_time 45 >>"$lfcepath/tf_coop_lambda/cfg/server2.cfg"
-	echo mp_transition_percent 68 >>"$lfcepath/tf_coop_lambda/cfg/server2.cfg"
-	echo sv_vote_enable 1 >>"$lfcepath/tf_coop_lambda/cfg/server2.cfg"
-	echo sv_vote_failure_timer 300 >>"$lfcepath/tf_coop_lambda/cfg/server2.cfg"
-	echo sv_vote_interval 10 >>"$lfcepath/tf_coop_lambda/cfg/server2.cfg"
-	echo sv_vote_percent_difficulty 67 >>"$lfcepath/tf_coop_lambda/cfg/server2.cfg"
-	echo sv_vote_percent_kick 67 >>"$lfcepath/tf_coop_lambda/cfg/server2.cfg"
-	echo sv_vote_percent_map 67 >>"$lfcepath/tf_coop_lambda/cfg/server2.cfg"
-	echo sv_vote_percent_restore 67 >>"$lfcepath/tf_coop_lambda/cfg/server2.cfg"
-	echo //Change this to a different savenumber for forked servers>>"$lfcepath/tf_coop_lambda/cfg/server2.cfg"
-	echo sv_savedir save2/>>"$lfcepath/tf_coop_lambda/cfg/server2.cfg"
+if [ ! -f "./$lfcepath/fc/cfg/server2.cfg" ];then
+	echo hostname FC Linux Server>"$lfcepath/fc/cfg/server2.cfg"
+	echo sv_lan 0 >>"$lfcepath/fc/cfg/server2.cfg"
+	echo mp_friendlyfire 0 >>"$lfcepath/fc/cfg/server2.cfg"
+	echo //Reloads the map when all players die>>"$lfcepath/fc/cfg/server2.cfg"
+	echo mp_reset 1 >>"$lfcepath/fc/cfg/server2.cfg"
+	echo mp_transition_time 45 >>"$lfcepath/fc/cfg/server2.cfg"
+	echo mp_transition_percent 68 >>"$lfcepath/fc/cfg/server2.cfg"
+	echo sv_vote_enable 1 >>"$lfcepath/fc/cfg/server2.cfg"
+	echo sv_vote_failure_timer 300 >>"$lfcepath/fc/cfg/server2.cfg"
+	echo sv_vote_interval 10 >>"$lfcepath/fc/cfg/server2.cfg"
+	echo sv_vote_percent_difficulty 67 >>"$lfcepath/fc/cfg/server2.cfg"
+	echo sv_vote_percent_kick 67 >>"$lfcepath/fc/cfg/server2.cfg"
+	echo sv_vote_percent_map 67 >>"$lfcepath/fc/cfg/server2.cfg"
+	echo sv_vote_percent_restore 67 >>"$lfcepath/fc/cfg/server2.cfg"
+	echo //Change this to a different savenumber for forked servers>>"$lfcepath/fc/cfg/server2.cfg"
+	echo sv_savedir save2/>>"$lfcepath/fc/cfg/server2.cfg"
 fi
 echo "Should be all configured for server running."
 echo "Would you like to edit your server config? (y/N)"
@@ -292,15 +292,15 @@ if [ -z $editconf ];then editconf="noneselected" ;fi
 editconf=${editconf,,}
 if [ $editconf = "y" ];then
 	if [ ! -z $EDITOR ];then
-		$EDITOR "$lfcepath/tf_coop_lambda/cfg/server2.cfg"
+		$EDITOR "$lfcepath/fc/cfg/server2.cfg"
 	elif [ ! -z $VISUAL ];then
-		$VISUAL "$lfcepath/tf_coop_lambda/cfg/server2.cfg"
+		$VISUAL "$lfcepath/fc/cfg/server2.cfg"
 	elif [ -f /bin/nano ];then
-		nano "$lfcepath/tf_coop_lambda/cfg/server2.cfg"
+		nano "$lfcepath/fc/cfg/server2.cfg"
 	elif [ -f /usr/bin/gedit ];then
-		gedit "$lfcepath/tf_coop_lambda/cfg/server2.cfg"
+		gedit "$lfcepath/fc/cfg/server2.cfg"
 	else
-		vi "$lfcepath/tf_coop_lambda/cfg/server2.cfg"
+		vi "$lfcepath/fc/cfg/server2.cfg"
 	fi
 fi
 echo "Would you like to install SourceMod? (y/N)"
@@ -339,7 +339,7 @@ reds
 reds() {
 curdatetime=$(date -u)
 echo "$curdatetime LFCEDS started."
-"./$lfcepath/srcds_run" -game tf_coop_lambda -console -norestart -maxplayers 32 +sv_lan 0 +map d1_trainstation_06 +exec server2.cfg -ip 0.0.0.0 -port 27015 -nocrashdialog -nohltv
+"./$lfcepath/srcds_run" -game fc -console -norestart -maxplayers 32 +sv_lan 0 +map d1_trainstation_06 +exec server2.cfg -ip 0.0.0.0 -port 27015 -nocrashdialog -nohltv
 curdatetime=$(date -u)
 echo "$curdatetime WARNING: LFCEDS closed or crashed, restarting."
 sleep 1
@@ -457,7 +457,7 @@ updmods
 }
 
 instsourcepluginstop() {
-lfcepath=./steamapps/common/Source\ SDK\ Base\ 2013\ Dedicated\ Server/tf_coop_lambda
+lfcepath=./steamapps/common/Source\ SDK\ Base\ 2013\ Dedicated\ Server/fc
 if [ ! -d "$lfcepath" ];then notinstalled;fi
 instsourceplugins
 }
@@ -609,20 +609,20 @@ instsourceplugins
 }
 
 modifysmadmin() {
-if [ ! -f "./steamapps/common/Source\ SDK\ Base\ 2013\ Dedicated\ Server/tf_coop_lambda/addons/sourcemod/configs/admins_simple.ini" ]; then
+if [ ! -f "./steamapps/common/Source\ SDK\ Base\ 2013\ Dedicated\ Server/fc/addons/sourcemod/configs/admins_simple.ini" ]; then
 	echo "You do not have an admins file."
 	start
 fi
 if [ ! -z $EDITOR ];then
-	$EDITOR ./steamapps/common/Source\ SDK\ Base\ 2013\ Dedicated\ Server/tf_coop_lambda/addons/sourcemod/configs/admins_simple.ini
+	$EDITOR ./steamapps/common/Source\ SDK\ Base\ 2013\ Dedicated\ Server/fc/addons/sourcemod/configs/admins_simple.ini
 elif [ ! -z $VISUAL ];then
-	$VISUAL ./steamapps/common/Source\ SDK\ Base\ 2013\ Dedicated\ Server/tf_coop_lambda/addons/sourcemod/configs/admins_simple.ini
+	$VISUAL ./steamapps/common/Source\ SDK\ Base\ 2013\ Dedicated\ Server/fc/addons/sourcemod/configs/admins_simple.ini
 elif [ -f /bin/nano ];then
-	nano ./steamapps/common/Source\ SDK\ Base\ 2013\ Dedicated\ Server/tf_coop_lambda/addons/sourcemod/configs/admins_simple.ini
+	nano ./steamapps/common/Source\ SDK\ Base\ 2013\ Dedicated\ Server/fc/addons/sourcemod/configs/admins_simple.ini
 elif [ -f /usr/bin/gedit ];then
-	gedit ./steamapps/common/Source\ SDK\ Base\ 2013\ Dedicated\ Server/tf_coop_lambda/addons/sourcemod/configs/admins_simple.ini
+	gedit ./steamapps/common/Source\ SDK\ Base\ 2013\ Dedicated\ Server/fc/addons/sourcemod/configs/admins_simple.ini
 else
-	vi ./steamapps/common/Source\ SDK\ Base\ 2013\ Dedicated\ Server/tf_coop_lambda/addons/sourcemod/configs/admins_simple.ini
+	vi ./steamapps/common/Source\ SDK\ Base\ 2013\ Dedicated\ Server/fc/addons/sourcemod/configs/admins_simple.ini
 fi
 start
 }
