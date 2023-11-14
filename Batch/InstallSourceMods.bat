@@ -92,8 +92,6 @@ echo (PEN) for HL2 Penetration       (EZ) for Entropy Zero
 echo (PTSD2) for PTSD 2              (DH) for DayHard
 echo (STTR) for SteamTracksTrouble and Riddles
 echo.
-echo (LFE) not supported in Synergy, but a separate mod that allows playing through HL1, HL2, Ep1, Ep2 with TF2 characters.
-echo.
 echo (SourceMods) to open your sourcemods directory
 echo (ModSupports) to open the Mod Support's page.
 echo (update) to update this script.
@@ -152,7 +150,6 @@ if "%uprun%"=="ez" goto ezero
 if "%uprun%"=="aod" goto avodessa
 if "%uprun%"=="sesc" goto silentesc
 if "%uprun%"=="exmo" goto escbyexmo
-if "%uprun%"=="lfe" goto lfeinst
 if "%uprun%"=="ptsd2" goto ptsd2
 if "%uprun%"=="update" goto updater
 echo.
@@ -845,19 +842,6 @@ if EXIST "%cldir%\Escape\maps\escape_map_01.bsp" (
 	rename "%cldir%\Escape" "escape_by_ex-mo"
 )
 if EXIST "%cldir%\escape_by_ex-mo\maps\escape_map_01.bsp" echo Completed.
-goto start
-:lfeinst
-if EXIST "%cldir%\tf_coop_extended\bin\server.dll" (
-	echo ^Lambda Fortress Extended is already installed.
-	pause
-	goto start
-)
-echo Downloading Lambda Fortress Extended...
-echo This will take a while depending on your download speed. The archive is 1GB in size...
-powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"http://bdf.crowbar.lt/Maps+modpack/tf_coop_extended_march2020.7z\",\"$PWD\tf_coop_extended_march2020.7z\") }"
-echo Extracting Lambda Fortress Extended...
-if EXIST "%cd%\tf_coop_extended_march2020.7z" .\7-Zip\7z.exe x .\tf_coop_extended_march2020.7z -o"%cldir%"
-if EXIST "%cldir%\tf_coop_extended\maps\d1_trainstation_01.bsp" echo Completed.
 goto start
 
 :dlsteamcmd
