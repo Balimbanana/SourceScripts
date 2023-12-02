@@ -101,7 +101,7 @@ if [ -f ./steamapps/common/Source\ SDK\ Base\ 2013\ Dedicated\ Server/fc/addons/
 	echo "(SMADMIN) to modify your SourceMod admins file."
 fi
 echo "(IHL2) (IEp1) (IEp2) to install/update HL2 Ep1 or Ep2. (IMods) to install Steam source mods and supports."
-echo "(update) to update FC from Git (updatedev) to update FC development branch."
+echo "(update) to update FC from Git."
 echo "(updatescr) to update this script."
 read uprun
 uprun=${uprun,,}
@@ -132,7 +132,7 @@ if [ ! -d ./steamapps/common/Source\ SDK\ Base\ 2013\ Dedicated\ Server/fc ];the
 else
 	cd ./steamapps/common/Source\ SDK\ Base\ 2013\ Dedicated\ Server/fc
 	git reset --hard
- 	git checkout main
+ 	#git checkout main
 	git pull
 	cd ../../../..
 fi
@@ -147,7 +147,7 @@ if [ ! -d ./steamapps/common/Source\ SDK\ Base\ 2013\ Dedicated\ Server/fc ];the
 else
 	cd ./steamapps/common/Source\ SDK\ Base\ 2013\ Dedicated\ Server/fc
 	git reset --hard
- 	git checkout dev
+ 	#git checkout dev
 	git pull
 	cd ../../../..
 fi
