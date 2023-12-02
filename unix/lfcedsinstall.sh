@@ -101,7 +101,7 @@ if [ -f ./steamapps/common/Source\ SDK\ Base\ 2013\ Dedicated\ Server/fc/addons/
 	echo "(SMADMIN) to modify your SourceMod admins file."
 fi
 echo "(IHL2) (IEp1) (IEp2) to install/update HL2 Ep1 or Ep2. (IMods) to install Steam source mods and supports."
-echo "(update) to update LFCE from Git."
+echo "(update) to update FC from Git (updatedev) to update FC development branch."
 echo "(updatescr) to update this script."
 read uprun
 uprun=${uprun,,}
@@ -119,6 +119,7 @@ if [ $uprun = "iep1" ]; then updep1;fi
 if [ $uprun = "iep2" ]; then updep2;fi
 if [ $uprun = "imods" ]; then updmods;fi
 if [ $uprun = "updatescr" ]; then updatescr;fi
+if [ $uprun = "updatedev" ]; then updatedevgit;fi
 if [ $uprun = "update" ]; then updategit;fi
 echo "Choose an option."
 start
@@ -131,6 +132,22 @@ if [ ! -d ./steamapps/common/Source\ SDK\ Base\ 2013\ Dedicated\ Server/fc ];the
 else
 	cd ./steamapps/common/Source\ SDK\ Base\ 2013\ Dedicated\ Server/fc
 	git reset --hard
+ 	git checkout main
+	git pull
+	cd ../../../..
+fi
+if [ $uprun = "i" ];then setup;fi
+start
+}
+
+updatedevgit() {
+if [ ! -d ./steamapps/common/Source\ SDK\ Base\ 2013\ Dedicated\ Server ];then firstinstall;fi
+if [ ! -d ./steamapps/common/Source\ SDK\ Base\ 2013\ Dedicated\ Server/fc ];then 
+	git -C ./steamapps/common/Source\ SDK\ Base\ 2013\ Dedicated\ Server clone --depth 1 "https://github.com/Lambdagon/fc.git"
+else
+	cd ./steamapps/common/Source\ SDK\ Base\ 2013\ Dedicated\ Server/fc
+	git reset --hard
+ 	git checkout dev
 	git pull
 	cd ../../../..
 fi
@@ -155,14 +172,17 @@ if [ -d "./$lfcepath/addons/sourcemod/bin/sourcemod_mm.so" ];then
 	read nullptr
 	start
 fi
-curl -sqL "https://sm.alliedmods.net/smdrop/1.11/sourcemod-1.11.0-git6569-linux.tar.gz" | tar zxvf - -C "./$lfcepath"
-curl -sqL "https://mms.alliedmods.net/mmsdrop/1.11/mmsource-1.11.0-git1130-linux.tar.gz" | tar zxvf - -C "./$lfcepath"
-curl -sqL "https://users.alliedmods.net/~kyles/builds/SteamWorks/SteamWorks-git131-linux.tar.gz" | tar zxvf - -C "./$lfcepath"
+#curl -sqL "https://sm.alliedmods.net/smdrop/1.11/sourcemod-1.11.0-git6569-linux.tar.gz" | tar zxvf - -C "./$lfcepath"
+#curl -sqL "https://mms.alliedmods.net/mmsdrop/1.11/mmsource-1.11.0-git1130-linux.tar.gz" | tar zxvf - -C "./$lfcepath"
+#curl -sqL "https://users.alliedmods.net/~kyles/builds/SteamWorks/SteamWorks-git131-linux.tar.gz" | tar zxvf - -C "./$lfcepath"
+tar zxvf ./$lfcepath/addons/SM1.12-128\ Linux.tar.bz2 -C ./lfcepath/addons
 if [ ! -d "./$lfcepath/addons/sourcemod" ];then
 	echo "Failed to auto-install SourceMod, you may have to manually install it."
 	read nullptr
 	start
 fi
+if [ ! -f "./$lfcepath/addons/sourcemod/configs/admins_simple.ini" ];then cp ./$lfcepath/addons/sourcemod/configs/admins_simple_sample.ini ./$lfcepath/addons/sourcemod/configs/admins_simple.ini ;fi
+if [ ! -f "./$lfcepath/addons/sourcemod/configs/databases.cfg" ];then cp ./$lfcepath/addons/sourcemod/configs/databases_sample.cfg ./$lfcepath/addons/sourcemod/configs/databases.cfg ;fi
 if [ -f "./$lfcepath/addons/metamod_x64.vdf" ];then rm "./$lfcepath/addons/metamod_x64.vdf" ;fi
 if [ -d "./$lfcepath/addons/metamod/bin/linux64" ]; then rm -rf "./$lfcepath/addons/metamod/bin/linux64" ;fi
 if [ -d "./$lfcepath/addons/sourcemod/bin/x64" ]; then rm -rf "./$lfcepath/addons/sourcemod/bin/x64" ;fi
