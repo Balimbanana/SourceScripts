@@ -52,7 +52,7 @@ set anonset=0
 if NOT EXIST steamcmd.exe goto notindir
 echo Information: enter the letter inside the () and press enter to continue at the prompts.
 echo First (I)nstall, (U)pdate or (R)un with auto-restart
-echo (RB) To run Synergy 18.x beta or (IS) to install SourceMod.
+echo (RD) To run Synergy development branch or (IS) to install SourceMod.
 echo (RT) To run Synergy Twich branch. (RP) To run Synergy Portal branch.
 echo (RF) to run custom or forked servers.
 if EXIST "steamapps\common\Synergy\synergy\addons\sourcemod\plugins" (
@@ -65,10 +65,9 @@ set /p uprun=
 for /f "delims=" %%V in ('powershell -command "$env:uprun.ToLower()"') do set "uprun=%%V"
 if "%uprun%"=="u" goto firstinstall
 if "%uprun%"=="i" goto firstinstall
-if "%uprun%"=="rb" goto srcds
+if "%uprun%"=="rd" goto srcds
 if "%uprun%"=="rt" goto srcds
 if "%uprun%"=="rp" goto srcds
-if "%uprun%"=="rd" goto srcds
 if "%uprun%"=="r" goto srcds
 if "%uprun%"=="rf" goto srcdscustom
 if "%uprun%"=="is" goto instsourcem
@@ -81,7 +80,7 @@ echo Choose an option.
 goto start
 
 :firstinstall
-if '%anonset%'=='0' (echo Regular, ^(B^)eta, ^(T^)witch, or ^(P^)ortal? ^(anything except b, t, or p will do regular^)
+if '%anonset%'=='0' (echo Regular, ^(D^)evelopment, ^(T^)witch, or ^(P^)ortal? ^(anything except d, t, or p will do regular^)
 	set /p betaset=
 )
 for /f "delims=" %%V in ('powershell -command "$env:betaset.ToLower()"') do set "betaset=%%V"
@@ -92,10 +91,10 @@ set anonblck=""
 for /f "delims=" %%V in ('powershell -command "$env:username.ToLower()"') do set anonblck=%%V
 if "%anonblck%"=="anonymous" goto noanon
 set synpath=steamapps\common\Synergy
-if "%uprun%"=="rb" set synpath=steamapps\common\synbeta
+if "%uprun%"=="rd" set synpath=steamapps\common\synbeta
 if "%uprun%"=="rt" set synpath=steamapps\common\syntwitch
 if "%uprun%"=="rp" set synpath=steamapps\common\synportal
-if '%betaset%'=='b' set synpath=steamapps\common\synbeta
+if '%betaset%'=='d' set synpath=steamapps\common\synbeta
 if '%betaset%'=='t' set synpath=steamapps\common\syntwitch
 if '%betaset%'=='p' set synpath=steamapps\common\synportal
 if NOT EXIST "%synpath%\synergy\synergy_pak.vpk" (
@@ -110,7 +109,8 @@ if NOT EXIST "%synpath%\synergy\maps" (
 )
 echo The next prompt is inside SteamCMD, if it asks for the password, it is entered as a secure string.
 echo What this means is that it will not show you the characters you enter, but it is entering them.
-if '%betaset%'=='b' goto betainst
+pause
+if '%betaset%'=='d' goto betainst
 if '%betaset%'=='t' goto twitchinst
 if '%betaset%'=='p' goto portalinst
 if NOT EXIST steamcmd.exe goto notindir
@@ -128,10 +128,10 @@ if "%uprun%"=="i" goto setup
 cls
 :srcds
 set synpath=steamapps\common\Synergy
-if "%uprun%"=="rb" set synpath=steamapps\common\synbeta
+if "%uprun%"=="rd" set synpath=steamapps\common\synbeta
 if "%uprun%"=="rt" set synpath=steamapps\common\syntwitch
 if "%uprun%"=="rp" set synpath=steamapps\common\synportal
-if '%betaset%'=='b' set synpath=steamapps\common\synbeta
+if '%betaset%'=='d' set synpath=steamapps\common\synbeta
 if '%betaset%'=='t' set synpath=steamapps\common\syntwitch
 if '%betaset%'=='p' set synpath=steamapps\common\synportal
 if NOT EXIST %synpath%\srcds.exe goto notinstalled
@@ -147,6 +147,10 @@ if '%linkset%'=='0' (
 	mklink /j "%synpath%\synergy\user_custom" "%synpath%\synergy\download\user_custom">NUL
 )
 for /f "delims=" %%V in ('powershell -command "$ab = get-date; $ab.Minute"') do set "starttime=%%V"
+rem Development branch now requires starting from srcds directory
+if "%uprun%"=="d" cd %synpath%
+if "%uprun%"=="d" goto redsdev
+if "%uprun%"=="rd" cd %synpath%
 if "%uprun%"=="rd" goto redsdev
 :reds
 echo (%date%)(%time%) SynDS started.
@@ -164,8 +168,8 @@ goto reds
 
 :redsdev
 echo (%date%)(%time%) SynDS started.
-if %smset%==1 start /wait %synpath%\srcds.exe -console -game synergy +maxplayers 64 +sv_lan 0 +map "hl2 d1_trainstation_06" +exec %configdir% -ip 0.0.0.0 -port %pnum% -nocrashdialog -insecure -nohltv -threads 8 -heapsize 2048000 -mem_max_heapsize 2048 -mem_max_heapsize_dedicated 512 +sm_basepath %sm_basepath% -allowdebug -condebug +developer 1
-if %smset%==0 start /wait %synpath%\srcds.exe -console -game synergy +maxplayers 64 +sv_lan 0 +map "hl2 d1_trainstation_06" +exec %configdir% -ip 0.0.0.0 -port %pnum% -nocrashdialog -insecure -nohltv -threads 8 -heapsize 2048000 -mem_max_heapsize 2048 -mem_max_heapsize_dedicated 512 -allowdebug -condebug +developer 1
+if %smset%==1 start /wait srcds.exe -console -game synergy +maxplayers 64 +sv_lan 0 +map "hl2 d1_trainstation_06" +exec %configdir% -ip 0.0.0.0 -port %pnum% -nocrashdialog -insecure -nohltv -threads 8 -heapsize 2048000 -mem_max_heapsize 2048 -mem_max_heapsize_dedicated 512 +sm_basepath %sm_basepath%
+if %smset%==0 start /wait srcds.exe -console -game synergy +maxplayers 64 +sv_lan 0 +map "hl2 d1_trainstation_06" +exec %configdir% -ip 0.0.0.0 -port %pnum% -nocrashdialog -insecure -nohltv -threads 8 -heapsize 2048000 -mem_max_heapsize 2048 -mem_max_heapsize_dedicated 512
 echo (%date%)(%time%) WARNING: SynDS closed or crashed, restarting.
 for /f "delims=" %%V in ('powershell -command "$ab = get-date; $ab.Minute"') do set "ctime=%%V"
 set /a cttime=ctime-starttime
@@ -174,22 +178,22 @@ if %cttime%==0 (
 	timeout -T 10
 )
 for /f "delims=" %%V in ('powershell -command "$ab = get-date; $ab.Minute"') do set "starttime=%%V"
-echo Servers console log is in console.log in the newly opened window.
-explorer "%CD%\steamapps\common\Synergy\synergy"
-pause
+rem echo Servers console log is in console.log in the newly opened window.
+rem explorer "%CD%\steamapps\common\synbeta\synergy"
+rem pause
 goto redsdev
 
 :srcdscustom
-if %skipstep% LEQ 0 (echo Regular, ^(B^)eta, ^(T^)witch, or ^(P^)ortal? ^(anything except b, t, or p will do regular^)
+if %skipstep% LEQ 0 (echo Regular, ^(D^)evelopment, ^(T^)witch, or ^(P^)ortal? ^(anything except d, t, or p will do regular^)
 	set /p betaset=
 	set skipstep=1
 )
 for /f "delims=" %%V in ('powershell -command "$env:betaset.ToLower()"') do set "betaset=%%V"
 set synpath=steamapps\common\Synergy
 set syntype=56.16
-if '%betaset%'=='b' (
+if '%betaset%'=='d' (
 	set synpath=steamapps\common\synbeta
-	set syntype=18.x
+	set syntype=Dev
 )
 if '%betaset%'=='t' (
 	set synpath=steamapps\common\syntwitch
@@ -283,8 +287,8 @@ set skipstep=3
 goto srcds
 
 :betainst
-echo Updating/installing Synergy Beta DS
-steamcmd.exe +login %username% +force_install_dir steamapps\Common\synbeta +app_update 17520 -beta development -validate +quit
+echo Updating/installing Synergy development Branch DS
+steamcmd.exe +force_install_dir steamapps\common\synbeta +login %username% +app_update 17520 -beta development -validate +quit
 if NOT EXIST steamapps\common\synbeta\srcds.exe (
 	echo ^There was an error while attempting to download Synergy...
 	set anonset=15
@@ -294,12 +298,13 @@ echo Update/installation Complete
 echo If there were errors above, close the script and log into SteamCMD.exe separately, then restart the script.
 timeout -T 10
 if "%uprun%"=="i" goto setup
+cd steamapps\common\synbeta
 cls
-goto srcds
+goto redsdev
 
 :twitchinst
 echo Updating/installing Synergy Twitch Branch DS
-steamcmd.exe +login %username% +force_install_dir steamapps\Common\syntwitch +app_update 17520 -beta twitch -validate +quit
+steamcmd.exe +force_install_dir steamapps\common\syntwitch +login %username% +app_update 17520 -beta twitch -validate +quit
 if NOT EXIST steamapps\common\syntwitch\srcds.exe (
 	echo ^There was an error while attempting to download Synergy...
 	set anonset=15
@@ -314,7 +319,7 @@ goto srcds
 
 :portalinst
 echo Updating/installing Synergy Portal Branch DS
-steamcmd.exe +login %username% +force_install_dir steamapps\Common\synportal +app_update 17520 -beta development_portaltest -validate +quit
+steamcmd.exe +force_install_dir steamapps\common\synportal +app_update 17520 -beta development_portaltest -validate +quit
 if NOT EXIST steamapps\common\synportal\srcds.exe (
 	echo ^There was an error while attempting to download Synergy...
 	set anonset=15
@@ -342,9 +347,9 @@ if '%s%'=='1' (if EXIST "steamapps\sourcemods" set s=2)
 if '%s%'=='1' mklink /j "steamapps\sourcemods" "%cldir%\sourcemods"
 set synpath=steamapps\common\Synergy
 set syntype=56.16
-if '%betaset%'=='b' (
+if '%betaset%'=='d' (
 	set synpath=steamapps\common\synbeta
-	set syntype=18.x
+	set syntype=Dev
 )
 if '%betaset%'=='t' (
 	set synpath=steamapps\common\syntwitch
@@ -459,8 +464,8 @@ pause
 exit
 :notinstalled
 set syntype=56.16
-if "%uprun%"=="rb" set syntype=Beta
-if '%betaset%'=='b' set syntype=Beta
+if "%uprun%"=="rd" set syntype=Beta
+if '%betaset%'=='d' set syntype=Beta
 if "%uprun%"=="rt" set syntype=Twitch
 if '%betaset%'=='t' set syntype=Twitch
 if '%betaset%'=='rp' set syntype=Portal
@@ -519,13 +524,13 @@ goto start
 :instsourcem
 if '%instsmset%'=='0' (
 	echo This function is designed for the current version of Synergy, the development branch may be unstable.
-	echo Regular, ^(B^)eta, ^(T^)witch, or ^(P^)ortal? ^(anything except b, t, or p will do regular^)
+	echo Regular, ^(D^)evelopment, ^(T^)witch, or ^(P^)ortal? ^(anything except d, t, or p will do regular^)
 	set /p betaset=
 	for /f "delims=" %%V in ('powershell -command "$env:betaset.ToLower()"') do set "betaset=%%V"
 )
 set synpath=steamapps\common\Synergy\synergy
 set syntype=56.16
-if '%betaset%'=='b' (
+if '%betaset%'=='d' (
 	set synpath=steamapps\common\synbeta\synergy
 	set syntype=dev
 )
@@ -619,11 +624,11 @@ cls
 goto start
 
 :instsourcepluginstop
-echo Install plugins for Regular, (B)eta, (T)witch, or (P)ortal? (anything except b, t, or p will do regular)
+echo Install plugins for Regular, (D)evelopment, (T)witch, or (P)ortal? (anything except d, t, or p will do regular)
 set /p betaset=
 for /f "delims=" %%V in ('powershell -command "$env:betaset.ToLower()"') do set "betaset=%%V"
 set synpath=steamapps\common\Synergy\synergy
-if '%betaset%'=='b' set synpath=steamapps\common\synbeta\synergy
+if '%betaset%'=='d' set synpath=steamapps\common\synbeta\synergy
 if '%betaset%'=='t' set synpath=steamapps\common\syntwitch\synergy
 if '%betaset%'=='p' set synpath=steamapps\common\synportal\synergy
 if NOT EXIST %synpath% goto notinstalled
@@ -780,11 +785,11 @@ if NOT EXIST "%cd%\%synpath%\addons\sourcemod\translations\fpd.phrases.txt" (
 goto instsourceplugins
 
 :instpmpck
-echo Install Player Model Packs for Regular, (B)eta, (T)witch, or (P)ortal? (anything except b, t, or p will do regular)
+echo Install Player Model Packs for Regular, (D)evelopment, (T)witch, or (P)ortal? (anything except d, t, or p will do regular)
 set synpath=steamapps\common\Synergy
 set /p betaset=
 for /f "delims=" %%V in ('powershell -command "$env:betaset.ToLower()"') do set "betaset=%%V"
-if '%betaset%'=='b' set synpath=steamapps\common\synbeta
+if '%betaset%'=='d' set synpath=steamapps\common\synbeta
 if '%betaset%'=='t' set synpath=steamapps\common\syntwitch
 if '%betaset%'=='p' set synpath=steamapps\common\synportal
 goto instpmpckpass
@@ -926,11 +931,11 @@ if NOT EXIST "steamapps\sourcemods" (
 	pause
 	exit
 )
-echo Install Mod Support's for Regular, (B)eta, (T)witch, or (P)ortal? (anything except b, t or p will do regular)
+echo Install Mod Support's for Regular, (D)evelopment, (T)witch, or (P)ortal? (anything except d, t or p will do regular)
 set /p betaset=
 for /f "delims=" %%V in ('powershell -command "$env:betaset.ToLower()"') do set "betaset=%%V"
 set contentpath=steamapps\common\Synergy\synergy\content
-if '%betaset%'=='b' set contentpath=steamapps\common\synbeta\synergy\content
+if '%betaset%'=='d' set contentpath=steamapps\common\synbeta\synergy\content
 if '%betaset%'=='t' set contentpath=steamapps\common\syntwitch\synergy\content
 if '%betaset%'=='p' set contentpath=steamapps\common\synportal\synergy\content
 if NOT EXIST %contentpath% goto notinstalled
