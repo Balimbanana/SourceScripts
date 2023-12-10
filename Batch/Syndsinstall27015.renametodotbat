@@ -115,7 +115,7 @@ if '%betaset%'=='t' goto twitchinst
 if '%betaset%'=='p' goto portalinst
 if NOT EXIST steamcmd.exe goto notindir
 echo Updating/installing Synergy DS
-steamcmd.exe +login %username% +app_update 17520 validate +quit
+steamcmd.exe +login %username% +app_update 17520 -beta public validate +quit
 if NOT EXIST steamapps\common\Synergy\srcds.exe (
 	echo ^There was an error while attempting to download Synergy...
 	set anonset=15
