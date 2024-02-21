@@ -98,7 +98,7 @@ echo (update) to update this script.
 echo For the manual install mods, you will need to subscribe to the Mod Support on the workshop to play it in Synergy.
 echo Full Auto installs will install the Mod Support automatically as well.
 rem (RANDD) for Research and Development SUPPORT NOT COMPLETED
-set /p uprun=
+set /p uprun=Option: || (echo Invalid Option && goto start)
 for /f "delims=" %%V in ('powershell -command "$env:uprun.ToLower()"') do set "uprun=%%V"
 if "%uprun%"=="sourcemods" (
 	explorer "%cldir%"
@@ -330,6 +330,7 @@ if NOT EXIST "%steamcmddir%\steamcmd.exe" (
 	if EXIST ..\steamcmd.exe set steamcmddir=..
 )
 if NOT EXIST "%steamcmddir%\steamcmd.exe" (
+	set foundcmd=0
 	set returntostep=1
 	echo ^Failed to find SteamCMD for workshop update/install. Attempting to re-download...
 )
