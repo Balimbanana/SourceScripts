@@ -66,7 +66,7 @@ pause
 echo.
 echo List of full auto install:
 echo (Offshore) for Offshore         (CTOA) for Coastline To Atmosphere
-echo (CD) for Combine Destiny        (LeonEp3) for Episode 3: The Closure
+echo (CD) for Combine Destiny        (R24) for Rock 24
 echo (MI) for Mission Improbable     (OP) for Omega Prison
 echo (PRE) for Precursor             (UP) for Uncertainty Principle
 echo (S2E) for Slums 2: Extended     (SN) for Spherical Nightmares
@@ -79,7 +79,6 @@ echo (CITY7) for City7               (DW) for Dangerous World
 echo (RIOT) for Riot Act             (DD) for DeepDown and Aftermath 
 echo (CAL) for Calamity              (AOD) for Avenue Odessa
 echo (SESC) for Silent Escape        (EXMO) for Escape by ExMo
-echo (R24) for Rock 24
 echo.
 echo Semi-Auto (download through web browser, then script will install from there).
 echo (BMS) for Black Mesa Source and Improved Xen
@@ -90,6 +89,7 @@ echo (YLA) for Year Long Alarm       (KTM) for Kill The Monk
 echo (CE) for Causality Effect       (TH) for They Hunger Again part 1
 echo (PEN) for HL2 Penetration       (EZ) for Entropy Zero
 echo (PTSD2) for PTSD 2              (DH) for DayHard
+echo (LeonEp3) for Episode 3: The Closure
 echo (STTR) for SteamTracksTrouble and Riddles
 echo.
 echo (SourceMods) to open your sourcemods directory
@@ -420,9 +420,12 @@ if EXIST "%cldir%\Halflife2-Episode3\maps\01_spymap_ep3.bsp" (
 	pause
 	goto start
 )
-echo Downloading Leon's Episode 3: The Closure...
-powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://www.runthinkshootlive.com/download.php?id=12429^&f=/hl2-ep2/hl2-ep2-sp-ep3-the-closure-v2.7z\",\"$PWD\ep3theclosure.7z\") }"
-if EXIST "%cd%\ep3theclosure.7z" .\7-Zip\7z.exe x .\ep3theclosure.7z -o"%cldir%"
+rem Latest is on ModDB now...
+echo Opening Leons Ep3 ModDB page...
+start /b https://www.moddb.com/mods/the-closure/downloads/halflife2-episode3
+rem echo Downloading Leon's Episode 3: The Closure...
+rem powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://www.runthinkshootlive.com/download.php?id=12429^&f=/hl2-ep2/hl2-ep2-sp-ep3-the-closure-v2.7z\",\"$PWD\ep3theclosure.7z\") }"
+rem if EXIST "%cd%\ep3theclosure.7z" .\7-Zip\7z.exe x .\ep3theclosure.7z -o"%cldir%"
 if NOT EXIST "%cd%\steamapps\workshop\content\17520\664873590" (
 	echo ^Downloading Synergy Support files through SteamCMD
 	steamcmd.exe +login anonymous +workshop_download_item 17520 664873590 +quit
