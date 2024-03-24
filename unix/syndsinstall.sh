@@ -604,6 +604,9 @@ if [ $instmod = "amal" ];then
 		fi
 	fi
 	./steamcmd.sh +@sSteamCmdForcePlatformType windows +force_install_dir ./steamapps/common/Amalgam +login $stusername +app_update 1389950 validate +quit
+	if [ ! -L ./steamapps/common/amalgam ];then
+		ln -s Amalgam ./steamapps/common/amalgam
+	fi
 fi
 if [ $instmod = "df" ];then
 	if [ ! -f "./steamapps/workshop/content/17520/909637644/909637644_pak.vpk" ];then
@@ -621,6 +624,9 @@ if [ $instmod = "df" ];then
 	fi
 	./steamcmd.sh +@sSteamCmdForcePlatformType windows +force_install_dir ./steamapps/common/HL2DownFall +login $stusername +app_update 587650 validate +quit
 	if [ ! -f "./steamapps/common/Synergy/synergy/content/DownFall.dat" ];then wget -nv "https://github.com/Balimbanana/SourceScripts/raw/master/synotherfilefixes/DownFall.dat" -P ./steamapps/common/Synergy/synergy/content ;fi
+	if [ ! -L ./steamapps/common/hl2downfall ];then
+		ln -s HL2DownFall ./steamapps/common/hl2downfall
+	fi
 fi
 if [ $instmod = "pros" ];then
 	if [ ! -f "./steamapps/workshop/content/17520/2338505640/2338505640_pak.vpk" ];then
@@ -637,6 +643,9 @@ if [ $instmod = "pros" ];then
 		fi
 	fi
 	./steamcmd.sh +@sSteamCmdForcePlatformType windows +force_install_dir ./steamapps/common/Prospekt +login $stusername +app_update 399120 validate +quit
+	if [ ! -L ./steamapps/common/prospekt ];then
+		ln -s Prospekt ./steamapps/common/prospekt
+	fi
 fi
 if [ $instmod = "ezero" ];then
 	if [ ! -f "./steamapps/workshop/content/17520/1877479381/1877479381_pak.vpk" ];then
@@ -652,13 +661,21 @@ if [ $instmod = "ezero" ];then
 			fi
 		fi
 	fi
-	./steamcmd.sh +@sSteamCmdForcePlatformType windows +force_install_dir ./steamapps/common/EZeroRen +login $stusername +app_update 714070 validate +quit
+	if [ ! -d "./steamapps/common/EntropyZero/EntropyZero" ]; then
+		./steamcmd.sh +@sSteamCmdForcePlatformType windows +force_install_dir ./steamapps/common/EZeroRen +login $stusername +app_update 714070 validate +quit
+	fi
 	if [ -d "./steamapps/common/EZeroRen/Entropy Zero/EntropyZero" ];then
 		if [ ! -d "./steamapps/common/EntropyZero" ];then mkdir ./steamapps/common/EntropyZero ;fi
 		mv ./steamapps/common/EZeroRen/Entropy\ Zero/EntropyZero ./steamapps/common/EntropyZero/EntropyZero
 		rm -rf ./steamapps/common/EZeroRen
 	fi
 	if [ ! -f "./steamapps/common/Synergy/synergy/content/EntropyZero.dat" ];then wget -nv "https://github.com/Balimbanana/SourceScripts/raw/master/synotherfilefixes/EntropyZero.dat" -P ./steamapps/common/Synergy/synergy/content ;fi
+	if [ ! -L ./steamapps/common/entropyzero ];then
+		ln -s EntropyZero ./steamapps/common/entropyzero
+	fi
+	if [ ! -L ./steamapps/common/entropyzero/entropyzero ];then
+		ln -s EntropyZero ./steamapps/common/entropyzero/entropyzero
+	fi
 fi
 updmods
 }
