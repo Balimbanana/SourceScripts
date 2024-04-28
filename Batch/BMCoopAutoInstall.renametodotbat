@@ -141,22 +141,22 @@ echo This will direct download the required SourceMod files and then extract the
 echo It may take a few mins depending on your download speed.
 if EXIST "%bmdirpath%\addons\sourcemod\metamod\sourcemod.vdf" goto start
 set dlloc=0
-if EXIST "%userprofile%\downloads\sourcemod-1.11.0-git6936-windows.zip" set dlloc=2
-if EXIST "sourcemod-1.11.0-git6936-windows.zip" set dlloc=1
-if '%dlloc%'=='0' start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://sm.alliedmods.net/smdrop/1.11/sourcemod-1.11.0-git6936-windows.zip\",\"$PWD\sourcemod-1.11.0-git6936-windows.zip\") }"
-if EXIST "sourcemod-1.11.0-git6936-windows.zip" set dlloc=2
+if EXIST "%userprofile%\downloads\sourcemod-1.11.0-git6960-windows.zip" set dlloc=2
+if EXIST "sourcemod-1.11.0-git6960-windows.zip" set dlloc=1
+if '%dlloc%'=='0' start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://sm.alliedmods.net/smdrop/1.11/sourcemod-1.11.0-git6960-windows.zip\",\"$PWD\sourcemod-1.11.0-git6960-windows.zip\") }"
+if EXIST "sourcemod-1.11.0-git6960-windows.zip" set dlloc=2
 set mmloc=0
 if EXIST "%userprofile%\downloads\mmsource-1.11.0-git1148-windows.zip" set mmloc=2
 if EXIST "mmsource-1.11.0-git1148-windows.zip" set mmloc=1
 if '%mmloc%'=='0' start /wait /min powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://mms.alliedmods.net/mmsdrop/1.11/mmsource-1.11.0-git1148-windows.zip\",\"$PWD\mmsource-1.11.0-git1148-windows.zip\") }"
 if EXIST "mmsource-1.11.0-git1148-windows.zip" set mmloc=1
 set dlloc=0
-if EXIST "%userprofile%\downloads\sourcemod-1.11.0-git6936-windows.zip" set dlloc=2
-if EXIST "sourcemod-1.11.0-git6936-windows.zip" set dlloc=1
+if EXIST "%userprofile%\downloads\sourcemod-1.11.0-git6960-windows.zip" set dlloc=2
+if EXIST "sourcemod-1.11.0-git6960-windows.zip" set dlloc=1
 if '%dlloc%'=='0' goto dltowrong
 echo This may take a minute or two, just wait for the next message after PowerShell finishes extracting SourceMod...
-if '%dlloc%'=='1' start /wait /min powershell -command "& {Add-Type -AssemblyName System.IO.Compression.FileSystem; [System.IO.Compression.ZipFile]::ExtractToDirectory(\"$HOME\downloads\sourcemod-1.11.0-git6936-windows.zip\", \"$PWD\$env:bmdirpath\"); [System.IO.Compression.ZipFile]::ExtractToDirectory(\"$HOME\downloads\mmsource-1.11.0-git1148-windows.zip\", \"$PWD\$env:bmdirpath\") }"
-if '%dlloc%'=='2' start /wait /min powershell -command "& {Add-Type -AssemblyName System.IO.Compression.FileSystem; [System.IO.Compression.ZipFile]::ExtractToDirectory(\"$PWD\sourcemod-1.11.0-git6936-windows.zip\", \"$PWD\$env:bmdirpath\"); [System.IO.Compression.ZipFile]::ExtractToDirectory(\"$PWD\mmsource-1.11.0-git1148-windows.zip\", \"$PWD\$env:bmdirpath\") }"
+if '%dlloc%'=='1' start /wait /min powershell -command "& {Add-Type -AssemblyName System.IO.Compression.FileSystem; [System.IO.Compression.ZipFile]::ExtractToDirectory(\"$HOME\downloads\sourcemod-1.11.0-git6960-windows.zip\", \"$PWD\$env:bmdirpath\"); [System.IO.Compression.ZipFile]::ExtractToDirectory(\"$HOME\downloads\mmsource-1.11.0-git1148-windows.zip\", \"$PWD\$env:bmdirpath\") }"
+if '%dlloc%'=='2' start /wait /min powershell -command "& {Add-Type -AssemblyName System.IO.Compression.FileSystem; [System.IO.Compression.ZipFile]::ExtractToDirectory(\"$PWD\sourcemod-1.11.0-git6960-windows.zip\", \"$PWD\$env:bmdirpath\"); [System.IO.Compression.ZipFile]::ExtractToDirectory(\"$PWD\mmsource-1.11.0-git1148-windows.zip\", \"$PWD\$env:bmdirpath\") }"
 if NOT EXIST "%cd%\7-Zip\7z.exe" powershell -command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; $WebClient = New-Object System.Net.WebClient; $WebClient.DownloadFile(\"https://github.com/Balimbanana/SourceScripts/raw/master/synotherfilefixes/7-Zip.zip\",\"$PWD\7zip.zip\") }"
 if EXIST "%cd%\7zip.zip" start /wait /min powershell -command "& {Add-Type -AssemblyName System.IO.Compression.FileSystem; [System.IO.Compression.ZipFile]::ExtractToDirectory(\"$PWD\7zip.zip\", \"$PWD\") }"
 if EXIST "%cd%\7zip.zip" del /Q "%cd%\7zip.zip"
@@ -164,11 +164,11 @@ set use7z=0
 if NOT EXIST "%bmdirpath%\addons\sourcemod" set use7z=1
 if '%use7z%'=='1' (
 	if '%dlloc%'=='1' (
-		start /min /wait "7z" "7-Zip\7z.exe" x -y sourcemod-1.11.0-git6936-windows.zip -o"%cd%\%bmdirpath%"
-		del /Q "sourcemod-1.11.0-git6936-windows.zip"
+		start /min /wait "7z" "7-Zip\7z.exe" x -y sourcemod-1.11.0-git6960-windows.zip -o"%cd%\%bmdirpath%"
+		del /Q "sourcemod-1.11.0-git6960-windows.zip"
 	)
 	if '%dlloc%'=='2' (
-		start /min /wait "7z" "7-Zip\7z.exe" x -y "%userprofile%\downloads\sourcemod-1.11.0-git6936-windows.zip" -o"%cd%\%bmdirpath%"
+		start /min /wait "7z" "7-Zip\7z.exe" x -y "%userprofile%\downloads\sourcemod-1.11.0-git6960-windows.zip" -o"%cd%\%bmdirpath%"
 	)
 	if '%mmloc%'=='1' (
 		start /min /wait "7z" "7-Zip\7z.exe" x -y mmsource-1.11.0-git1148-windows.zip -o"%cd%\%bmdirpath%"
