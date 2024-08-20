@@ -172,10 +172,10 @@ if [ -d "./$lfcepath/addons/sourcemod/bin/sourcemod_mm.so" ];then
 	read nullptr
 	start
 fi
-curl -sqL "https://sm.alliedmods.net/smdrop/1.11/sourcemod-1.11.0-git6569-linux.tar.gz" | tar zxvf - -C "./$lfcepath"
-curl -sqL "https://mms.alliedmods.net/mmsdrop/1.11/mmsource-1.11.0-git1130-linux.tar.gz" | tar zxvf - -C "./$lfcepath"
+# curl -sqL "https://sm.alliedmods.net/smdrop/1.11/sourcemod-1.11.0-git6569-linux.tar.gz" | tar zxvf - -C "./$lfcepath"
+# curl -sqL "https://mms.alliedmods.net/mmsdrop/1.11/mmsource-1.11.0-git1130-linux.tar.gz" | tar zxvf - -C "./$lfcepath"
 curl -sqL "https://users.alliedmods.net/~kyles/builds/SteamWorks/SteamWorks-git131-linux.tar.gz" | tar zxvf - -C "./$lfcepath"
-#tar zxvf ./$lfcepath/addons/SM1.12-128\ Linux.tar.bz2 -C ./lfcepath/addons
+tar zxvf ./$lfcepath/addons/SM1.12-101\ Linux.tar.bz2 -C ./$lfcepath/addons
 if [ ! -d "./$lfcepath/addons/sourcemod" ];then
 	echo "Failed to auto-install SourceMod, you may have to manually install it."
 	read nullptr
