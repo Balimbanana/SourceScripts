@@ -444,10 +444,10 @@ if [ ! -L ./$synpath/bin/libvstdlib.so ];then
 	mv ./$synpath/bin/libvstdlib.so ./$synpath/bin/libvstdlib.so.bak
 	ln -s libvstdlib_srv.so ./$synpath/bin/libvstdlib.so
 fi
-if [ ! -L ./$synpath/bin/steamclient.so ];then
-	mv ./$synpath/bin/steamclient.so ./$synpath/bin/steamclient.so.bak
-	ln -s ../../../../linux32/steamclient.so ./$synpath/bin/steamclient.so
-fi
+#if [ ! -L ./$synpath/bin/steamclient.so ];then
+#	mv ./$synpath/bin/steamclient.so ./$synpath/bin/steamclient.so.bak
+#	ln -s ../../../../linux32/steamclient.so ./$synpath/bin/steamclient.so
+#fi
 if [ ! -d ./$synpath/synergy/download ];then mkdir ./$synpath/synergy/download ;fi
 if [ ! -d ./$synpath/synergy/download/user_custom ];then mkdir ./$synpath/synergy/download/user_custom ;fi
 if [ ! -L ./$synpath/synergy/user_custom ];then ln -s ./download/user_custom ./$synpath/synergy/user_custom ;fi
