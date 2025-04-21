@@ -94,11 +94,11 @@ echo "First (I)nstall, (U)pdate, (R)un with auto-restart"
 echo "(RB) to run Synergy 18.x beta, (RT) to run Synergy Twitch branch."
 echo "(IS) to install SourceMod."
 if [ -d ./steamapps/common/Synergy/synergy/addons/sourcemod/plugins ]; then echo "(ISM) to install additional SM plugins. (IMP) to install Player Model Packs."; fi
-if [ ! -d ./steamapps/common/Synergy/synergy/addons/plr ]; then
-	if [ -d ./steamapps/common/Synergy/synergy/addons/metamod ]; then
-		echo "(PLR) to install Player Limit Remover, allows for up to 64 players (only v56.16)"
-	fi
-fi
+#if [ ! -d ./steamapps/common/Synergy/synergy/addons/plr ]; then
+#	if [ -d ./steamapps/common/Synergy/synergy/addons/metamod ]; then
+#		echo "(PLR) to install Player Limit Remover, allows for up to 64 players (only v56.16)"
+#	fi
+#fi
 if [ -d ./steamapps/common/Synergy/synergy/addons/metamod ]; then
 	echo "(UtilFixes) to update/install Synergy reverse engineered fixes (only v56.16)"
 fi
@@ -118,7 +118,7 @@ if [ $uprun = "r" ]; then srcds;fi
 if [ $uprun = "is" ]; then instsourcem;fi
 if [ $uprun = "ism" ]; then instsourcepluginstop;fi
 if [ $uprun = "linksm" ]; then linksm;fi
-if [ $uprun = "plr" ]; then instplr;fi
+#if [ $uprun = "plr" ]; then instplr;fi
 if [ $uprun = "imp" ]; then instpmpck;fi
 if [ $uprun = "smadmin" ]; then modifysmadmin;fi
 if [ $uprun = "ihl2" ]; then updhl2;fi
@@ -165,7 +165,7 @@ if [ -d ./$synpath/addons/sourcemod ];then
 	read nullptr
 	start
 fi
-curl -sqL "https://sm.alliedmods.net/smdrop/1.10/sourcemod-1.10.0-git6503-linux.tar.gz" | tar zxvf - -C ./$synpath
+curl -sqL "https://sm.alliedmods.net/smdrop/1.13/sourcemod-1.13.0-git7224-linux.tar.gz" | tar zxvf - -C ./$synpath
 curl -sqL "https://mms.alliedmods.net/mmsdrop/1.11/mmsource-1.11.0-git1145-linux.tar.gz" | tar zxvf - -C ./$synpath
 curl -sqL "https://users.alliedmods.net/~kyles/builds/SteamWorks/SteamWorks-git131-linux.tar.gz" | tar zxvf - -C ./$synpath
 if [ ! -d ./$synpath/addons/sourcemod ];then
@@ -685,7 +685,7 @@ if [ -f ./steamapps/common/Synergy/synergy/addons/sourcemod/extensions/synergy_u
 	mv ./steamapps/common/Synergy/synergy/addons/sourcemod/extensions/synergy_utils.ext.so "./steamapps/common/Synergy/synergy/addons/sourcemod/extensions/synergy_utils.ext.so.bak$(date -u)"
 fi
 if [ ! -f ./steamapps/common/Synergy/synergy/addons/sourcemod/extensions/synergy_utils.autoload ]; then echo "" > ./steamapps/common/Synergy/synergy/addons/sourcemod/extensions/synergy_utils.autoload ;fi
-wget -nv "https://github.com/ReservedRegister/Synergy_ReverseEngineering/raw/master/build/package/addons/sourcemod/extensions/synergy_utils.ext.2.sdk2013.so" -P ./steamapps/common/Synergy/synergy/addons/sourcemod/extensions
+wget -nv "https://github.com/ReservedRegister/SourceEngineReverseEngineering/raw/refs/heads/synergy_latest/manual_build/server_utils.ext.2.sdk2013.so" -P ./steamapps/common/Synergy/synergy/addons/sourcemod/extensions
 mv ./steamapps/common/Synergy/synergy/addons/sourcemod/extensions/synergy_utils.ext.2.sdk2013.so ./steamapps/common/Synergy/synergy/addons/sourcemod/extensions/synergy_utils.ext.so
 echo 
 if [ -f ./steamapps/common/Synergy/synergy/addons/sourcemod/extensions/synergy_utils.ext.so ]; then
@@ -928,21 +928,21 @@ if [ $pluginsubstr = "b" ];then start;fi
 instsourceplugins
 }
 
-instplr() {
-if [ ! -d ./steamapps/common/Synergy/synergy/addons/plr ]; then
-	if [ -d ./steamapps/common/Synergy/synergy/addons/metamod ]; then
-		mkdir ./steamapps/common/Synergy/synergy/addons/plr
-		wget -nv "https://raw.githubusercontent.com/FoG-Plugins/Player-Limit-Remover/master/addons/plr.vdf" -P ./steamapps/common/Synergy/synergy/addons
-		wget -nv "https://github.com/FoG-Plugins/Player-Limit-Remover/raw/master/addons/plr/plr.so" -P ./steamapps/common/Synergy/synergy/addons/plr
-	fi
-fi
-if [ -f ./steamapps/common/Synergy/synergy/addons/plr/plr.so ]; then
-	if [ -f ./steamapps/common/Synergy/synergy/addons/plr.vdf ]; then
-		echo "Successfully installed PLR"
-	fi
-fi
-start
-}
+#instplr() {
+#if [ ! -d ./steamapps/common/Synergy/synergy/addons/plr ]; then
+#	if [ -d ./steamapps/common/Synergy/synergy/addons/metamod ]; then
+#		mkdir ./steamapps/common/Synergy/synergy/addons/plr
+#		wget -nv "https://raw.githubusercontent.com/FoG-Plugins/Player-Limit-Remover/master/addons/plr.vdf" -P ./steamapps/common/Synergy/synergy/addons
+#		wget -nv "https://github.com/FoG-Plugins/Player-Limit-Remover/raw/master/addons/plr/plr.so" -P ./steamapps/common/Synergy/synergy/addons/plr
+#	fi
+#fi
+#if [ -f ./steamapps/common/Synergy/synergy/addons/plr/plr.so ]; then
+#	if [ -f ./steamapps/common/Synergy/synergy/addons/plr.vdf ]; then
+#		echo "Successfully installed PLR"
+#	fi
+#fi
+#start
+#}
 
 instpmpck() {
 echo "Install Player Model Packs for Regular, (B)eta, or (T)witch? (anything except b or t will do regular)"
