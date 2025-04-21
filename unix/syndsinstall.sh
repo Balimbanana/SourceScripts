@@ -681,14 +681,14 @@ updmods
 }
 
 updutilfix() {
-if [ -f ./steamapps/common/Synergy/synergy/addons/sourcemod/extensions/synergy_utils.ext.so ]; then
-	mv ./steamapps/common/Synergy/synergy/addons/sourcemod/extensions/synergy_utils.ext.so "./steamapps/common/Synergy/synergy/addons/sourcemod/extensions/synergy_utils.ext.so.bak$(date -u)"
+if [ -f ./steamapps/common/Synergy/synergy/addons/sourcemod/extensions/server_utils.ext.so ]; then
+	mv ./steamapps/common/Synergy/synergy/addons/sourcemod/extensions/server_utils.ext.so "./steamapps/common/Synergy/synergy/addons/sourcemod/extensions/server_utils.ext.so.bak$(date -u)"
 fi
-if [ ! -f ./steamapps/common/Synergy/synergy/addons/sourcemod/extensions/synergy_utils.autoload ]; then echo "" > ./steamapps/common/Synergy/synergy/addons/sourcemod/extensions/synergy_utils.autoload ;fi
+if [ ! -f ./steamapps/common/Synergy/synergy/addons/sourcemod/extensions/server_utils.autoload ]; then echo "" > ./steamapps/common/Synergy/synergy/addons/sourcemod/extensions/server_utils.autoload ;fi
 wget -nv "https://github.com/ReservedRegister/SourceEngineReverseEngineering/raw/refs/heads/synergy_latest/manual_build/server_utils.ext.2.sdk2013.so" -P ./steamapps/common/Synergy/synergy/addons/sourcemod/extensions
-mv ./steamapps/common/Synergy/synergy/addons/sourcemod/extensions/synergy_utils.ext.2.sdk2013.so ./steamapps/common/Synergy/synergy/addons/sourcemod/extensions/synergy_utils.ext.so
+mv ./steamapps/common/Synergy/synergy/addons/sourcemod/extensions/server_utils.ext.2.sdk2013.so ./steamapps/common/Synergy/synergy/addons/sourcemod/extensions/server_utils.ext.so
 echo 
-if [ -f ./steamapps/common/Synergy/synergy/addons/sourcemod/extensions/synergy_utils.ext.so ]; then
+if [ -f ./steamapps/common/Synergy/synergy/addons/sourcemod/extensions/server_utils.ext.so ]; then
 	echo "Installed/updated!"
 else
 	echo "Failed to install!"
